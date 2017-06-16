@@ -1,0 +1,26 @@
+{
+  "name": "inc2734/wp-view-controller",
+  "description": "A library for WordPress theme view controller.",
+  "license": "GPL-2.0+",
+  "version": "0.1.0",
+  "require": {
+    "php": ">=5.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.7"
+  },
+  "authors": [
+    {
+      "name": "Takashi Kitajima",
+      "email": "inc@2inc.org"
+    }
+  ],
+  "autoload": {
+    "psr-4" : {
+      "Inc2734\\WP_View_Controller\\" : "src"
+    }
+  },
+  "scripts": {
+    "test": "bash bin/phpunit.sh"
+  }
+}
