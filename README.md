@@ -16,7 +16,7 @@ $ composer require inc2734/wp-view-controller
 // $Controller = new Inc2734\WP_View_Controller\View_Controller();
 
 // When not Using composer auto loader
-include_once( get_template_directory() . '/vendor/inc2734/wp-view-controller/src/wp-view-controller.php' );
+include_once( get_theme_file_path( '/vendor/inc2734/wp-view-controller/src/wp-view-controller.php' ) );
 $Controller = new Inc2734_WP_View_Controller();
 ```
 
@@ -36,7 +36,7 @@ themes/your-theme-name/
 
 ## Layout template
 
-The lyout template requires `<?php $this->view(); ?>`.
+The lyout template requires `<?php $_View_Controller->view(); ?>`.
 
 ## View templates
 
@@ -63,13 +63,13 @@ $controller->render( 'content', 'news' );
 
 ## Template tags
 
-### mimizuku_get_template_part()
+### wpvc_get_template_part()
 
 This is a function which to pass the variables to WordPress's `get_template_part()`.
 
 ```
 // The caller
-mimizuku_get_template_part( 'path/to/template-parts', [
+wpvc_get_template_part( 'path/to/template-parts', [
 	'_foo' => 'bar',
 	'_baz' => 'qux',
 ] );

@@ -88,12 +88,9 @@ class Inc2734_WP_View_Controller_View {
 	protected function _render() {
 		$layout = apply_filters( 'inc2734_wp_view_controller_layout', $this->layout );
 		$slug   = wpvc_config( 'directory', 'layout' );
-
-		$template_file_name = $slug . '/' . $layout . '.php';
-		$template_file_path = get_theme_file_path( $slug . '/' . $layout . '.php' );
-		if ( file_exists( $template_file_path ) ) {
-			include( $template_file_path );
-		}
+		wpvc_get_template_part( $slug . '/' . $layout, [
+			'_View_Controller' => $this,
+		] );
 	}
 
 	/**
