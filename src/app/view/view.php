@@ -89,7 +89,7 @@ class Inc2734_WP_View_Controller_View {
 		$layout = apply_filters( 'inc2734_wp_view_controller_layout', $this->layout );
 		$slug   = wpvc_config( 'directory', 'layout' );
 		wpvc_get_template_part( $slug . '/' . $layout, [
-			'_View_Controller' => $this,
+			'_view_controller' => $this,
 		] );
 	}
 

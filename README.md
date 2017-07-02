@@ -36,27 +36,27 @@ themes/your-theme-name/
 
 ## Layout template
 
-The lyout template requires `<?php $_View_Controller->view(); ?>`.
+The lyout template requires `<?php $_view_controller->view(); ?>`.
 
 ## View templates
 
 ### In singular page
 
-Mimizuku loading `/templates/view/content-{post-type}.php` for the view template.
+Loading `/templates/view/content-{post-type}.php` for the view template.
 Loading `/templates/view/content.php` when `/templates/view/content-{post-type}.php` isn't exists.
 
 ### In archive page
 
-Mimizuku loading `/templates/view/archive-{post-type}.php` for the view template.
+Loading `/templates/view/archive-{post-type}.php` for the view template.
 Loading `/templates/view/archive.php` when `/templates/view/archive-{post-type}.php` isn't exists.
 
 ### Static view templates
 
-Mimizuku tries to load the view template according to the URL. For example when URL is http://example.com/foo/bar, tries to laod from `/templates/view/static/foo/bar.php`.
+Tries to load the view template according to the URL. For example when URL is http://example.com/foo/bar, tries to laod from `/templates/view/static/foo/bar.php`.
 
 ## Using view controller
 ```
-$controller = new Mimizuku_Controller();
+$controller = new Inc2734_WP_View_Controller();
 $controller->layout( 'right-sidebar' );
 $controller->render( 'content', 'news' );
 ```
