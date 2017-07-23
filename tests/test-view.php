@@ -4,6 +4,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	public function setup() {
 		parent::setup();
 		include_once( __DIR__ . '/../src/wp-view-controller.php' );
+		new Inc2734_WP_View_Controller();
 
 		global $wp_rewrite;
 		parent::setup();
