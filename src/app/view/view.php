@@ -87,7 +87,7 @@ class Inc2734_WP_View_Controller_View {
 	 */
 	protected function _render() {
 		$layout = apply_filters( 'inc2734_wp_view_controller_layout', $this->layout );
-		$slug   = wpvc_config( 'directory', 'layout' );
+		$slug   = wpvc_config( 'layout' );
 		wpvc_get_template_part( $slug . '/' . $layout, [
 			'_view_controller' => $this,
 		] );
@@ -110,7 +110,7 @@ class Inc2734_WP_View_Controller_View {
 	 * @return array
 	 */
 	protected function _get_view_args() {
-		$slug = wpvc_config( 'directory', 'view' );
+		$slug = wpvc_config( 'view' );
 		$view = [
 			'slug' => $slug . '/' . $this->view,
 			'name' => $this->view_suffix,
@@ -143,7 +143,7 @@ class Inc2734_WP_View_Controller_View {
 		$path        = $this->_remove_http_query( $request_uri );
 		$path        = $this->_remove_paged_slug( $path );
 		$path        = trim( $path, '/' );
-		$slug        = wpvc_config( 'directory', 'static' );
+		$slug        = wpvc_config( 'static' );
 		return $slug . '/' . $path;
 	}
 

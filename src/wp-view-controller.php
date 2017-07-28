@@ -5,6 +5,16 @@
  * @license GPL-2.0+
  */
 
+$includes = array(
+	'/app/template-tags',
+	'/app/setup',
+);
+foreach ( $includes as $include ) {
+	foreach ( glob( __DIR__ . $include . '/*.php' ) as $file ) {
+		require_once( $file );
+	}
+}
+
 /**
  * View controller
  */
@@ -19,9 +29,7 @@ class Inc2734_WP_View_Controller {
 
 	public function __construct() {
 		$includes = array(
-			'/app/model',
 			'/app/view',
-			'/app/template-tags',
 		);
 		foreach ( $includes as $include ) {
 			foreach ( glob( __DIR__ . $include . '/*.php' ) as $file ) {

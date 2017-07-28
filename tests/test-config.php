@@ -18,25 +18,19 @@ class Inc2734_WP_View_Controller_Config_Test extends WP_UnitTestCase {
 		$config = Inc2734_WP_View_Controller_Config::get( 'no-match' );
 		$this->assertNull( $config );
 
-		$config = Inc2734_WP_View_Controller_Config::get( 'directory' );
+		$config = Inc2734_WP_View_Controller_Config::get();
 		$this->assertTrue( is_array( $config ) );
 
-		$config = Inc2734_WP_View_Controller_Config::get( 'directory', 'layout' );
+		$config = Inc2734_WP_View_Controller_Config::get( 'layout' );
 		$this->assertEquals( 'templates/layout/wrapper', $config );
-
-		$config = Inc2734_WP_View_Controller_Config::get( 'directory', 'no-match-key' );
-		$this->assertNull( $config );
 
 		$config = wpvc_config( 'no-match' );
 		$this->assertNull( $config );
 
-		$config = wpvc_config( 'directory' );
+		$config = wpvc_config();
 		$this->assertTrue( is_array( $config ) );
 
-		$config = wpvc_config( 'directory', 'layout' );
+		$config = wpvc_config( 'layout' );
 		$this->assertEquals( 'templates/layout/wrapper', $config );
-
-		$config = wpvc_config( 'directory', 'no-match-key' );
-		$this->assertNull( $config );
 	}
 }

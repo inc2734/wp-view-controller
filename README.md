@@ -24,14 +24,15 @@ $Controller = new Inc2734_WP_View_Controller();
 ```
 themes/your-theme-name/
 ├── vendor                   # → Composer packages (never edit)
-└── templates
+└── templates                # → Base templates directory
     ├── layout
     │   ├── wrapper          # → Layout templates
     │   ├── header           # → Header templates
     │   ├── sidebar          # → Sidebar templates
     │   └── footer           # → Footer templates
-    └── view                 # → View templates
-        └── static           # → Static view templates
+    ├── view                 # → View templates
+    │   └── static           # → Static view templates
+    └── index.php, page.php ect...
 ```
 
 ## Layout template
