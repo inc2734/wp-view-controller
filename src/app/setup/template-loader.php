@@ -47,7 +47,7 @@ add_action( 'after_setup_theme', function() {
 				$new_templates[] = 'index.php';
 			}
 
-			return $new_templates;
+			return array_unique( $new_templates );
 		} );
 	}
 } );

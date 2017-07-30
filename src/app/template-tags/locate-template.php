@@ -15,7 +15,17 @@
 function wpvc_locate_template( $template_directory_slugs, $name ) {
 	$template_directory_slugs = (array) $template_directory_slugs;
 
+	if ( empty( $template_directory_slugs ) ) {
+		if ( locate_template( $name . '.php', false ) ) {
+			return $name;
+		}
+	}
+
 	foreach ( $template_directory_slugs as $slug ) {
+		if ( empty( $slug ) && locate_template( $name . '.php', false ) ) {
+			return $name;
+		}
+
 		if ( locate_template( $slug . '/' . $name . '.php', false ) ) {
 			return $slug . '/' . $name;
 		}

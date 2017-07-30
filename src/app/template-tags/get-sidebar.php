@@ -14,6 +14,15 @@
 function wpvc_get_sidebar( $name = null ) {
 	do_action( 'get_sidebar', $name );
 
+	if ( '' !== $name && file_exists( get_theme_file_path( "sidebar-{$name}.php" ) ) ) {
+		locate_template( "sidebar-{$name}.php", true, false );
+		return;
+	}
+	if ( file_exists( get_theme_file_path( "sidebar.php" ) ) ) {
+		locate_template( "sidebar.php", true, false );
+		return;
+	}
+
 	if ( '' !== $name ) {
 		$template_name = wpvc_locate_template( (array) wpvc_config( 'templates' ), 'sidebar-' . $name );
 	}

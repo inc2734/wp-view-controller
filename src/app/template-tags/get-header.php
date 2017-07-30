@@ -14,6 +14,15 @@
 function wpvc_get_header( $name = null ) {
 	do_action( 'get_header', $name );
 
+	if ( '' !== $name && file_exists( get_theme_file_path( "header-{$name}.php" ) ) ) {
+		locate_template( "header-{$name}.php", true, false );
+		return;
+	}
+	if ( file_exists( get_theme_file_path( "header.php" ) ) ) {
+		locate_template( "header.php", true, false );
+		return;
+	}
+
 	if ( '' !== $name ) {
 		$template_name = wpvc_locate_template( (array) wpvc_config( 'templates' ), 'header-' . $name );
 	}

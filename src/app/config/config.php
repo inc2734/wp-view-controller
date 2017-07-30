@@ -6,7 +6,7 @@
  */
 
 return apply_filters( 'inc2734_view_controller_config', [
-	'templates' => [ 'templates' ],
+	'templates' => [ '' ],
 	'layout'    => [ 'templates/layout/wrapper' ],
 	'header'    => [ 'templates/layout/header' ],
 	'sidebar'   => [ 'templates/layout/sidebar' ],

@@ -23,16 +23,16 @@ $Controller = new Inc2734_WP_View_Controller();
 ## Directory structure
 ```
 themes/your-theme-name/
-├── vendor                   # → Composer packages (never edit)
-└── templates                # → Base templates directory
-    ├── layout
-    │   ├── wrapper          # → Layout templates
-    │   ├── header           # → Header templates
-    │   ├── sidebar          # → Sidebar templates
-    │   └── footer           # → Footer templates
-    ├── view                 # → View templates
-    │   └── static           # → Static view templates
-    └── index.php, page.php ect...
+├─ vendor                   # → Composer packages (never edit)
+├─ templates                # → Base templates directory
+│   ├─ layout
+│   │   ├─ wrapper          # → Layout templates
+│   │   ├─ header           # → Header templates
+│   │   ├─ sidebar          # → Sidebar templates
+│   │   └─ footer           # → Footer templates
+│   ├─ view                 # → View templates
+│   └─ static               # → Static view templates
+└─ index.php, page.php ect...
 ```
 
 ## Layout template
@@ -53,7 +53,7 @@ Loading `/templates/view/archive.php` when `/templates/view/archive-{post-type}.
 
 ### Static view templates
 
-Tries to load the view template according to the URL. For example when URL is http://example.com/foo/bar, tries to laod from `/templates/view/static/foo/bar.php`.
+Tries to load the view template according to the URL. For example when URL is http://example.com/foo/bar, tries to laod from `/templates/view/static/foo/bar.php` or `/templates/view/static/foo/bar/index.php`.
 
 ## Using view controller
 ```
