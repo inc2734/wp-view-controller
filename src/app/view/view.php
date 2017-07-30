@@ -87,8 +87,7 @@ class Inc2734_WP_View_Controller_View {
 	 */
 	protected function _render() {
 		$layout = apply_filters( 'inc2734_wp_view_controller_layout', $this->layout );
-		$slug   = wpvc_config( 'layout' );
-		wpvc_get_template_part( $slug . '/' . $layout, [
+		wpvc_get_wrapper_template( $layout, [
 			'_view_controller' => $this,
 		] );
 	}
@@ -110,13 +109,23 @@ class Inc2734_WP_View_Controller_View {
 	 * @return array
 	 */
 	protected function _get_view_args() {
-		$slug = wpvc_config( 'view' );
-		$view = [
-			'slug' => $slug . '/' . $this->view,
+		$view  = [
+			'slug' => '',
+			'name' => '',
+		];
+
+		$template_name = wpvc_locate_template( (array) wpvc_config( 'view' ), $this->view );
+
+		if ( empty( $template_name ) ) {
+			return $view;
+		}
+
+		$view  = [
+			'slug' => $template_name,
 			'name' => $this->view_suffix,
 		];
 
-		if ( is_404() || is_front_page() || is_search() ) {
+		if ( is_404() || is_search() ) {
 			return $view;
 		}
 
@@ -135,7 +144,7 @@ class Inc2734_WP_View_Controller_View {
 	/**
 	 * Returns static view template name
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function get_static_view_template_name() {
 		$request_uri = $_SERVER['REQUEST_URI'];
@@ -143,8 +152,14 @@ class Inc2734_WP_View_Controller_View {
 		$path        = $this->_remove_http_query( $request_uri );
 		$path        = $this->_remove_paged_slug( $path );
 		$path        = trim( $path, '/' );
-		$slug        = wpvc_config( 'static' );
-		return $slug . '/' . $path;
+
+		$template_name = wpvc_locate_template( (array) wpvc_config( 'static' ), $path );
+
+		if ( empty( $template_name ) ) {
+			$template_name = wpvc_locate_template( (array) wpvc_config( 'static' ), $path . '/index' );
+		}
+
+		return $template_name;
 	}
 
 	/**

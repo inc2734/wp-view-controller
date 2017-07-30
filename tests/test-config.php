@@ -22,7 +22,7 @@ class Inc2734_WP_View_Controller_Config_Test extends WP_UnitTestCase {
 		$this->assertTrue( is_array( $config ) );
 
 		$config = Inc2734_WP_View_Controller_Config::get( 'layout' );
-		$this->assertEquals( 'templates/layout/wrapper', $config );
+		$this->assertEquals( [ 'templates/layout/wrapper' ], $config );
 
 		$config = wpvc_config( 'no-match' );
 		$this->assertNull( $config );
@@ -31,6 +31,6 @@ class Inc2734_WP_View_Controller_Config_Test extends WP_UnitTestCase {
 		$this->assertTrue( is_array( $config ) );
 
 		$config = wpvc_config( 'layout' );
-		$this->assertEquals( 'templates/layout/wrapper', $config );
+		$this->assertEquals( [ 'templates/layout/wrapper' ], $config );
 	}
 }

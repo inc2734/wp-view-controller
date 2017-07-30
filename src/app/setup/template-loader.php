@@ -32,10 +32,21 @@ add_action( 'after_setup_theme', function() {
 	foreach ( $types as $type ) {
 		add_filter( "{$type}_template_hierarchy", function( $templates ) {
 			$new_templates = $templates;
+
 			foreach ( $templates as $template ) {
-				$slug = wpvc_config( 'templates' );
-				$new_templates[] = $slug . '/' . $template;
+				$template_name = wpvc_locate_template( (array) wpvc_config( 'templates' ), basename( $template , '.php' ) );
+				if ( is_null( $template_name ) ) {
+					continue;
+				}
+				$new_templates[] = $template_name . '.php';
 			}
+
+			$default_template_index = array_search( 'index.php', $new_templates );
+			if ( false !== $default_template_index ) {
+				unset( $new_templates[ $default_template_index ] );
+				$new_templates[] = 'index.php';
+			}
+
 			return $new_templates;
 		} );
 	}
