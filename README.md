@@ -24,6 +24,7 @@ $Controller = new Inc2734_WP_View_Controller();
 ```
 themes/your-theme-name/
 ├─ vendor                   # → Composer packages (never edit)
+├─ page-template            # → Custom page templates directory
 ├─ templates                # → Base templates directory
 │   ├─ layout
 │   │   ├─ wrapper          # → Layout templates
