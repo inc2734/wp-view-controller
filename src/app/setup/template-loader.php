@@ -34,7 +34,7 @@ add_action( 'after_setup_theme', function() {
 			$new_templates = $templates;
 
 			foreach ( $templates as $template ) {
-				$template_name = wpvc_locate_template( (array) wpvc_config( 'templates' ), rtrim( $template , '.php' ) );
+				$template_name = wpvc_locate_template( (array) wpvc_config( 'templates' ), basename( $template, '.php' ) );
 				if ( is_null( $template_name ) ) {
 					continue;
 				}
