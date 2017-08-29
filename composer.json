@@ -2,7 +2,7 @@
   "name": "inc2734/wp-view-controller",
   "description": "A library for WordPress theme view controller.",
   "license": "GPL-2.0+",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "require": {
     "php": ">=5.6"
   },

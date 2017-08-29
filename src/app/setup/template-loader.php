@@ -34,6 +34,16 @@ add_action( 'after_setup_theme', function() {
 			$new_templates = $templates;
 
 			foreach ( $templates as $template ) {
+				$_wp_page_template = get_post_meta( get_the_ID(), '_wp_page_template', true );
+				if ( $_wp_page_template && 'default' !== $_wp_page_template ) {
+					$template_name = wpvc_locate_template( (array) wpvc_config( 'page-templates' ), basename( $template, '.php' ) );
+					if ( is_null( $template_name ) ) {
+						continue;
+					}
+					$new_templates[] = $template_name . '.php';
+					continue;
+				}
+
 				$template_name = wpvc_locate_template( (array) wpvc_config( 'templates' ), basename( $template, '.php' ) );
 				if ( is_null( $template_name ) ) {
 					continue;
