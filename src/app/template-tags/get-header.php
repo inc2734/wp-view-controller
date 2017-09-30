@@ -18,8 +18,8 @@ function wpvc_get_header( $name = null ) {
 		locate_template( "header-{$name}.php", true, false );
 		return;
 	}
-	if ( file_exists( get_theme_file_path( "header.php" ) ) ) {
-		locate_template( "header.php", true, false );
+	if ( file_exists( get_theme_file_path( 'header.php' ) ) ) {
+		locate_template( 'header.php', true, false );
 		return;
 	}
 

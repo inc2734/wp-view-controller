@@ -13,11 +13,11 @@ $ composer require inc2734/wp-view-controller
 ```
 <?php
 // When Using composer auto loader
-// $Controller = new Inc2734\WP_View_Controller\View_Controller();
+$Controller = new Inc2734\WP_View_Controller\View_Controller();
 
 // When not Using composer auto loader
-include_once( get_theme_file_path( '/vendor/inc2734/wp-view-controller/src/wp-view-controller.php' ) );
-$Controller = new Inc2734_WP_View_Controller();
+// include_once( get_theme_file_path( '/vendor/inc2734/wp-view-controller/src/wp-view-controller.php' ) );
+// $Controller = new Inc2734_WP_View_Controller();
 ```
 
 ## Directory structure

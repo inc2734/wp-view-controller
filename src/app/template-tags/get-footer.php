@@ -18,8 +18,8 @@ function wpvc_get_footer( $name = null ) {
 		locate_template( "footer-{$name}.php", true, false );
 		return;
 	}
-	if ( file_exists( get_theme_file_path( "footer.php" ) ) ) {
-		locate_template( "footer.php", true, false );
+	if ( file_exists( get_theme_file_path( 'footer.php' ) ) ) {
+		locate_template( 'footer.php', true, false );
 		return;
 	}
 

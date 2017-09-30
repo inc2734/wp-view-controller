@@ -18,8 +18,8 @@ function wpvc_get_sidebar( $name = null ) {
 		locate_template( "sidebar-{$name}.php", true, false );
 		return;
 	}
-	if ( file_exists( get_theme_file_path( "sidebar.php" ) ) ) {
-		locate_template( "sidebar.php", true, false );
+	if ( file_exists( get_theme_file_path( 'sidebar.php' ) ) ) {
+		locate_template( 'sidebar.php', true, false );
 		return;
 	}
 

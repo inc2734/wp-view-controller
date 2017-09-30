@@ -62,7 +62,9 @@ add_action( 'after_setup_theme', function() {
 						}
 					}
 
+					// @codingStandardsIgnoreStart
 					$post_templates[ $page_template ] = translate( $template_name, wp_get_theme()->get( 'TextDomain' ) );
+					// @codingStandardsIgnoreEnd
 				}
 			}
 
