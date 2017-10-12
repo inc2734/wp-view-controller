@@ -36,7 +36,7 @@ add_action( 'after_setup_theme', function() {
 			foreach ( $templates as $template ) {
 				$_wp_page_template = get_post_meta( get_the_ID(), '_wp_page_template', true );
 				if ( $_wp_page_template && 'default' !== $_wp_page_template ) {
-					$template_name = wpvc_locate_template( (array) wpvc_config( 'page-templates' ), basename( $template, '.php' ) );
+					$template_name = wpvc_locate_template( (array) wpvc_config( 'page-templates' ), basename( $_wp_page_template, '.php' ) );
 					if ( is_null( $template_name ) ) {
 						continue;
 					}
@@ -60,4 +60,11 @@ add_action( 'after_setup_theme', function() {
 			return array_unique( $new_templates );
 		} );
 	}
+
+	add_filter( 'template_include', function( $template ) {
+		if ( file_exists( get_theme_file_path( $template ) ) ) {
+			return get_theme_file_path( $template );
+		}
+		return $template;
+	} );
 } );

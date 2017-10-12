@@ -22,11 +22,18 @@ add_action( 'after_setup_theme', function() {
 				foreach ( glob( get_theme_file_path( $page_templates_dir . '/*' ) ) as $page_template_full_path ) {
 					$base_template_dirs = wpvc_config( 'templates' );
 					foreach ( $base_template_dirs as $base_template_dir ) {
-						$page_template = preg_replace(
-							'/^' . preg_quote( trailingslashit( get_theme_file_path( '/' . $base_template_dir ) ), '/' ) . '(.*)$/',
-							'$1',
+						$page_template = str_replace(
+							trailingslashit( get_theme_file_path( '/' . $base_template_dir ) ),
+							'',
 							$page_template_full_path
 						);
+
+						$page_template = str_replace(
+							trailingslashit( get_template_directory() ),
+							'',
+							$page_template
+						);
+
 						if ( $page_template !== $page_template_full_path ) {
 							break;
 						}
@@ -63,7 +70,11 @@ add_action( 'after_setup_theme', function() {
 					}
 
 					// @codingStandardsIgnoreStart
-					$post_templates[ $page_template ] = translate( $template_name, wp_get_theme()->get( 'TextDomain' ) );
+					if ( ! is_child_theme() ) {
+						$post_templates[ $page_template ] = translate( $template_name, wp_get_theme()->get( 'TextDomain' ) );
+					} else {
+						$post_templates[ $page_template ] = translate( $template_name, wp_get_theme( get_template() )->get( 'TextDomain' ) );
+					}
 					// @codingStandardsIgnoreEnd
 				}
 			}
