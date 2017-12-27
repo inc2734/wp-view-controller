@@ -14,6 +14,7 @@
  */
 function wpvc_locate_template( $directory_slugs, $name ) {
 	$directory_slugs = (array) $directory_slugs;
+	$name = str_replace( '.php', '', $name );
 
 	if ( empty( $directory_slugs ) ) {
 		if ( locate_template( $name . '.php', false ) ) {

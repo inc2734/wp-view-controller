@@ -13,5 +13,5 @@ return apply_filters( 'inc2734_view_controller_config', [
 	'sidebar'       => [ 'templates/layout/sidebar' ],
 	'footer'        => [ 'templates/layout/footer' ],
 	'view'          => [ 'templates/view' ],
-	'static'        => [ 'templates/view/static' ],
+	'static'        => [ 'templates/static' ],
 ] );
