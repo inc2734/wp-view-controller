@@ -54,7 +54,7 @@ Loading `/templates/view/archive.php` when `/templates/view/archive-{post-type}.
 
 ### Static view templates
 
-Tries to load the view template according to the URL. For example when URL is http://example.com/foo/bar, tries to laod from `/templates/view/static/foo/bar.php` or `/templates/view/static/foo/bar/index.php`.
+Tries to load the view template according to the URL. For example when URL is http://example.com/foo/bar, tries to laod from `/templates/static/foo/bar.php` or `/templates/static/foo/bar/index.php`.
 
 ## Using view controller
 ```

@@ -51,13 +51,13 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 		_unregister_post_type( $this->post_type );
 		_unregister_taxonomy( $this->taxonomy, $this->post_type );
 
-		$static_view_directory = get_template_directory() . '/templates/view/static';
+		$static_view_directory = get_template_directory() . '/templates/static';
 		system( 'chmod -R 755 ' . $static_view_directory );
 		system( 'rm -R ' . $static_view_directory );
 	}
 
 	protected function _create_static_view_dir( $subdir ) {
-		$static_view_directory = get_template_directory() . '/templates/view/static/' . trim( $subdir, '/' );
+		$static_view_directory = get_template_directory() . '/templates/static/' . trim( $subdir, '/' );
 		if ( ! is_dir( $static_view_directory ) ) {
 			mkdir( $static_view_directory, 0755, true);
 		}
@@ -86,14 +86,14 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 
 		$static_view_template = $this->_create_static_view_template( 'category', $category->slug );
 		$this->assertEquals(
-			'templates/view/static/category/' . $category->slug,
+			'templates/static/category/' . $category->slug,
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
 
 		$static_view_template = $this->_create_static_view_template( 'category/' . $category->slug, 'index' );
 		$this->assertEquals(
-			'templates/view/static/category/' . $category->slug . '/index',
+			'templates/static/category/' . $category->slug . '/index',
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
@@ -109,14 +109,14 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 
 		$static_view_template = $this->_create_static_view_template( 'tag', $post_tag->slug );
 		$this->assertEquals(
-			'templates/view/static/tag/' . $post_tag->slug,
+			'templates/static/tag/' . $post_tag->slug,
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
 
 		$static_view_template = $this->_create_static_view_template( 'tag/' . $post_tag->slug, 'index' );
 		$this->assertEquals(
-			'templates/view/static/tag/' . $post_tag->slug . '/index',
+			'templates/static/tag/' . $post_tag->slug . '/index',
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
@@ -133,14 +133,14 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 
 		$static_view_template = $this->_create_static_view_template( 'date', $year );
 		$this->assertEquals(
-			'templates/view/static/date/' . $year,
+			'templates/static/date/' . $year,
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
 
 		$static_view_template = $this->_create_static_view_template( 'date/' . $year, 'index' );
 		$this->assertEquals(
-			'templates/view/static/date/' . $year . '/index',
+			'templates/static/date/' . $year . '/index',
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
@@ -158,14 +158,14 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 
 		$static_view_template = $this->_create_static_view_template( 'date/' . $year, $month );
 		$this->assertEquals(
-			'templates/view/static/date/' . $year . '/' . $month,
+			'templates/static/date/' . $year . '/' . $month,
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
 
 		$static_view_template = $this->_create_static_view_template( 'date/' . $year . '/' . $month, 'index' );
 		$this->assertEquals(
-			'templates/view/static/date/' . $year . '/' . $month . '/index',
+			'templates/static/date/' . $year . '/' . $month . '/index',
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
@@ -184,14 +184,14 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 
 		$static_view_template = $this->_create_static_view_template( 'date/' . $year . '/' . $month, $day );
 		$this->assertEquals(
-			'templates/view/static/date/' . $year . '/' . $month . '/' . $day,
+			'templates/static/date/' . $year . '/' . $month . '/' . $day,
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
 
 		$static_view_template = $this->_create_static_view_template( 'date/' . $year . '/' . $month . '/' . $day, 'index' );
 		$this->assertEquals(
-			'templates/view/static/date/' . $year . '/' . $month . '/' . $day . '/index',
+			'templates/static/date/' . $year . '/' . $month . '/' . $day . '/index',
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
@@ -208,14 +208,14 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 
 		$static_view_template = $this->_create_static_view_template( 'author', $user_nicename );
 		$this->assertEquals(
-			'templates/view/static/author/' . $user_nicename,
+			'templates/static/author/' . $user_nicename,
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
 
 		$static_view_template = $this->_create_static_view_template( 'author/' . $user_nicename, 'index' );
 		$this->assertEquals(
-			'templates/view/static/author/' . $user_nicename . '/index',
+			'templates/static/author/' . $user_nicename . '/index',
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
@@ -232,14 +232,14 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 
 		$static_view_template = $this->_create_static_view_template( '', $this->post_ids[0] );
 		$this->assertEquals(
-			'templates/view/static/' . $this->post_ids[0],
+			'templates/static/' . $this->post_ids[0],
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
 
 		$static_view_template = $this->_create_static_view_template( $this->post_ids[0], 'index' );
 		$this->assertEquals(
-			'templates/view/static/' . $this->post_ids[0] . '/index',
+			'templates/static/' . $this->post_ids[0] . '/index',
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
@@ -257,14 +257,14 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 
 		$static_view_template = $this->_create_static_view_template( $post_type_object->name, $custom_post->post_name );
 		$this->assertEquals(
-			'templates/view/static/' . $post_type_object->name . '/' . $custom_post->post_name,
+			'templates/static/' . $post_type_object->name . '/' . $custom_post->post_name,
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
 
 		$static_view_template = $this->_create_static_view_template( $post_type_object->name . '/' . $custom_post->post_name, 'index' );
 		$this->assertEquals(
-			'templates/view/static/' . $post_type_object->name . '/' . $custom_post->post_name . '/index',
+			'templates/static/' . $post_type_object->name . '/' . $custom_post->post_name . '/index',
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
@@ -281,14 +281,14 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 
 		$static_view_template = $this->_create_static_view_template( '', $post_type_object->name );
 		$this->assertEquals(
-			'templates/view/static/' . $post_type_object->name,
+			'templates/static/' . $post_type_object->name,
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
 
 		$static_view_template = $this->_create_static_view_template( $post_type_object->name, 'index' );
 		$this->assertEquals(
-			'templates/view/static/' . $post_type_object->name . '/index',
+			'templates/static/' . $post_type_object->name . '/index',
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
@@ -306,14 +306,14 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 
 		$static_view_template = $this->_create_static_view_template( '', $post_type_object->name );
 		$this->assertEquals(
-			'templates/view/static/' . $post_type_object->name,
+			'templates/static/' . $post_type_object->name,
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );
 
 		$static_view_template = $this->_create_static_view_template( $post_type_object->name, 'index' );
 		$this->assertEquals(
-			'templates/view/static/' . $post_type_object->name . '/index',
+			'templates/static/' . $post_type_object->name . '/index',
 			$View->get_static_view_template_name()
 		);
 		unlink( $static_view_template );

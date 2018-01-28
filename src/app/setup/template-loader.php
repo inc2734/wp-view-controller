@@ -89,4 +89,8 @@ add_action( 'after_setup_theme', function() {
 		}
 		return $template;
 	} );
+
+	add_filter( 'frontpage_template', function( $template ) {
+		return is_home() ? '' : $template;
+	} );
 } );
