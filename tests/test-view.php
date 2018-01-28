@@ -3,8 +3,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 
 	public function setup() {
 		parent::setup();
-		include_once( __DIR__ . '/../src/wp-view-controller.php' );
-		new Inc2734_WP_View_Controller();
+		new Inc2734\WP_View_Controller\View_Controller();
 
 		global $wp_rewrite;
 		parent::setup();
@@ -80,7 +79,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 * @test
 	 */
 	public function get_static_view_template_name__category() {
-		$View = new Inc2734_WP_View_Controller_View();
+		$View = new Inc2734\WP_View_Controller\App\View();
 		$category = get_terms( 'category' )[0];
 		$this->go_to( get_term_link( $category ) );
 
@@ -103,7 +102,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 * @test
 	 */
 	public function get_static_view_template_name__post_tag() {
-		$View = new Inc2734_WP_View_Controller_View();
+		$View = new Inc2734\WP_View_Controller\App\View();
 		$post_tag = get_terms( 'post_tag' )[0];
 		$this->go_to( get_term_link( $post_tag ) );
 
@@ -126,7 +125,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 * @test
 	 */
 	public function get_static_view_template_name__year() {
-		$View = new Inc2734_WP_View_Controller_View();
+		$View = new Inc2734\WP_View_Controller\App\View();
 		$newest_post = get_post( $this->post_ids[0] );
 		$year = date( 'Y', strtotime( $newest_post->post_date ) );
 		$this->go_to( get_year_link( $year ) );
@@ -150,7 +149,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 * @test
 	 */
 	public function get_static_view_template_name__month() {
-		$View = new Inc2734_WP_View_Controller_View();
+		$View = new Inc2734\WP_View_Controller\App\View();
 		$newest_post = get_post( $this->post_ids[0] );
 		$year  = date( 'Y', strtotime( $newest_post->post_date ) );
 		$month = date( 'm', strtotime( $newest_post->post_date ) );
@@ -175,7 +174,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 * @test
 	 */
 	public function get_static_view_template_name__day() {
-		$View = new Inc2734_WP_View_Controller_View();
+		$View = new Inc2734\WP_View_Controller\App\View();
 		$newest_post = get_post( $this->post_ids[0] );
 		$year  = date( 'Y', strtotime( $newest_post->post_date ) );
 		$month = date( 'm', strtotime( $newest_post->post_date ) );
@@ -201,7 +200,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 * @test
 	 */
 	public function get_static_view_template_name__author() {
-		$View = new Inc2734_WP_View_Controller_View();
+		$View = new Inc2734\WP_View_Controller\App\View();
 		$newest_post = get_post( $this->post_ids[0] );
 		$user_nicename = get_the_author_meta( 'user_nicename', $newest_post->post_author );
 		$this->go_to( get_author_posts_url( $newest_post->post_author ) );
@@ -225,7 +224,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 * @test
 	 */
 	public function get_static_view_template_name__single_post() {
-		$View = new Inc2734_WP_View_Controller_View();
+		$View = new Inc2734\WP_View_Controller\App\View();
 		$newest_post = get_post( $this->post_ids[0] );
 		$categories = get_the_category( $newest_post );
 		$this->go_to( get_permalink( $newest_post ) );
@@ -249,7 +248,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 * @test
 	 */
 	public function get_static_view_template_name__single_custom_post() {
-		$View = new Inc2734_WP_View_Controller_View();
+		$View = new Inc2734\WP_View_Controller\App\View();
 		$custom_post_type_id = $this->factory->post->create( [ 'post_type' => $this->post_type ] );
 		$custom_post = get_post( $custom_post_type_id );
 		$this->go_to( get_permalink( $custom_post_type_id ) );
@@ -274,7 +273,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 * @test
 	 */
 	public function get_static_view_template_name__post_type_archive_no_post() {
-		$View = new Inc2734_WP_View_Controller_View();
+		$View = new Inc2734\WP_View_Controller\App\View();
 		$this->go_to( get_post_type_archive_link( $this->post_type ) );
 		$this->assertFalse( get_post_type() );
 		$post_type_object = get_post_type_object( $this->post_type );
@@ -298,7 +297,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 * @test
 	 */
 	public function get_static_view_template_name__post_type_archive_have_posts() {
-		$View = new Inc2734_WP_View_Controller_View();
+		$View = new Inc2734\WP_View_Controller\App\View();
 		$custom_post_type_id = $this->factory->post->create( [ 'post_type' => $this->post_type ] );
 		$this->go_to( get_post_type_archive_link( $this->post_type ) );
 		$post_type_object = get_post_type_object( $this->post_type );

@@ -3,8 +3,7 @@ class Inc2734_WP_View_Controller_Config_Test extends WP_UnitTestCase {
 
 	public function setup() {
 		parent::setup();
-		include_once( __DIR__ . '/../src/wp-view-controller.php' );
-		new Inc2734_WP_View_Controller();
+		new \Inc2734\WP_View_Controller\View_Controller();
 	}
 
 	public function tearDown() {
@@ -15,13 +14,13 @@ class Inc2734_WP_View_Controller_Config_Test extends WP_UnitTestCase {
 	 * @test
 	 */
 	public function get() {
-		$config = Inc2734_WP_View_Controller_Config::get( 'no-match' );
+		$config = \Inc2734\WP_View_Controller\App\Config_Loader::get( 'no-match' );
 		$this->assertNull( $config );
 
-		$config = Inc2734_WP_View_Controller_Config::get();
+		$config = \Inc2734\WP_View_Controller\App\Config_Loader::get();
 		$this->assertTrue( is_array( $config ) );
 
-		$config = Inc2734_WP_View_Controller_Config::get( 'layout' );
+		$config = \Inc2734\WP_View_Controller\App\Config_Loader::get( 'layout' );
 		$this->assertEquals( [ 'templates/layout/wrapper' ], $config );
 
 		$config = wpvc_config( 'no-match' );

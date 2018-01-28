@@ -3,8 +3,7 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 
 	public function setup() {
 		parent::setup();
-		include_once( __DIR__ . '/../src/wp-view-controller.php' );
-		new Inc2734_WP_View_Controller();
+		new Inc2734\WP_View_Controller\View_Controller();
 	}
 
 	public function tearDown() {

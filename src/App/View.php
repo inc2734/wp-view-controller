@@ -5,10 +5,9 @@
  * @license GPL-2.0+
  */
 
-/**
- * View class
- */
-class Inc2734_WP_View_Controller_View {
+namespace Inc2734\WP_View_Controller\App;
+
+class View {
 
 	/**
 	 * The layout template path
