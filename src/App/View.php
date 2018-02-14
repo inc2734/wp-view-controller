@@ -76,10 +76,9 @@ class View {
 	 * @return void
 	 */
 	protected function _render_direct() {
-		while ( have_posts() ) {
-			the_post();
-			$this->_render();
-		}
+		global $post;
+		setup_postdata( $post );
+		$this->_render();
 	}
 
 	/**
