@@ -34,14 +34,16 @@ add_action( 'after_setup_theme', function() {
 			$new_templates = $templates;
 
 			foreach ( $templates as $template ) {
-				$_wp_page_template = get_post_meta( get_the_ID(), '_wp_page_template', true );
-				if ( $_wp_page_template && 'default' !== $_wp_page_template ) {
-					$template_name = wpvc_locate_template( (array) wpvc_config( 'page-templates' ), str_replace( '.php', '', $_wp_page_template ) );
-					if ( is_null( $template_name ) ) {
+				if ( is_singular() ) {
+					$_wp_page_template = get_post_meta( get_the_ID(), '_wp_page_template', true );
+					if ( $_wp_page_template && 'default' !== $_wp_page_template ) {
+						$template_name = wpvc_locate_template( (array) wpvc_config( 'page-templates' ), str_replace( '.php', '', $_wp_page_template ) );
+						if ( is_null( $template_name ) ) {
+							continue;
+						}
+						$new_templates[] = $template_name . '.php';
 						continue;
 					}
-					$new_templates[] = $template_name . '.php';
-					continue;
 				}
 
 				$template_name = wpvc_locate_template( (array) wpvc_config( 'templates' ), str_replace( '.php', '', $template ) );
@@ -61,11 +63,13 @@ add_action( 'after_setup_theme', function() {
 		} );
 
 		add_filter( "{$type}_template", function( $template, $type, $templates ) {
-			$custom_page_template = get_post_meta( get_the_ID(), '_wp_page_template', true );
-			if ( $custom_page_template ) {
-				if ( $custom_page_template && 'default' !== $custom_page_template ) {
-					if ( file_exists( get_theme_file_path( $custom_page_template ) ) ) {
-						return $custom_page_template;
+			if ( is_singular() ) {
+				$custom_page_template = get_post_meta( get_the_ID(), '_wp_page_template', true );
+				if ( $custom_page_template ) {
+					if ( $custom_page_template && 'default' !== $custom_page_template ) {
+						if ( file_exists( get_theme_file_path( $custom_page_template ) ) ) {
+							return $custom_page_template;
+						}
 					}
 				}
 			}
