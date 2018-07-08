@@ -42,7 +42,7 @@ class Template_Part {
 	 * @param string $slug
 	 * @return void
 	 */
-	public function __construct( $template, $slug = '' ) {
+	public function __construct( $template, $slug = null ) {
 		global $wp_query;
 
 		$this->template = $template;
