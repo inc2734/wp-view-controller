@@ -148,7 +148,10 @@ class View {
 	 * @return string|null
 	 */
 	public function get_static_view_template_name() {
-		$request_uri = $_SERVER['REQUEST_URI'];
+		// @codingStandardsIgnoreStart
+		// @todo サニタイズしているのに Detected usage of a non-validated input variable: $_SERVER がでる。バグ？
+		$request_uri = sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) );
+		// @codingStandardsIgnoreEnd
 		$request_uri = $this->_get_relative_path( $request_uri );
 		$path        = $this->_remove_http_query( $request_uri );
 		$path        = $this->_remove_paged_slug( $path );
