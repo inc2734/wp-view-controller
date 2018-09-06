@@ -75,11 +75,8 @@ add_action( 'after_setup_theme', function() {
 			}
 
 			foreach ( $templates as $_template ) {
-				$directory = (array) wpvc_config( 'templates' );
-				$directory = array_merge( array( '' ), $directory );
-				$template_name = wpvc_locate_template( $directory, $_template );
-				if ( $template_name && get_theme_file_path( $template_name ) ) {
-					return get_theme_file_path( $template_name . '.php' );
+				if ( file_exists( get_theme_file_path( $_template ) ) ) {
+					return get_theme_file_path( $_template );
 				}
 			}
 
