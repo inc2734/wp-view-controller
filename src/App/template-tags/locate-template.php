@@ -9,26 +9,26 @@
  * Locate template
  *
  * @param array $directory_slugs Template name that can be used in get_template_part()
- * @param string $template_name
+ * @param string $slug
+ * @param string $name
  * @return null|string Template name that can be used in get_template_part()
  */
-function wpvc_locate_template( $directory_slugs, $name ) {
+function wpvc_locate_template( $directory_slugs, $slug, $name = '' ) {
 	$directory_slugs = (array) $directory_slugs;
-	$name = str_replace( '.php', '', $name );
+	$slug = rtrim( $slug, '.php' );
 
 	if ( empty( $directory_slugs ) ) {
-		if ( locate_template( $name . '.php', false ) ) {
-			return $name;
-		}
+		return wpvc_get_template_name( $slug, $name );
 	}
 
-	foreach ( $directory_slugs as $slug ) {
-		if ( empty( $slug ) && locate_template( $name . '.php', false ) ) {
-			return $name;
+	foreach ( $directory_slugs as $directory_slug ) {
+		if ( $directory_slug ) {
+			$slug = $directory_slug . '/' . $slug;
 		}
 
-		if ( locate_template( $slug . '/' . $name . '.php', false ) ) {
-			return $slug . '/' . $name;
+		$template_name = wpvc_get_template_name( $slug, $name );
+		if ( $template_name ) {
+			return $template_name;
 		}
 	}
 }

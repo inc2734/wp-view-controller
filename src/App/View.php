@@ -88,9 +88,13 @@ class View {
 	 */
 	protected function _render() {
 		$layout = apply_filters( 'inc2734_wp_view_controller_layout', $this->layout );
-		wpvc_get_wrapper_template( $layout, [
-			'_view_controller' => $this,
-		] );
+
+		wpvc_get_wrapper_template(
+			$layout,
+			[
+				'_view_controller' => $this,
+			]
+		);
 	}
 
 	/**
@@ -115,31 +119,36 @@ class View {
 			'name' => '',
 		];
 
-		$template_name = wpvc_locate_template( (array) wpvc_config( 'view' ), $this->view );
-
+		$template_name = wpvc_locate_template( (array) wpvc_config( 'view' ), $this->view, $this->view_suffix );
 		if ( empty( $template_name ) ) {
 			return $view;
 		}
 
-		$view  = [
-			'slug' => $template_name,
-			'name' => $this->view_suffix,
-		];
+		if ( ! $this->view_suffix ) {
+			$view  = [
+				'slug' => $template_name,
+				'name' => '',
+			];
+		} else {
+			$view  = [
+				'slug' => rtrim( $template_name, '-' . $this->view_suffix ),
+				'name' => $this->view_suffix,
+			];
+		}
 
 		if ( is_404() || is_search() ) {
 			return $view;
 		}
 
-		$template_name = $this->get_static_view_template_name();
-
-		if ( ! locate_template( $template_name . '.php', false ) ) {
-			return $view;
+		$static_template_name = $this->get_static_view_template_name();
+		if ( locate_template( $static_template_name . '.php', false ) ) {
+			return [
+				'slug' => $static_template_name,
+				'name' => '',
+			];
 		}
 
-		return [
-			'slug' => $template_name,
-			'name' => '',
-		];
+		return $view;
 	}
 
 	/**
@@ -158,7 +167,6 @@ class View {
 		$path        = trim( $path, '/' );
 
 		$template_name = wpvc_locate_template( (array) wpvc_config( 'static' ), $path );
-
 		if ( empty( $template_name ) ) {
 			$template_name = wpvc_locate_template( (array) wpvc_config( 'static' ), $path . '/index' );
 		}

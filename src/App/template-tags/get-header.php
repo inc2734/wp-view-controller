@@ -23,7 +23,7 @@ function wpvc_get_header( $name = null ) {
 		return;
 	}
 
-	if ( '' !== $name ) {
+	if ( $name ) {
 		$template_name = wpvc_locate_template( (array) wpvc_config( 'templates' ), 'header-' . $name );
 	}
 

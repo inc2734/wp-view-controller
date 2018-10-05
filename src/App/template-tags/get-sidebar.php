@@ -23,7 +23,7 @@ function wpvc_get_sidebar( $name = null ) {
 		return;
 	}
 
-	if ( '' !== $name ) {
+	if ( $name ) {
 		$template_name = wpvc_locate_template( (array) wpvc_config( 'templates' ), 'sidebar-' . $name );
 	}
 
