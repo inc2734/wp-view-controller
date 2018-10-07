@@ -77,11 +77,7 @@ add_action(
 							}
 
 							// @codingStandardsIgnoreStart
-							if ( ! is_child_theme() ) {
-								$post_templates[ $page_template ] = translate( $template_name, wp_get_theme()->get( 'TextDomain' ) );
-							} else {
-								$post_templates[ $page_template ] = translate( $template_name, wp_get_theme( get_template() )->get( 'TextDomain' ) );
-							}
+							$post_templates[ $page_template ] = translate( $template_name, wp_get_theme( get_template() )->get( 'TextDomain' ) );
 							// @codingStandardsIgnoreEnd
 						}
 					}
