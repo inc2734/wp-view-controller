@@ -15,7 +15,7 @@
  */
 function wpvc_locate_template( $directory_slugs, $slug, $name = '' ) {
 	$directory_slugs = (array) $directory_slugs;
-	$slug = rtrim( $slug, '.php' );
+	$slug = preg_replace( '|\.php$|', '', $slug );
 
 	if ( empty( $directory_slugs ) ) {
 		return wpvc_get_template_name( $slug, $name );

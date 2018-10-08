@@ -131,7 +131,7 @@ class View {
 			];
 		} else {
 			$view  = [
-				'slug' => rtrim( $template_name, '-' . $this->view_suffix ),
+				'slug' => preg_replace( '|\-' . preg_quote( $this->view_suffix ) . '$|', '', $template_name ),
 				'name' => $this->view_suffix,
 			];
 		}
