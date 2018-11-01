@@ -82,7 +82,13 @@ class Template_Part {
 	 * @return void
 	 */
 	public function render() {
+		ob_start();
 		get_template_part( $this->template, $this->slug );
+
+		// @codingStandardsIgnoreStart
+		echo apply_filters( 'inc2734_view_controller_template_part_render', ob_get_clean(), $this->template, $this->slug, $this->vars );
+		// @codingStandardsIgnoreEnd
+
 		foreach ( $this->vars as $key => $value ) {
 			unset( $value );
 			$this->wp_query->set( $key, null );
