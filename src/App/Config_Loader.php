@@ -18,7 +18,7 @@ class Config_Loader {
 	public static function get( $key = null ) {
 		$path = apply_filters(
 			'inc2734_view_controller_config_path',
-			untrailingslashit( __DIR__ ) . '/config/config.php'
+			untrailingslashit( __DIR__ ) . '/../config/config.php'
 		);
 
 		if ( ! file_exists( $path ) ) {

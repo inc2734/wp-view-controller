@@ -7,17 +7,8 @@
 
 namespace Inc2734\WP_View_Controller;
 
+use Inc2734\WP_View_Controller\App\Loader;
 use Inc2734\WP_View_Controller\App\View;
-
-$includes = array(
-	'/App/template-tags',
-	'/App/setup',
-);
-foreach ( $includes as $include ) {
-	foreach ( glob( __DIR__ . $include . '/*.php' ) as $file ) {
-		require_once( $file );
-	}
-}
 
 class View_Controller {
 
@@ -29,6 +20,8 @@ class View_Controller {
 	protected $view;
 
 	public function __construct() {
+		Loader::load_template_tags();
+		Loader::load_setup_files();
 		$this->view = new View();
 	}
 
