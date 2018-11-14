@@ -10,23 +10,19 @@ namespace Inc2734\WP_View_Controller;
 use Inc2734\WP_View_Controller\App\Loader;
 use Inc2734\WP_View_Controller\App\View;
 
-/**
- * Old bootstrap class.
- *
- * @deprecated
- */
-class View_Controller {
+class Bootstrap {
 
 	/**
 	 * View object
 	 *
 	 * @var View
 	 */
-	protected $view;
+	protected static $view;
 
 	public function __construct() {
-		$this->view = new View();
-		error_log( 'Inc2734\WP_View_Controller\View_Controller class is deprecated. You should use Inc2734\WP_View_Controller\Bootstrap class.' );
+		Loader::load_template_tags();
+		Loader::load_setup_files();
+		static::_set_view();
 	}
 
 	/**
@@ -36,8 +32,9 @@ class View_Controller {
 	 * @param string $view_suffix view template suffix
 	 * @return void
 	 */
-	public function render( $view, $view_suffix = '' ) {
-		$this->view->render( $view, $view_suffix );
+	public static function render( $view, $view_suffix = '' ) {
+		static::_set_view();
+		static::$view->render( $view, $view_suffix );
 	}
 
 	/**
@@ -46,7 +43,19 @@ class View_Controller {
 	 * @param string $layout layout template path
 	 * @return void
 	 */
-	public function layout( $layout ) {
-		$this->view->layout( $layout );
+	public static function layout( $layout ) {
+		static::_set_view();
+		static::$view->layout( $layout );
+	}
+
+	/**
+	 * Set View object
+	 *
+	 * @return void
+	 */
+	protected static function _set_view() {
+		if ( ! static::$view ) {
+			static::$view = new View();
+		}
 	}
 }

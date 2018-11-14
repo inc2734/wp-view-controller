@@ -12,8 +12,17 @@ $ composer require inc2734/wp-view-controller
 ## How to use
 ```
 <?php
-// When Using composer auto loader
-$Controller = new Inc2734\WP_View_Controller\View_Controller();
+// in functions.php
+new Inc2734\WP_View_Controller\Bootstrap();
+```
+
+```
+<?php
+// in page template
+use Inc2734\WP_View_Controller\Bootstrap;
+
+Bootstrap::layout( 'right-sidebar' );
+Bootstrap::render( 'front-page' );
 ```
 
 ## Directory structure
@@ -54,9 +63,10 @@ Tries to load the view template according to the URL. For example when URL is ht
 
 ## Using view controller
 ```
-$controller = new Inc2734_WP_View_Controller();
-$controller->layout( 'right-sidebar' );
-$controller->render( 'content', 'news' );
+use Inc2734\WP_View_Controller\Bootstrap;
+
+Bootstrap::layout( 'right-sidebar' );
+Bootstrap::render( 'content', 'news' );
 ```
 
 ## Template tags

@@ -3,7 +3,7 @@ class Inc2734_WP_View_Controller_Config_Test extends WP_UnitTestCase {
 
 	public function setup() {
 		parent::setup();
-		new \Inc2734\WP_View_Controller\View_Controller();
+		new \Inc2734\WP_View_Controller\Bootstrap();
 	}
 
 	public function tearDown() {
