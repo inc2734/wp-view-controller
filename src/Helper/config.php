@@ -5,7 +5,9 @@
  * @license GPL-2.0+
  */
 
-use Inc2734\WP_View_Controller\App\Config_Loader;
+namespace Inc2734\WP_View_Controller\Helper;
+
+use Inc2734\WP_View_Controller\App\Config;
 
 /**
  * Getting config value
@@ -13,6 +15,6 @@ use Inc2734\WP_View_Controller\App\Config_Loader;
  * @param string $key the key of the config
  * @return mixed
  */
-function wpvc_config( $key = null ) {
-	return Config_Loader::get( $key );
+function config( $key = null ) {
+	return Config::get( $key );
 }

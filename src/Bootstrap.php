@@ -20,7 +20,7 @@ class Bootstrap {
 	protected static $view;
 
 	public function __construct() {
-		Loader::load_template_tags();
+		Loader::load_helpers();
 		Loader::load_setup_files();
 		static::_set_view();
 	}

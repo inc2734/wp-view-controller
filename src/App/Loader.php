@@ -10,12 +10,12 @@ namespace Inc2734\WP_View_Controller\App;
 class Loader {
 
 	/**
-	 * Load template tags
+	 * Load helper function
 	 *
 	 * @return void
 	 */
-	public static function load_template_tags() {
-		static::load( __DIR__ . '/../template-tags' );
+	public static function load_helpers() {
+		static::load( __DIR__ . '/../Helper' );
 	}
 
 	/**

@@ -7,6 +7,8 @@
 
 namespace Inc2734\WP_View_Controller\App;
 
+use Inc2734\WP_View_Controller\Helper;
+
 class View {
 
 	/**
@@ -89,7 +91,7 @@ class View {
 	protected function _render() {
 		$layout = apply_filters( 'inc2734_wp_view_controller_layout', $this->layout );
 
-		wpvc_get_wrapper_template(
+		Helper\get_wrapper_template(
 			$layout,
 			[
 				'_view_controller' => $this,
@@ -105,7 +107,7 @@ class View {
 	public function view() {
 		$view = $this->_get_view_args();
 		$view = apply_filters( 'inc2734_wp_view_controller_view', $view );
-		wpvc_get_template_part( $view['slug'], $view['name'] );
+		get_template_part( $view['slug'], $view['name'] );
 	}
 
 	/**
@@ -119,7 +121,7 @@ class View {
 			'name' => '',
 		];
 
-		$template_name = wpvc_locate_template( (array) wpvc_config( 'view' ), $this->view, $this->view_suffix );
+		$template_name = Helper\locate_template( (array) Helper\config( 'view' ), $this->view, $this->view_suffix );
 		if ( empty( $template_name ) ) {
 			return $view;
 		}
@@ -166,9 +168,9 @@ class View {
 		$path        = $this->_remove_paged_slug( $path );
 		$path        = trim( $path, '/' );
 
-		$template_name = wpvc_locate_template( (array) wpvc_config( 'static' ), $path );
+		$template_name = Helper\locate_template( (array) Helper\config( 'static' ), $path );
 		if ( empty( $template_name ) ) {
-			$template_name = wpvc_locate_template( (array) wpvc_config( 'static' ), $path . '/index' );
+			$template_name = Helper\locate_template( (array) Helper\config( 'static' ), $path . '/index' );
 		}
 
 		return $template_name;

@@ -5,6 +5,8 @@
  * @license GPL-2.0+
  */
 
+namespace Inc2734\WP_View_Controller\Helper;
+
 /**
  * Locate template
  *
@@ -13,12 +15,12 @@
  * @param string $name
  * @return null|string Template name that can be used in get_template_part()
  */
-function wpvc_locate_template( $directory_slugs, $slug, $name = '' ) {
+function locate_template( $directory_slugs, $slug, $name = '' ) {
 	$directory_slugs = (array) $directory_slugs;
 	$slug = preg_replace( '|\.php$|', '', $slug );
 
 	if ( empty( $directory_slugs ) ) {
-		return wpvc_get_template_name( $slug, $name );
+		return get_template_name( $slug, $name );
 	}
 
 	foreach ( $directory_slugs as $directory_slug ) {
@@ -26,7 +28,7 @@ function wpvc_locate_template( $directory_slugs, $slug, $name = '' ) {
 			$slug = $directory_slug . '/' . $slug;
 		}
 
-		$template_name = wpvc_get_template_name( $slug, $name );
+		$template_name = get_template_name( $slug, $name );
 		if ( $template_name ) {
 			return $template_name;
 		}

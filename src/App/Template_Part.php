@@ -14,14 +14,14 @@ class Template_Part {
 	 *
 	 * @var string
 	 */
-	protected $template;
+	protected $slug;
 
 	/**
-	 * The slug like get_template_part()
+	 * The name like get_template_part()
 	 *
 	 * @var string
 	 */
-	protected $slug;
+	protected $name;
 
 	/**
 	 * Variables
@@ -38,15 +38,15 @@ class Template_Part {
 	protected $wp_query;
 
 	/**
-	 * @param string $template
 	 * @param string $slug
+	 * @param string $name
 	 * @return void
 	 */
-	public function __construct( $template, $slug = null ) {
+	public function __construct( $slug, $name = null ) {
 		global $wp_query;
 
-		$this->template = $template;
 		$this->slug     = $slug;
+		$this->name     = $name;
 		$this->wp_query = $wp_query;
 	}
 
@@ -58,7 +58,7 @@ class Template_Part {
 	 * @return void
 	 */
 	public function set_var( $key, $value ) {
-		if ( null === $this->wp_query->get( $key, null ) || ! isset( $this->vars[ $key ] ) ) {
+		if ( null === $this->wp_query->get( $key, null ) ) {
 			$this->vars[ $key ] = $value;
 			$this->wp_query->set( $key, $value );
 		}
@@ -83,10 +83,10 @@ class Template_Part {
 	 */
 	public function render() {
 		ob_start();
-		get_template_part( $this->template, $this->slug );
+		get_template_part( $this->slug, $this->name );
 
 		// @codingStandardsIgnoreStart
-		echo apply_filters( 'inc2734_view_controller_template_part_render', ob_get_clean(), $this->template, $this->slug, $this->vars );
+		echo apply_filters( 'inc2734_view_controller_template_part_render', ob_get_clean(), $this->slug, $this->name, $this->vars );
 		// @codingStandardsIgnoreEnd
 
 		foreach ( $this->vars as $key => $value ) {

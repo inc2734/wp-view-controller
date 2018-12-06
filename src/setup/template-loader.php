@@ -5,6 +5,8 @@
  * @license GPL-2.0+
  */
 
+use Inc2734\WP_View_Controller\Helper;
+
 /**
  * @see https://developer.wordpress.org/reference/hooks/type_template_hierarchy/
  */
@@ -41,7 +43,7 @@ add_action(
 						if ( is_singular() ) {
 							$_wp_page_template = get_post_meta( get_the_ID(), '_wp_page_template', true );
 							if ( $_wp_page_template && 'default' !== $_wp_page_template ) {
-								$template_name = wpvc_locate_template( (array) wpvc_config( 'page-templates' ), str_replace( '.php', '', $_wp_page_template ) );
+								$template_name = Helper\locate_template( (array) Helper\config( 'page-templates' ), str_replace( '.php', '', $_wp_page_template ) );
 								if ( is_null( $template_name ) ) {
 									continue;
 								}
@@ -50,7 +52,7 @@ add_action(
 							}
 						}
 
-						$template_name = wpvc_locate_template( (array) wpvc_config( 'templates' ), str_replace( '.php', '', $template ) );
+						$template_name = Helper\locate_template( (array) Helper\config( 'templates' ), str_replace( '.php', '', $template ) );
 						if ( is_null( $template_name ) ) {
 							continue;
 						}

@@ -7,7 +7,7 @@
 
 namespace Inc2734\WP_View_Controller\App;
 
-class Config_Loader {
+class Config {
 
 	/**
 	 * Getting config value

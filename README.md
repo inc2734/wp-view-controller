@@ -71,13 +71,13 @@ Bootstrap::render( 'content', 'news' );
 
 ## Template tags
 
-### wpvc_get_template_part()
+### \\Inc2734\\WP_View_Controller\\Helper\\get_template_part()
 
 This is a function which to pass the variables to WordPress's `get_template_part()`.
 
 ```
 // The caller
-wpvc_get_template_part( 'path/to/template-parts', [
+\Inc2734\WP_View_Controller\Helper\get_template_part() 'path/to/template-parts', [
 	'_foo' => 'bar',
 	'_baz' => 'qux',
 ] );

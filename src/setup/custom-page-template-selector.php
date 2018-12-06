@@ -5,6 +5,8 @@
  * @license GPL-2.0+
  */
 
+use Inc2734\WP_View_Controller\Helper;
+
 add_action(
 	'after_setup_theme',
 	function() {
@@ -22,9 +24,9 @@ add_action(
 			add_filter(
 				"theme_{$post_type}_templates",
 				function( $post_templates, $wp_theme, $post, $post_type ) {
-					foreach ( wpvc_config( 'page-templates' ) as $page_templates_dir ) {
+					foreach ( Helper\config( 'page-templates' ) as $page_templates_dir ) {
 						foreach ( glob( get_theme_file_path( $page_templates_dir . '/*' ) ) as $page_template_full_path ) {
-							$base_template_dirs = wpvc_config( 'templates' );
+							$base_template_dirs = Helper\config( 'templates' );
 							foreach ( $base_template_dirs as $base_template_dir ) {
 								$page_template = str_replace(
 									trailingslashit( get_theme_file_path( '/' . $base_template_dir ) ),
