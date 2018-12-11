@@ -13,7 +13,7 @@ add_action(
 		foreach ( get_post_types() as $post_type ) {
 
 			/**
-			 * Add custom list of page templates
+			 * Translate page templates on child page
 			 *
 			 * @param array $post_templates
 			 * @param WP_Theme $wp_theme
@@ -24,66 +24,29 @@ add_action(
 			add_filter(
 				"theme_{$post_type}_templates",
 				function( $post_templates, $wp_theme, $post, $post_type ) {
-					foreach ( Helper\config( 'page-templates' ) as $page_templates_dir ) {
-						foreach ( glob( get_theme_file_path( $page_templates_dir . '/*' ) ) as $page_template_full_path ) {
-							$base_template_dirs = Helper\config( 'templates' );
-							foreach ( $base_template_dirs as $base_template_dir ) {
-								$page_template = str_replace(
-									trailingslashit( get_theme_file_path( '/' . $base_template_dir ) ),
-									'',
-									$page_template_full_path
-								);
+					if ( ! is_child_theme() ) {
+						return $post_templates;
+					}
 
-								$page_template = str_replace(
-									trailingslashit( get_template_directory() ),
-									'',
-									$page_template
-								);
+					foreach ( $post_templates as $base_path => $template_name ) {
+						if ( file_exists( get_stylesheet_directory() . '/' . $base_path ) ) {
+							return;
+						}
 
-								if ( $page_template !== $page_template_full_path ) {
-									break;
-								}
-							}
-
+						if ( file_exists( get_template_directory() . '/' . $base_path ) ) {
 							$page_template_data = get_file_data(
-								$page_template_full_path,
+								get_template_directory() . '/' . $base_path,
 								[
-									'template-name'      => 'Template Name',
-									'template-post-type' => 'Template Post Type',
+									'template-name' => 'Template Name',
 								]
 							);
 
 							$template_name = $page_template_data['template-name'];
-
-							$template_post_type = [];
-							if ( $page_template_data['template-post-type'] ) {
-								$template_post_type = explode( ',', $page_template_data['template-post-type'] );
-							}
-
-							if ( ! $template_name ) {
-								continue;
-							}
-
-							if ( in_array( $template_name, $post_templates ) ) {
-								continue;
-							}
-
-							if ( ! $template_post_type ) {
-								if ( 'page' !== $post_type ) {
-									continue;
-								}
-							} else {
-								if ( ! in_array( $post_type, $template_post_type ) ) {
-									continue;
-								}
-							}
-
 							// @codingStandardsIgnoreStart
-							$post_templates[ $page_template ] = translate( $template_name, wp_get_theme( get_template() )->get( 'TextDomain' ) );
+							$post_templates[ $base_path ] = translate( $template_name, $wp_theme->parent()->get( 'TextDomain' ) );
 							// @codingStandardsIgnoreEnd
 						}
 					}
-
 					return $post_templates;
 				},
 				10,
