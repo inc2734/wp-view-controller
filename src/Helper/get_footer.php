@@ -37,5 +37,5 @@ function get_footer( $name = null ) {
 		return;
 	}
 
-	\get_template_part( $template_name );
+	get_template_part( $template_name );
 }

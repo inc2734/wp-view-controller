@@ -26,6 +26,22 @@ function get_template_part( $slug, $name = null, array $vars = [] ) {
 		$name = null;
 	}
 
+	$args = apply_filters(
+		'inc2734_view_controller_get_template_part_args',
+		[
+			'slug' => $slug,
+			'name' => $name,
+			'vars' => $vars,
+		]
+	);
+
+	do_action( 'inc2734_view_controller_get_template_part_pre_render', $args );
+
+	if ( false !== has_action( 'inc2734_view_controller_get_template_part_' . $args['slug'] ) ) {
+		do_action( 'inc2734_view_controller_get_template_part_' . $args['slug'], $args['name'], $args['vars'] );
+		return;
+	}
+
 	$template_part = new Template_Part( $slug, $name );
 	$template_part->set_vars( $vars );
 	$template_part->render();

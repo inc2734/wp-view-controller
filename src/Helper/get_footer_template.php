@@ -20,5 +20,5 @@ function get_footer_template( $name = 'footer' ) {
 		return;
 	}
 
-	\get_template_part( $template_name );
+	get_template_part( $template_name );
 }

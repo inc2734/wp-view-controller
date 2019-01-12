@@ -20,5 +20,5 @@ function get_sidebar_template( $name = 'sidebar' ) {
 		return;
 	}
 
-	\get_template_part( $template_name );
+	get_template_part( $template_name );
 }

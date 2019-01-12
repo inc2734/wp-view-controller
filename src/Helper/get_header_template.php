@@ -20,5 +20,5 @@ function get_header_template( $name = 'header' ) {
 		return;
 	}
 
-	\get_template_part( $template_name );
+	get_template_part( $template_name );
 }
