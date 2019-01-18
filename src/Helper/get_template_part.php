@@ -42,7 +42,7 @@ function get_template_part( $slug, $name = null, array $vars = [] ) {
 		return;
 	}
 
-	$template_part = new Template_Part( $slug, $name );
-	$template_part->set_vars( $vars );
+	$template_part = new Template_Part( $args['slug'], $args['name'] );
+	$template_part->set_vars( $args['vars'] );
 	$template_part->render();
 }

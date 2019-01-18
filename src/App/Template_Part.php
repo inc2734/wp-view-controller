@@ -70,7 +70,7 @@ class Template_Part {
 	 * @param array $vars
 	 * @return void
 	 */
-	public function set_vars( $vars ) {
+	public function set_vars( array $vars = [] ) {
 		foreach ( $vars as $key => $value ) {
 			$this->set_var( $key, $value );
 		}
