@@ -25,10 +25,12 @@ function locate_template( $directory_slugs, $slug, $name = '' ) {
 
 	foreach ( $directory_slugs as $directory_slug ) {
 		if ( $directory_slug ) {
-			$slug = $directory_slug . '/' . $slug;
+			$new_slug = $directory_slug . '/' . $slug;
+		} else {
+			$new_slug = $slug;
 		}
 
-		$template_name = get_template_name( $slug, $name );
+		$template_name = get_template_name( $new_slug, $name );
 		if ( $template_name ) {
 			return $template_name;
 		}
