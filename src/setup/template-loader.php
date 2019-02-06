@@ -68,48 +68,26 @@ add_action(
 					return array_unique( $new_templates );
 				}
 			);
-
-			add_filter(
-				"{$type}_template",
-				function( $template, $type, $templates ) {
-					if ( is_singular() ) {
-						$custom_page_template = get_post_meta( get_the_ID(), '_wp_page_template', true );
-						if ( $custom_page_template ) {
-							if ( $custom_page_template && 'default' !== $custom_page_template ) {
-								if ( file_exists( get_theme_file_path( $custom_page_template ) ) ) {
-									return $custom_page_template;
-								}
-							}
-						}
-					}
-
-					foreach ( $templates as $_template ) {
-						if ( file_exists( get_theme_file_path( $_template ) ) ) {
-							return get_theme_file_path( $_template );
-						}
-					}
-
-					return $template;
-				},
-				10,
-				3
-			);
 		}
-
-		add_filter(
-			'template_include',
-			function( $template ) {
-				if ( file_exists( get_theme_file_path( $template ) ) ) {
-					return get_theme_file_path( $template );
-				}
-				return $template;
-			}
-		);
 
 		add_filter(
 			'frontpage_template',
 			function( $template ) {
 				return is_home() ? '' : $template;
+			}
+		);
+
+		add_filter(
+			'template_include',
+			function( $template ) {
+				$filename = str_replace( trailingslashit( get_template_directory() ), '', $template );
+				if ( is_child_theme() ) {
+					$filename = str_replace( trailingslashit( get_stylesheet_directory() ), '', $filename );
+				}
+
+				$filtered_template = apply_filters( 'inc2734_wp_view_controller_controller', $template, $filename );
+
+				return file_exists( $filtered_template ) ? $filtered_template : $template;
 			}
 		);
 	}
