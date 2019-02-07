@@ -8,12 +8,13 @@
 return apply_filters(
 	'inc2734_view_controller_config',
 	[
-		'templates' => [ '' ],
-		'layout'    => [ 'templates/layout/wrapper' ],
-		'header'    => [ 'templates/layout/header' ],
-		'sidebar'   => [ 'templates/layout/sidebar' ],
-		'footer'    => [ 'templates/layout/footer' ],
-		'view'      => [ 'templates/view' ],
-		'static'    => [ 'templates/static' ],
+		'templates'     => [ '' ],
+		'page-template' => [ 'page-templates' ],
+		'layout'        => [ 'templates/layout/wrapper' ],
+		'header'        => [ 'templates/layout/header' ],
+		'sidebar'       => [ 'templates/layout/sidebar' ],
+		'footer'        => [ 'templates/layout/footer' ],
+		'view'          => [ 'templates/view' ],
+		'static'        => [ 'templates/static' ],
 	]
 );
