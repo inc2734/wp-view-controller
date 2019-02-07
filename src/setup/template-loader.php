@@ -36,27 +36,22 @@ add_action(
 		foreach ( $types as $type ) {
 			add_filter(
 				"{$type}_template_hierarchy",
-				function( $templates ) {
+				function( $templates ) use ( $type ) {
 					$new_templates = $templates;
 
 					foreach ( $templates as $template ) {
-						if ( is_singular() ) {
+						if ( in_array( $type, [ 'frontpage', 'singular', 'single', 'page' ] ) ) {
 							$_wp_page_template = get_post_meta( get_the_ID(), '_wp_page_template', true );
 							if ( $_wp_page_template && 'default' !== $_wp_page_template ) {
-								$template_name = Helper\locate_template( (array) Helper\config( 'page-templates' ), str_replace( '.php', '', $_wp_page_template ) );
-								if ( is_null( $template_name ) ) {
-									continue;
-								}
-								$new_templates[] = $template_name . '.php';
+								$new_templates = array_merge( [ $_wp_page_template ], $new_templates );
 								continue;
 							}
 						}
 
 						$template_name = Helper\locate_template( (array) Helper\config( 'templates' ), str_replace( '.php', '', $template ) );
-						if ( is_null( $template_name ) ) {
-							continue;
+						if ( $template_name ) {
+							$new_templates[] = $template_name . '.php';
 						}
-						$new_templates[] = $template_name . '.php';
 					}
 
 					$default_template_index = array_search( 'index.php', $new_templates );
