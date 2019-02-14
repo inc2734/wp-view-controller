@@ -76,9 +76,7 @@ add_action(
 			'template_include',
 			function( $template ) {
 				$filename = str_replace( trailingslashit( get_template_directory() ), '', $template );
-				if ( is_child_theme() ) {
-					$filename = str_replace( trailingslashit( get_stylesheet_directory() ), '', $filename );
-				}
+				$filename = str_replace( trailingslashit( get_stylesheet_directory() ), '', $filename );
 
 				$filtered_template = apply_filters( 'inc2734_wp_view_controller_controller', $template, $filename );
 

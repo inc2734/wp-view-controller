@@ -8,7 +8,7 @@
 namespace Inc2734\WP_View_Controller\Helper;
 
 /**
- * Locate template
+ * Locate template that based in theme directory
  *
  * @param array $directory_slugs Template name that can be used in get_template_part()
  * @param string $slug

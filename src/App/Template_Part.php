@@ -7,6 +7,8 @@
 
 namespace Inc2734\WP_View_Controller\App;
 
+use Inc2734\WP_View_Controller\Helper;
+
 class Template_Part {
 
 	/**
@@ -82,16 +84,66 @@ class Template_Part {
 	 * @return void
 	 */
 	public function render() {
-		ob_start();
-		get_template_part( $this->slug, $this->name );
+		$is_root = false;
+		$html = '';
+
+		$template_part_root = apply_filters( 'inc2734_view_controller_template_part_root', '', $this->slug, $this->name, $this->vars );
+		if ( $template_part_root ) {
+			ob_start();
+			$is_root = $this->_root_get_template_part( $template_part_root ) ? true : false;
+			$html = ob_get_clean();
+		}
+
+		if ( ! $is_root || ! $template_part_root ) {
+			ob_start();
+			get_template_part( $this->slug, $this->name );
+			$html = ob_get_clean();
+		}
 
 		// @codingStandardsIgnoreStart
-		echo apply_filters( 'inc2734_view_controller_template_part_render', ob_get_clean(), $this->slug, $this->name, $this->vars );
+		echo apply_filters( 'inc2734_view_controller_template_part_render', $html, $this->slug, $this->name, $this->vars );
 		// @codingStandardsIgnoreEnd
 
 		foreach ( $this->vars as $key => $value ) {
 			unset( $value );
 			$this->wp_query->set( $key, null );
 		}
+	}
+
+	/**
+	 * @see https://developer.wordpress.org/reference/functions/get_template_part/
+	 */
+	protected function _root_get_template_part( $template_part_root ) {
+		do_action( 'get_template_part_' . $this->slug, $this->slug, $this->name );
+
+		$template_part_root = trailingslashit( $template_part_root );
+		if ( $this->name ) {
+			$templates[] = $template_part_root . $this->slug . '-' . $this->name . '.php';
+		}
+		$templates[] = $template_part_root . $this->slug . '.php';
+
+		return $this->_root_locate_template( $templates );
+	}
+
+	/**
+	 * @see https://developer.wordpress.org/reference/functions/locate_template/
+	 */
+	protected function _root_locate_template( $templates ) {
+		$located = '';
+
+		foreach ( (array) $templates as $template ) {
+			if ( ! $template ) {
+				continue;
+			} elseif ( file_exists( $template ) ) {
+				$located = $template;
+				break;
+			}
+		}
+
+		if ( $located ) {
+			load_template( $located, true, false );
+		}
+
+		return $located;
 	}
 }

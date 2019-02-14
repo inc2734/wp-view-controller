@@ -8,7 +8,7 @@
 namespace Inc2734\WP_View_Controller\Helper;
 
 /**
- * Return template name by $slug and $name
+ * Return template name by $slug and $name that based in theme directory
  *
  * @param string $slug
  * @param string $name
