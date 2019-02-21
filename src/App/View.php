@@ -100,12 +100,39 @@ class View {
 	}
 
 	/**
+	 * Return layout arg
+	 *
+	 * @return string
+	 */
+	public function get_layout() {
+		return $this->layout;
+	}
+
+	/**
+	 * Return view arg
+	 *
+	 * @return string
+	 */
+	public function get_view() {
+		return $this->view;
+	}
+
+	/**
+	 * Return view_suffix arg
+	 *
+	 * @return string
+	 */
+	public function get_view_suffix() {
+		return $this->view_suffix;
+	}
+
+	/**
 	 * Loading the view template in layout template
 	 *
 	 * @return void
 	 */
 	public function view() {
-		$view = $this->_get_view_args();
+		$view = $this->_get_args_for_template_part();
 		$view = apply_filters( 'inc2734_wp_view_controller_view', $view );
 		Helper\get_template_part( $view['slug'], $view['name'] );
 	}
@@ -115,7 +142,7 @@ class View {
 	 *
 	 * @return array
 	 */
-	protected function _get_view_args() {
+	protected function _get_args_for_template_part() {
 		$view  = [
 			'slug' => '',
 			'name' => '',
