@@ -7,7 +7,7 @@ if [ -e ${WP_TESTS_DIR} -a -e ${WP_TESTS_DIR}/includes/functions.php ]; then
   themedir=$(pwd)
 
   cd ${themedir};
-  vendor/bin/phpunit --configuration= ${themedir}/phpunit.xml.dist
+  vendor/bin/phpunit --configuration=${themedir}/phpunit.xml.dist
   exit 0
 fi
 
