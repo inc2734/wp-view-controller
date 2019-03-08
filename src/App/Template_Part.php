@@ -169,6 +169,7 @@ class Template_Part {
 			$this->name,
 			$this->vars
 		);
+		$hierarchy = array_unique( $hierarchy );
 
 		foreach ( $hierarchy as $root ) {
 			if ( $this->_is_root( $root ) ) {
