@@ -28,25 +28,38 @@ add_action(
 						return $post_templates;
 					}
 
+					$filterd_post_templates = [];
+
 					foreach ( $post_templates as $base_path => $template_name ) {
-						if ( file_exists( get_stylesheet_directory() . '/' . $base_path ) ) {
-							return;
-						}
+						foreach ( [ get_stylesheet_directory(), get_template_directory() ] as $theme_dir_path ) {
+							$full_page_tempmlate_path = $theme_dir_path . '/' . $base_path;
 
-						if ( file_exists( get_template_directory() . '/' . $base_path ) ) {
-							$page_template_data = get_file_data(
-								get_template_directory() . '/' . $base_path,
-								[
-									'template-name' => 'Template Name',
-								]
-							);
+							if ( isset( $filterd_post_templates[ $base_path ] ) ) {
+								continue;
+							}
 
-							$template_name = $page_template_data['template-name'];
-							// @codingStandardsIgnoreStart
-							$post_templates[ $base_path ] = translate( $template_name, $wp_theme->parent()->get( 'TextDomain' ) );
-							// @codingStandardsIgnoreEnd
+							if ( ! file_exists( $full_page_tempmlate_path ) ) {
+								continue;
+							}
+
+							$filterd_post_templates[ $base_path ] = $full_page_tempmlate_path;
 						}
 					}
+
+					foreach ( $filterd_post_templates as $base_path => $full_page_tempmlate_path ) {
+						$page_template_data = get_file_data(
+							$full_page_tempmlate_path,
+							[
+								'template-name' => 'Template Name',
+							]
+						);
+
+						$template_name = $page_template_data['template-name'];
+						// @codingStandardsIgnoreStart
+						$post_templates[ $base_path ] = translate( $template_name, $wp_theme->parent()->get( 'TextDomain' ) );
+						// @codingStandardsIgnoreEnd
+					}
+
 					return $post_templates;
 				},
 				10,
