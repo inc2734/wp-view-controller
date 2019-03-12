@@ -49,6 +49,33 @@ class Bootstrap {
 	}
 
 	/**
+	 * Return layout arg
+	 *
+	 * @return string
+	 */
+	public static function get_layout() {
+		return static::$view->get_layout();
+	}
+
+	/**
+	 * Return view arg
+	 *
+	 * @return string
+	 */
+	public static function get_view() {
+		return static::$view->get_view();
+	}
+
+	/**
+	 * Return view_suffix arg
+	 *
+	 * @return string
+	 */
+	public static function get_view_suffix() {
+		return static::$view->get_view_suffix();
+	}
+
+	/**
 	 * Set View object
 	 *
 	 * @return void
