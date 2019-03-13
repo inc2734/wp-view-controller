@@ -25,14 +25,7 @@ function get_sidebar( $name = null ) {
 		return;
 	}
 
-	if ( $name ) {
-		$template_name = locate_template( (array) config( 'templates' ), 'sidebar-' . $name );
-	}
-
-	if ( empty( $template_name ) ) {
-		$template_name = locate_template( (array) config( 'templates' ), 'sidebar' );
-	}
-
+	$template_name = locate_template( (array) config( 'templates' ), 'sidebar', $name );
 	if ( empty( $template_name ) ) {
 		return;
 	}

@@ -150,6 +150,11 @@ class Template_Part {
 	 * @return boolean
 	 */
 	protected function _is_root_template() {
+		$hierarchy = [];
+
+		/**
+		 * @deprecated
+		 */
 		$root = apply_filters(
 			'inc2734_view_controller_template_part_root',
 			'',
@@ -158,13 +163,13 @@ class Template_Part {
 			$this->vars
 		);
 
-		if ( $this->_is_root( $root ) ) {
-			return true;
+		if ( $root ) {
+			$hierarchy[] = $root;
 		}
 
 		$hierarchy = apply_filters(
 			'inc2734_view_controller_template_part_root_hierarchy',
-			[],
+			$hierarchy,
 			$this->slug,
 			$this->name,
 			$this->vars
@@ -172,8 +177,9 @@ class Template_Part {
 		$hierarchy = array_unique( $hierarchy );
 
 		foreach ( $hierarchy as $root ) {
-			if ( $this->_is_root( $root ) ) {
-				return $this->_is_root( $root );
+			$is_root = $this->_is_root( $root );
+			if ( $is_root ) {
+				return $is_root;
 			}
 		}
 

@@ -195,6 +195,10 @@ class View {
 		$path        = $this->_remove_paged_slug( $path );
 		$path        = trim( $path, '/' );
 
+		if ( ! $path ) {
+			return Helper\locate_template( (array) Helper\config( 'static' ), 'index' );
+		}
+
 		$template_name = Helper\locate_template( (array) Helper\config( 'static' ), $path );
 		if ( empty( $template_name ) ) {
 			$template_name = Helper\locate_template( (array) Helper\config( 'static' ), $path . '/index' );

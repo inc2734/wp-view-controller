@@ -25,14 +25,7 @@ function get_header( $name = null ) {
 		return;
 	}
 
-	if ( $name ) {
-		$template_name = locate_template( (array) config( 'templates' ), 'header-' . $name );
-	}
-
-	if ( empty( $template_name ) ) {
-		$template_name = locate_template( (array) config( 'templates' ), 'header' );
-	}
-
+	$template_name = locate_template( (array) config( 'templates' ), 'header', $name );
 	if ( empty( $template_name ) ) {
 		return;
 	}

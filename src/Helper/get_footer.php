@@ -25,14 +25,7 @@ function get_footer( $name = null ) {
 		return;
 	}
 
-	if ( $name ) {
-		$template_name = locate_template( (array) config( 'templates' ), 'footer-' . $name );
-	}
-
-	if ( empty( $template_name ) ) {
-		$template_name = locate_template( (array) config( 'templates' ), 'footer' );
-	}
-
+	$template_name = locate_template( (array) config( 'templates' ), 'footer', $name );
 	if ( empty( $template_name ) ) {
 		return;
 	}
