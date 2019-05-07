@@ -45,4 +45,6 @@ function get_template_part( $slug, $name = null, array $vars = [] ) {
 	$template_part = new Template_Part( $args['slug'], $args['name'] );
 	$template_part->set_vars( $args['vars'] );
 	$template_part->render();
+
+	do_action( 'inc2734_view_controller_get_template_part_post_render', $args );
 }
