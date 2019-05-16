@@ -107,6 +107,7 @@ add_action(
 					$filename = str_replace( trailingslashit( $root ), '', $template );
 				}
 
+				$filename = isset( $filename ) ? $filename : $template;
 				$filename = str_replace( trailingslashit( get_template_directory() ), '', $filename );
 				$filename = str_replace( trailingslashit( get_stylesheet_directory() ), '', $filename );
 
