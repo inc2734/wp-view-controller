@@ -220,7 +220,7 @@ class Helper {
 	 * @param array $vars
 	 * @return array
 	 */
-	public static function get_template_part_root_hierarchy( $slug, $name = null, array $vars = [] ) {
+	public static function get_template_part_root_hierarchy( $slug = null, $name = null, array $vars = [] ) {
 		/**
 		 * @deprecated
 		 */

@@ -10,61 +10,79 @@ use Inc2734\WP_View_Controller\Helper;
 add_action(
 	'after_setup_theme',
 	function() {
-		foreach ( get_post_types() as $post_type ) {
-
-			/**
-			 * Translate page templates on child page
-			 *
-			 * @param array $post_templates
-			 * @param WP_Theme $wp_theme
-			 * @param WP_Post $post
-			 * @param string $post_type
-			 * @return array [{ Relative path from the theme => label }]
-			 */
-			add_filter(
-				"theme_{$post_type}_templates",
-				function( $post_templates, $wp_theme, $post, $post_type ) {
-					if ( ! is_child_theme() ) {
-						return $post_templates;
-					}
-
-					$filterd_post_templates = [];
-
-					foreach ( $post_templates as $base_path => $template_name ) {
-						foreach ( [ get_stylesheet_directory(), get_template_directory() ] as $theme_dir_path ) {
-							$full_page_tempmlate_path = $theme_dir_path . '/' . $base_path;
-
-							if ( isset( $filterd_post_templates[ $base_path ] ) ) {
+		/**
+		 * Translate page templates on child page
+		 *
+		 * @param array $post_templates
+		 * @param WP_Theme $wp_theme
+		 * @param WP_Post $post
+		 * @param string $post_type
+		 * @return array [{ Relative path from the theme => label }]
+		 */
+		add_filter(
+			"theme_templates",
+			function( $post_templates, $wp_theme, $post, $post_type ) {
+				$hierarchy = Helper::get_template_part_root_hierarchy();
+				foreach ( $hierarchy as $root ) {
+					$page_templates_dirs = Helper::config( 'page-templates' );
+					foreach ( $page_templates_dirs as $page_templates_dir ) {
+						$custom_page_templates = glob( trailingslashit( $root ) . trailingslashit( $page_templates_dir ) . '*.php' );
+						foreach ( $custom_page_templates as $custom_page_template ) {
+							$base_path = str_replace( trailingslashit( $root ), '', $custom_page_template );
+							if ( ! empty( $post_templates[ $base_path ] ) ) {
 								continue;
 							}
 
-							if ( ! file_exists( $full_page_tempmlate_path ) ) {
-								continue;
-							}
+							$custom_page_template_data = get_file_data(
+								$custom_page_template,
+								[
+									'template-name'      => 'Template Name',
+									'template-post-type' => 'Template Post Type',
+								]
+							);
 
-							$filterd_post_templates[ $base_path ] = $full_page_tempmlate_path;
+							if ( ! empty( $custom_page_template_data[ 'template-name' ] ) ) {
+								$template_post_types = $custom_page_template_data[ 'template-post-type' ];
+								$template_post_types = $template_post_types ? array_map( 'trim', explode( ',', $template_post_types ) ) : [ 'page' ];
+								if ( in_array( $post_type, $template_post_types ) ) {
+									$post_templates[ $base_path ] = $custom_page_template_data[ 'template-name' ];
+								}
+							}
 						}
 					}
+				}
 
-					foreach ( $filterd_post_templates as $base_path => $full_page_tempmlate_path ) {
-						$page_template_data = get_file_data(
-							$full_page_tempmlate_path,
-							[
-								'template-name' => 'Template Name',
-							]
-						);
-
-						$template_name = $page_template_data['template-name'];
-						// @codingStandardsIgnoreStart
-						$post_templates[ $base_path ] = translate( $template_name, $wp_theme->parent()->get( 'TextDomain' ) );
-						// @codingStandardsIgnoreEnd
-					}
-
+				if ( ! is_child_theme() ) {
 					return $post_templates;
-				},
-				10,
-				4
-			);
-		}
+				}
+
+				$filterd_post_templates = [];
+
+				foreach ( $post_templates as $base_path => $template_name ) {
+					$located = Helper::locate_template( $base_path, false );
+					if ( $located ) {
+						$filterd_post_templates[ $base_path ] = $located;
+					}
+				}
+
+				foreach ( $filterd_post_templates as $base_path => $full_page_tempmlate_path ) {
+					$page_template_data = get_file_data(
+						$full_page_tempmlate_path,
+						[
+							'template-name' => 'Template Name',
+						]
+					);
+
+					$template_name = $page_template_data['template-name'];
+					// @codingStandardsIgnoreStart
+					$post_templates[ $base_path ] = translate( $template_name, $wp_theme->parent()->get( 'TextDomain' ) );
+					// @codingStandardsIgnoreEnd
+				}
+
+				return $post_templates;
+			},
+			10,
+			4
+		);
 	}
 );

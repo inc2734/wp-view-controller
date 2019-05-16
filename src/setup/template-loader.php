@@ -40,18 +40,12 @@ add_action(
 					$new_templates = $templates;
 
 					foreach ( $templates as $template ) {
-						if ( in_array( $type, [ 'frontpage', 'singular', 'single', 'page' ] ) ) {
+						if ( 'frontpage' === $type ) {
 							$_wp_page_template = get_post_meta( get_the_ID(), '_wp_page_template', true );
 							if ( $_wp_page_template && 'default' !== $_wp_page_template ) {
 								$new_templates = array_merge( [ $_wp_page_template ], $new_templates );
 								continue;
 							}
-						}
-
-						$slug = preg_replace( '|\.php$|', '', $template );
-						$slug = Helper::get_located_template_slug( Helper::config( 'templates' ), $slug );
-						if ( $slug ) {
-							$new_templates[] = $slug . '.php';
 						}
 					}
 
@@ -63,6 +57,38 @@ add_action(
 
 					return array_unique( $new_templates );
 				}
+			);
+
+			add_filter(
+				"{$type}_template",
+				function( $template, $type, $templates ) {
+					if ( $template ) {
+						return $template;
+					}
+
+					$located = Helper::locate_template( $templates, false );
+					if ( $located ) {
+						return $located;
+					}
+
+					$template_names = [];
+					$hierarchy = Helper::config( 'templates' );
+					foreach ( $hierarchy as $root ) {
+						foreach ( $templates as $_template ) {
+							$template_names = untrailingslashit( $root ) . '/' . $_template;
+						}
+					}
+					if ( $template_names ) {
+						$located = Helper::locate_template( $template_names, false );
+						if ( $located ) {
+							return $located;
+						}
+					}
+
+					return $template;
+				},
+				10,
+				3
 			);
 		}
 
@@ -76,7 +102,12 @@ add_action(
 		add_filter(
 			'template_include',
 			function( $template ) {
-				$filename = str_replace( trailingslashit( get_template_directory() ), '', $template );
+				$hierarchy = Helper::get_template_part_root_hierarchy();
+				foreach ( $hierarchy as $root ) {
+					$filename = str_replace( trailingslashit( $root ), '', $template );
+				}
+
+				$filename = str_replace( trailingslashit( get_template_directory() ), '', $filename );
 				$filename = str_replace( trailingslashit( get_stylesheet_directory() ), '', $filename );
 
 				$filtered_template = apply_filters( 'inc2734_wp_view_controller_controller', $template, $filename );
