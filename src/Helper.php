@@ -258,8 +258,12 @@ class Helper {
 	 * @return string
 	 */
 	public static function get_located_template_slug( array $relative_dir_paths, $slug, $name = null ) {
-		foreach ( $relative_dir_paths as $relative_dir_path ) {
-			$maybe_completed_slug = trailingslashit( $relative_dir_path ) . $slug;
+		$slug = trim( $slug );
+		$slug = trim( $slug, '/' );
+		$slug = preg_replace( '|\.php$|', '', $slug );
+
+		foreach ( $relative_directory_paths as $relative_directory_path ) {
+			$maybe_completed_slug = $relative_directory_path ? trailingslashit( $relative_directory_path ) . $slug : $slug;
 
 			$template_names = [];
 			if ( ! is_null( $name ) && '' !== $name ) {
