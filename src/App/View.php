@@ -91,7 +91,7 @@ class View {
 	protected function _render() {
 		$layout = apply_filters( 'inc2734_wp_view_controller_layout', $this->layout );
 
-		Helper\get_wrapper_template(
+		Helper::get_wrapper_template(
 			$layout,
 			[
 				'_view_controller' => $this,
@@ -134,7 +134,7 @@ class View {
 	public function view() {
 		$view = $this->_get_args_for_template_part();
 		$view = apply_filters( 'inc2734_wp_view_controller_view', $view );
-		Helper\get_template_part( $view['slug'], $view['name'] );
+		Helper::get_template_part( $view['slug'], $view['name'] );
 	}
 
 	/**
@@ -148,7 +148,7 @@ class View {
 			'name' => '',
 		];
 
-		$template_name = Helper\locate_template( (array) Helper\config( 'view' ), $this->view, $this->view_suffix );
+		$template_name = Helper::locate_template( (array) Helper::config( 'view' ), $this->view, $this->view_suffix );
 		if ( empty( $template_name ) ) {
 			return $view;
 		}
@@ -186,22 +186,19 @@ class View {
 	 * @return string|null
 	 */
 	public function get_static_view_template_name() {
-		// @codingStandardsIgnoreStart
-		// @todo サニタイズしているのに Detected usage of a non-validated input variable: $_SERVER がでる。バグ？
 		$request_uri = sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) );
-		// @codingStandardsIgnoreEnd
 		$request_uri = $this->_get_relative_path( $request_uri );
 		$path        = $this->_remove_http_query( $request_uri );
 		$path        = $this->_remove_paged_slug( $path );
 		$path        = trim( $path, '/' );
 
 		if ( ! $path ) {
-			return Helper\locate_template( (array) Helper\config( 'static' ), 'index' );
+			return Helper::locate_template( (array) Helper::config( 'static' ), 'index' );
 		}
 
-		$template_name = Helper\locate_template( (array) Helper\config( 'static' ), $path );
+		$template_name = Helper::locate_template( (array) Helper::config( 'static' ), $path );
 		if ( empty( $template_name ) ) {
-			$template_name = Helper\locate_template( (array) Helper\config( 'static' ), $path . '/index' );
+			$template_name = Helper::locate_template( (array) Helper::config( 'static' ), $path . '/index' );
 		}
 
 		return $template_name;

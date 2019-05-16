@@ -48,7 +48,7 @@ add_action(
 							}
 						}
 
-						$template_name = Helper\locate_template( (array) Helper\config( 'templates' ), str_replace( '.php', '', $template ) );
+						$template_name = Helper::locate_template( (array) Helper::config( 'templates' ), str_replace( '.php', '', $template ) );
 						if ( $template_name ) {
 							$new_templates[] = $template_name . '.php';
 						}

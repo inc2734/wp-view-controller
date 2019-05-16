@@ -69,7 +69,7 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 			}
 		);
 
-		Inc2734\WP_View_Controller\Helper\get_template_part( 'template', 'name', [ 'key' => 'value' ] );
+		Inc2734\WP_View_Controller\Helper::get_template_part( 'template', 'name', [ 'key' => 'value' ] );
 	}
 
 	/**
@@ -100,17 +100,17 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 		);
 
 		ob_start();
-		Inc2734\WP_View_Controller\Helper\get_template_part( 'template', 'name' );
+		Inc2734\WP_View_Controller\Helper::get_template_part( 'template', 'name' );
 		$this->assertEquals( 'hierarchy-test', ob_get_clean() );
 
 		file_exists( $file ) && unlink( $file );
 		ob_start();
-		Inc2734\WP_View_Controller\Helper\get_template_part( 'template', 'name' );
+		Inc2734\WP_View_Controller\Helper::get_template_part( 'template', 'name' );
 		$this->assertEquals( 'hierarchy-test2', ob_get_clean() );
 
 		file_exists( $file2 ) && unlink( $file2 );
 		ob_start();
-		Inc2734\WP_View_Controller\Helper\get_template_part( 'template', 'name' );
+		Inc2734\WP_View_Controller\Helper::get_template_part( 'template', 'name' );
 		$this->assertEquals( '', ob_get_clean() );
 	}
 }

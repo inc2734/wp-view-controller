@@ -12,10 +12,11 @@ class Loader {
 	/**
 	 * Load helper function
 	 *
+	 * @deprecated
 	 * @return void
 	 */
 	public static function load_helpers() {
-		static::load( __DIR__ . '/../Helper' );
+		static::load( __DIR__ . '/../deprecated' );
 	}
 
 	/**

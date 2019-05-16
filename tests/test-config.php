@@ -25,13 +25,13 @@ class Inc2734_WP_View_Controller_Config_Test extends WP_UnitTestCase {
 		$config = \Inc2734\WP_View_Controller\App\Config::get( 'layout' );
 		$this->assertEquals( [ 'templates/layout/wrapper' ], $config );
 
-		$config = Helper\config( 'no-match' );
+		$config = Helper::config( 'no-match' );
 		$this->assertNull( $config );
 
-		$config = Helper\config();
+		$config = Helper::config();
 		$this->assertTrue( is_array( $config ) );
 
-		$config = Helper\config( 'layout' );
+		$config = Helper::config( 'layout' );
 		$this->assertEquals( [ 'templates/layout/wrapper' ], $config );
 	}
 }
