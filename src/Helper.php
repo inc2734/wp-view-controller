@@ -262,8 +262,8 @@ class Helper {
 		$slug = trim( $slug, '/' );
 		$slug = preg_replace( '|\.php$|', '', $slug );
 
-		foreach ( $relative_directory_paths as $relative_directory_path ) {
-			$maybe_completed_slug = $relative_directory_path ? trailingslashit( $relative_directory_path ) . $slug : $slug;
+		foreach ( $relative_dir_paths as $relative_dir_path ) {
+			$maybe_completed_slug = $relative_dir_path ? trailingslashit( $relative_dir_path ) . $slug : $slug;
 
 			$template_names = [];
 			if ( ! is_null( $name ) && '' !== $name ) {
