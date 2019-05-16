@@ -29,15 +29,14 @@ class Helper {
 	 * @return void
 	 */
 	public static function get_footer_template( $name = 'footer' ) {
-		$template_name = static::locate_template( (array) static::config( 'footer' ), $name );
+		$slug = static::get_located_template_slug( static::config( 'footer' ), $name );
 
-		if ( empty( $template_name ) ) {
+		if ( ! $slug ) {
 			return;
 		}
 
-		static::get_template_part( $template_name );
+		static::get_template_part( $slug );
 	}
-
 
 	/**
 	 * This function like get_footer()
@@ -48,21 +47,13 @@ class Helper {
 	public static function get_footer( $name = null ) {
 		do_action( 'get_footer', $name );
 
-		if ( '' !== $name && file_exists( get_theme_file_path( "footer-{$name}.php" ) ) ) {
-			\locate_template( "footer-{$name}.php", true, false );
-			return;
-		}
-		if ( file_exists( get_theme_file_path( 'footer.php' ) ) ) {
-			\locate_template( 'footer.php', true, false );
+		$slug = static::get_located_template_slug( static::config( 'templates' ), 'footer', $name );
+
+		if ( ! $slug ) {
 			return;
 		}
 
-		$template_name = static::locate_template( (array) static::config( 'templates' ), 'footer', $name );
-		if ( empty( $template_name ) ) {
-			return;
-		}
-
-		static::get_template_part( $template_name );
+		static::get_template_part( $slug, $name );
 	}
 
 	/**
@@ -72,13 +63,13 @@ class Helper {
 	 * @return void
 	 */
 	public static function get_header_template( $name = 'header' ) {
-		$template_name = static::locate_template( (array) static::config( 'header' ), $name );
+		$slug = static::get_located_template_slug( static::config( 'header' ), $name );
 
-		if ( empty( $template_name ) ) {
+		if ( ! $slug ) {
 			return;
 		}
 
-		static::get_template_part( $template_name );
+		static::get_template_part( $slug );
 	}
 
 	/**
@@ -90,21 +81,13 @@ class Helper {
 	public static function get_header( $name = null ) {
 		do_action( 'get_header', $name );
 
-		if ( '' !== $name && file_exists( get_theme_file_path( "header-{$name}.php" ) ) ) {
-			\locate_template( "header-{$name}.php", true, false );
-			return;
-		}
-		if ( file_exists( get_theme_file_path( 'header.php' ) ) ) {
-			\locate_template( 'header.php', true, false );
+		$slug = static::get_located_template_slug( static::config( 'templates' ), 'header', $name );
+
+		if ( ! $slug ) {
 			return;
 		}
 
-		$template_name = static::locate_template( (array) static::config( 'templates' ), 'header', $name );
-		if ( empty( $template_name ) ) {
-			return;
-		}
-
-		static::get_template_part( $template_name );
+		static::get_template_part( $slug, $name );
 	}
 
 	/**
@@ -114,13 +97,13 @@ class Helper {
 	 * @return void
 	 */
 	public static function get_sidebar_template( $name = 'sidebar' ) {
-		$template_name = static::locate_template( (array) static::config( 'sidebar' ), $name );
+		$slug = static::get_located_template_slug( static::config( 'sidebar' ), $name );
 
-		if ( empty( $template_name ) ) {
+		if ( ! $slug ) {
 			return;
 		}
 
-		static::get_template_part( $template_name );
+		static::get_template_part( $slug );
 	}
 
 	/**
@@ -132,48 +115,13 @@ class Helper {
 	public static function get_sidebar( $name = null ) {
 		do_action( 'get_sidebar', $name );
 
-		if ( '' !== $name && file_exists( get_theme_file_path( "sidebar-{$name}.php" ) ) ) {
-			\locate_template( "sidebar-{$name}.php", true, false );
-			return;
-		}
-		if ( file_exists( get_theme_file_path( 'sidebar.php' ) ) ) {
-			\locate_template( 'sidebar.php', true, false );
+		$slug = static::get_located_template_slug( static::config( 'templates' ), 'sidebar', $name );
+
+		if ( ! $slug ) {
 			return;
 		}
 
-		$template_name = static::locate_template( (array) static::config( 'templates' ), 'sidebar', $name );
-		if ( empty( $template_name ) ) {
-			return;
-		}
-
-		static::get_template_part( $template_name );
-	}
-
-	/**
-	 * Return template name by $slug and $name that based in theme directory
-	 *
-	 * @param string $slug
-	 * @param string $name
-	 * @return null|string Template name that can be used in get_template_part()
-	 */
-	public static function get_template_name( $slug, $name ) {
-		$template_names = [];
-		if ( $name ) {
-			$template_names[] = $slug . '-' . $name . '.php';
-		}
-		$template_names[] = $slug . '.php';
-
-		$template_path = \locate_template( $template_names, false );
-		$template_name = '';
-		if ( $template_path ) {
-			if ( false !== strpos( $template_path, $slug . '-' . $name . '.php' ) ) {
-				$template_name = $slug . '-' . $name;
-			} else {
-				$template_name = $slug;
-			}
-		}
-
-		return $template_name;
+		static::get_template_part( $slug, $name );
 	}
 
 	/**
@@ -219,46 +167,112 @@ class Helper {
 	 * Load wrapper template
 	 *
 	 * @param string $name
-	 * @param array $args
+	 * @param array $vars
 	 * @return void
 	 */
-	public static function get_wrapper_template( $name = 'wrapper', array $args = array() ) {
-		$template_name = static::locate_template( (array) static::config( 'layout' ), $name );
+	public static function get_wrapper_template( $name = 'wrapper', array $vars = array() ) {
+		$slug = static::get_located_template_slug( static::config( 'layout' ), $name );
 
-		if ( empty( $template_name ) ) {
+		if ( ! $slug ) {
 			return;
 		}
 
-		static::get_template_part( $template_name, null, $args );
+		static::get_template_part( $slug, null, $vars );
 	}
 
 	/**
-	 * Locate template that based in theme directory
+	 * Add template_part_root_hierarchy check to locate_template()
 	 *
-	 * @param array $directory_slugs Template name that can be used in get_template_part()
+	 * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+	 *
+	 * @see https://developer.wordpress.org/reference/functions/locate_template/
+	 *
+	 * @param string|array $template_names
+	 * @param boolean $load
+	 * @param boolean $require_once
+	 * @return string
+	 */
+	public static function locate_template( $template_names, $load = false, $require_once = true ) {
+		foreach ( (array) $template_names as $template_name ) {
+			$slug = preg_replace( '|\.php$|', '', $template_name );
+			$hierarchy = static::get_template_part_root_hierarchy( $slug );
+			foreach ( $hierarchy as $root ) {
+				$located = trailingslashit( $root ) . $template_name;
+				if ( ! file_exists( $located ) ) {
+					continue;
+				}
+
+				if ( $load && '' != $located ) {
+					load_template( $located, $require_once );
+				}
+				return $located;
+			}
+		}
+
+		return \locate_template( $template_names, $load, $require_once );
+	}
+
+	/**
+	 * Return template part root hierarchy
+	 *
 	 * @param string $slug
 	 * @param string $name
-	 * @return null|string Template name that can be used in get_template_part()
+	 * @param array $vars
+	 * @return array
 	 */
-	public static function locate_template( $directory_slugs, $slug, $name = '' ) {
-		$directory_slugs = (array) $directory_slugs;
-		$slug = preg_replace( '|\.php$|', '', $slug );
+	public static function get_template_part_root_hierarchy( $slug, $name = null, array $vars = [] ) {
+		/**
+		 * @deprecated
+		 */
+		$root = apply_filters(
+			'inc2734_view_controller_template_part_root',
+			'',
+			$slug,
+			$name,
+			$vars
+		);
 
-		if ( empty( $directory_slugs ) ) {
-			return static::get_template_name( $slug, $name );
+		$hierarchy = [];
+
+		if ( $root ) {
+			$hierarchy[] = $root;
 		}
 
-		foreach ( $directory_slugs as $directory_slug ) {
-			if ( $directory_slug ) {
-				$new_slug = $directory_slug . '/' . $slug;
-			} else {
-				$new_slug = $slug;
-			}
+		$hierarchy = apply_filters(
+			'inc2734_view_controller_template_part_root_hierarchy',
+			$hierarchy,
+			$slug,
+			$name,
+			$vars
+		);
 
-			$template_name = static::get_template_name( $new_slug, $name );
-			if ( $template_name ) {
-				return $template_name;
+		return array_unique( $hierarchy );
+	}
+
+	/**
+	 * Return located template slug
+	 *
+	 * @param array $relative_dir_paths
+	 * @param string $slug
+	 * @param string $name
+	 * @return string
+	 */
+	public static function get_located_template_slug( array $relative_dir_paths, $slug, $name = null ) {
+		foreach ( $relative_dir_paths as $relative_dir_path ) {
+			$maybe_completed_slug = trailingslashit( $relative_dir_path ) . $slug;
+
+			$template_names = [];
+			if ( ! is_null( $name ) && '' !== $name ) {
+				$template_names[] = $maybe_completed_slug . '-' . $name . '.php';
+			}
+			$template_names[] = $maybe_completed_slug . '.php';
+
+			$located = static::locate_template( $template_names, false );
+			if ( $located ) {
+				return $maybe_completed_slug;
 			}
 		}
+
+		return false;
 	}
 }

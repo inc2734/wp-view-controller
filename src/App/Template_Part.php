@@ -40,13 +40,6 @@ class Template_Part {
 	protected $wp_query;
 
 	/**
-	 * The template part root (Default is '' = theme directory)
-	 *
-	 * @var string
-	 */
-	protected $root;
-
-	/**
 	 * @param string $slug
 	 * @param string $name
 	 * @return void
@@ -91,14 +84,17 @@ class Template_Part {
 	 * @return void
 	 */
 	public function render() {
-		$html = '';
+		do_action( "get_template_part_{$this->slug}", $this->slug, $this->name );
+
+		if ( $this->name ) {
+			$template_names[] = $this->slug . '-' . $this->name . '.php';
+		}
+		$template_names[] = $this->slug . '.php';
+
+		do_action( 'get_template_part', $this->slug, $this->name, $template_names );
 
 		ob_start();
-		if ( $this->_is_root_template() ) {
-			$this->_root_get_template_part();
-		} else {
-			get_template_part( $this->slug, $this->name );
-		}
+		Helper::locate_template( $template_names, true, false );
 		$html = ob_get_clean();
 
 		// @codingStandardsIgnoreStart
@@ -109,115 +105,5 @@ class Template_Part {
 			unset( $value );
 			$this->wp_query->set( $key, null );
 		}
-	}
-
-	/**
-	 * @see https://developer.wordpress.org/reference/functions/get_template_part/
-	 */
-	protected function _root_get_template_part() {
-		do_action( 'get_template_part_' . $this->slug, $this->slug, $this->name );
-		return $this->_root_locate_template( true );
-	}
-
-	/**
-	 * @see https://developer.wordpress.org/reference/functions/locate_template/
-	 *
-	 * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
-	 */
-	protected function _root_locate_template( $load = false ) {
-		$located = '';
-
-		$templates = $this->_get_root_template_part_slugs();
-		foreach ( (array) $templates as $template ) {
-			if ( ! $template ) {
-				continue;
-			} elseif ( file_exists( $template ) ) {
-				$located = $template;
-				break;
-			}
-		}
-
-		if ( $load && '' != $located ) {
-			load_template( $located, false );
-		}
-
-		return $located;
-	}
-
-	/**
-	 * Return true when the template exists in each roots
-	 *
-	 * @return boolean
-	 */
-	protected function _is_root_template() {
-		$hierarchy = [];
-
-		/**
-		 * @deprecated
-		 */
-		$root = apply_filters(
-			'inc2734_view_controller_template_part_root',
-			'',
-			$this->slug,
-			$this->name,
-			$this->vars
-		);
-
-		if ( $root ) {
-			$hierarchy[] = $root;
-		}
-
-		$hierarchy = apply_filters(
-			'inc2734_view_controller_template_part_root_hierarchy',
-			$hierarchy,
-			$this->slug,
-			$this->name,
-			$this->vars
-		);
-		$hierarchy = array_unique( $hierarchy );
-
-		foreach ( $hierarchy as $root ) {
-			$is_root = $this->_is_root( $root );
-			if ( $is_root ) {
-				return $is_root;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Return true when the template exists in the root
-	 *
-	 * @param string $root root directory of template parts
-	 * @return boolean
-	 */
-	protected function _is_root( $root ) {
-		$this->root = $root;
-
-		$is_root = (bool) $this->_root_locate_template();
-		if ( ! $is_root ) {
-			$this->root = '';
-		}
-
-		return $is_root;
-	}
-
-	/**
-	 * Return candidate file names of the root template part
-	 *
-	 * @return array
-	 */
-	protected function _get_root_template_part_slugs() {
-		if ( ! $this->root ) {
-			return [];
-		}
-
-		if ( $this->name ) {
-			$templates[] = trailingslashit( $this->root ) . $this->slug . '-' . $this->name . '.php';
-		}
-		$templates[] = trailingslashit( $this->root ) . $this->slug . '.php';
-
-		return $templates;
 	}
 }

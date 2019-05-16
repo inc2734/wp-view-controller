@@ -48,9 +48,10 @@ add_action(
 							}
 						}
 
-						$template_name = Helper::locate_template( (array) Helper::config( 'templates' ), str_replace( '.php', '', $template ) );
-						if ( $template_name ) {
-							$new_templates[] = $template_name . '.php';
+						$slug = preg_replace( '|\.php$|', '', $template );
+						$slug = Helper::get_located_template_slug( Helper::config( 'templates' ), $slug );
+						if ( $slug ) {
+							$new_templates[] = $slug . '.php';
 						}
 					}
 

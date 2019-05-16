@@ -148,29 +148,23 @@ class View {
 			'name' => '',
 		];
 
-		$template_name = Helper::locate_template( (array) Helper::config( 'view' ), $this->view, $this->view_suffix );
-		if ( empty( $template_name ) ) {
+		$slug = Helper::get_located_template_slug( Helper::config( 'view' ), $this->view, $this->view_suffix );
+
+		if ( ! $slug ) {
 			return $view;
 		}
 
-		if ( ! $this->view_suffix ) {
-			$view  = [
-				'slug' => $template_name,
-				'name' => '',
-			];
-		} else {
-			$view  = [
-				'slug' => preg_replace( '|\-' . preg_quote( $this->view_suffix ) . '$|', '', $template_name ),
-				'name' => $this->view_suffix,
-			];
-		}
+		$view  = [
+			'slug' => $slug,
+			'name' => $this->view_suffix,
+		];
 
 		if ( is_404() || is_search() ) {
 			return $view;
 		}
 
 		$static_template_name = $this->get_static_view_template_name();
-		if ( locate_template( $static_template_name . '.php', false ) ) {
+		if ( $static_template_name ) {
 			return [
 				'slug' => $static_template_name,
 				'name' => '',
@@ -193,15 +187,18 @@ class View {
 		$path        = trim( $path, '/' );
 
 		if ( ! $path ) {
-			return Helper::locate_template( (array) Helper::config( 'static' ), 'index' );
+			return Helper::get_located_template_slug( Helper::config( 'static' ), 'index' );
 		}
 
-		$template_name = Helper::locate_template( (array) Helper::config( 'static' ), $path );
-		if ( empty( $template_name ) ) {
-			$template_name = Helper::locate_template( (array) Helper::config( 'static' ), $path . '/index' );
+		$slug = Helper::get_located_template_slug( Helper::config( 'static' ), untrailingslashit( $path ) );
+		if ( $slug ) {
+			return $slug;
 		}
 
-		return $template_name;
+		$slug = Helper::get_located_template_slug( Helper::config( 'static' ), trailingslashit( $path ) . 'index' );
+		if ( $slug ) {
+			return $slug;
+		}
 	}
 
 	/**

@@ -81,17 +81,6 @@ function get_sidebar( $name = null ) {
 }
 
 /**
- * Return template name by $slug and $name that based in theme directory
- *
- * @param string $slug
- * @param string $name
- * @return null|string Template name that can be used in get_template_part()
- */
-function get_template_name( $slug, $name ) {
-	return \Inc2734\WP_View_Controller\Helper::get_template_name( $slug, $name );
-}
-
-/**
  * A template tag that is get_template_part() using variables
  *
  * @param string $slug
@@ -120,16 +109,4 @@ function get_template_part( $slug, $name = null, array $vars = [] ) {
  */
 function get_wrapper_template( $name = 'wrapper', array $args = array() ) {
 	\Inc2734\WP_View_Controller\Helper::get_wrapper_template( $name, $args );
-}
-
-/**
- * Locate template that based in theme directory
- *
- * @param array $directory_slugs Template name that can be used in get_template_part()
- * @param string $slug
- * @param string $name
- * @return null|string Template name that can be used in get_template_part()
- */
-function locate_template( $directory_slugs, $slug, $name = '' ) {
-	return \Inc2734\WP_View_Controller\Helper::locate_template( $directory_slugs, $slug, $name );
 }
