@@ -190,12 +190,12 @@ class View {
 			return Helper::get_located_template_slug( Helper::config( 'static' ), 'index' );
 		}
 
-		$slug = Helper::get_located_template_slug( Helper::config( 'static' ), untrailingslashit( $path ) );
+		$slug = Helper::get_located_template_slug( Helper::config( 'static' ), $path );
 		if ( $slug ) {
 			return $slug;
 		}
 
-		$slug = Helper::get_located_template_slug( Helper::config( 'static' ), trailingslashit( $path ) . 'index' );
+		$slug = Helper::get_located_template_slug( Helper::config( 'static' ), $path . '/index' );
 		if ( $slug ) {
 			return $slug;
 		}

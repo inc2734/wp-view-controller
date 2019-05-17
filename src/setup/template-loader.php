@@ -59,6 +59,10 @@ add_action(
 				}
 			);
 
+			/**
+			 * Only relative paths are stored in $templates.
+			 * Since only the files directly under the theme are checked, the extended root is also checked.
+			 */
 			add_filter(
 				"{$type}_template",
 				function( $template, $type, $templates ) {

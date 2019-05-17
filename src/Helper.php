@@ -193,6 +193,17 @@ class Helper {
 	 * @return string
 	 */
 	public static function locate_template( $template_names, $load = false, $require_once = true ) {
+		$cache_key   = hash( 'sha256', json_encode( $template_names ) );
+		$cache_group = 'inc2734/wp-view-controller/locate_template';
+		$cache       = wp_cache_get( $cache_key, $cache_group );
+
+		if ( false !== $cache && file_exists( $cache ) ) {
+			if ( $load ) {
+				load_template( $cache, $require_once );
+			}
+			return $cache;
+		}
+
 		foreach ( (array) $template_names as $template_name ) {
 			$slug = preg_replace( '|\.php$|', '', $template_name );
 			$hierarchy = static::get_template_part_root_hierarchy( $slug );
@@ -205,11 +216,14 @@ class Helper {
 				if ( $load && '' != $located ) {
 					load_template( $located, $require_once );
 				}
+				wp_cache_set( $cache_key, $located, $cache_group );
 				return $located;
 			}
 		}
 
-		return \locate_template( $template_names, $load, $require_once );
+		$located = \locate_template( $template_names, $load, $require_once );
+		wp_cache_set( $cache_key, $located, $cache_group );
+		return $located;
 	}
 
 	/**
@@ -262,6 +276,14 @@ class Helper {
 		$slug = trim( $slug, '/' );
 		$slug = preg_replace( '|\.php$|', '', $slug );
 
+		$cache_key   = hash( 'sha256', json_encode( $relative_dir_paths ) . '-' . $slug . '-' . $name );
+		$cache_group = 'inc2734/wp-view-controller/get_located_template_slug';
+		$cache       = wp_cache_get( $cache_key, $cache_group );
+
+		if ( false !== $cache && file_exists( $cache ) ) {
+			return $cache;
+		}
+
 		foreach ( $relative_dir_paths as $relative_dir_path ) {
 			$maybe_completed_slug = $relative_dir_path ? trailingslashit( $relative_dir_path ) . $slug : $slug;
 
@@ -273,6 +295,7 @@ class Helper {
 
 			$located = static::locate_template( $template_names, false );
 			if ( $located ) {
+				wp_cache_set( $cache_key, $maybe_completed_slug, $cache_group );
 				return $maybe_completed_slug;
 			}
 		}
