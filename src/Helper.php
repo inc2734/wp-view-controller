@@ -280,6 +280,10 @@ class Helper {
 		$cache_group = 'inc2734/wp-view-controller/get_located_template_slug';
 		$cache       = wp_cache_get( $cache_key, $cache_group );
 
+		if ( is_null( $cache ) ) {
+			return false;
+		}
+
 		if ( false !== $cache && file_exists( $cache ) ) {
 			return $cache;
 		}
@@ -300,6 +304,7 @@ class Helper {
 			}
 		}
 
+		wp_cache_set( $cache_key, null, $cache_group );
 		return false;
 	}
 }
