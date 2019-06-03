@@ -2,6 +2,8 @@ language: php
 php:
 - 7.2
 - 7.3
+addons:
+  mariadb: 10.0
 sudo: false
 env:
   global:
