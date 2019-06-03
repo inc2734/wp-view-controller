@@ -66,10 +66,6 @@ add_action(
 			add_filter(
 				"{$type}_template",
 				function( $template, $type, $templates ) {
-					if ( $template ) {
-						return $template;
-					}
-
 					$located = Helper::locate_template( $templates, false );
 					if ( $located ) {
 						return $located;
@@ -106,14 +102,15 @@ add_action(
 		add_filter(
 			'template_include',
 			function( $template ) {
+				$filename  = $template;
 				$hierarchy = Helper::get_template_part_root_hierarchy();
-				foreach ( $hierarchy as $root ) {
-					$filename = str_replace( trailingslashit( $root ), '', $template );
-				}
+				$hierarchy = array_merge( $hierarchy, [ get_stylesheet_directory(), get_template_directory() ] );
+				$hierarchy = array_unique( $hierarchy );
 
-				$filename = isset( $filename ) ? $filename : $template;
-				$filename = str_replace( trailingslashit( get_template_directory() ), '', $filename );
-				$filename = str_replace( trailingslashit( get_stylesheet_directory() ), '', $filename );
+				foreach ( $hierarchy as $root ) {
+					$filename = str_replace( trailingslashit( $root ), '', $filename );
+					$filename = preg_replace( '|^/*?([^/]+?)/*?$|', '$1', $filename );
+				}
 
 				$filtered_template = apply_filters( 'inc2734_wp_view_controller_controller', $template, $filename );
 
