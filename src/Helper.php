@@ -266,6 +266,8 @@ class Helper {
 	/**
 	 * Return located template slug
 	 *
+	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+	 *
 	 * @param array $relative_dir_paths
 	 * @param string $slug
 	 * @param string $name
@@ -304,7 +306,13 @@ class Helper {
 			}
 		}
 
-		wp_cache_set( $cache_key, null, $cache_group );
+		$fallback_slug = apply_filters( 'inc2734_view_controller_located_template_slug_fallback', null, $relative_dir_paths, $slug, $name );
+		wp_cache_set( $cache_key, $fallback_slug, $cache_group );
+
+		if ( $fallback_slug ) {
+			return $fallback_slug;
+		}
+
 		return false;
 	}
 }
