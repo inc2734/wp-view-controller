@@ -184,15 +184,18 @@ class Helper {
 	 * Add template_part_root_hierarchy check to locate_template()
 	 *
 	 * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
 	 *
 	 * @see https://developer.wordpress.org/reference/functions/locate_template/
 	 *
 	 * @param string|array $template_names
 	 * @param boolean $load
 	 * @param boolean $require_once
+	 * @param string $slug Optional
+	 * @param string $name Optional
 	 * @return string
 	 */
-	public static function locate_template( $template_names, $load = false, $require_once = true ) {
+	public static function locate_template( $template_names, $load = false, $require_once = true, $slug = null, $name = null ) {
 		$cache_key   = hash( 'sha256', json_encode( $template_names ) );
 		$cache_group = 'inc2734/wp-view-controller/locate_template';
 		$cache       = wp_cache_get( $cache_key, $cache_group );
@@ -205,8 +208,11 @@ class Helper {
 		}
 
 		foreach ( (array) $template_names as $template_name ) {
-			$slug = preg_replace( '|\.php$|', '', $template_name );
-			$hierarchy = static::get_template_part_root_hierarchy( $slug );
+			if ( is_null( $slug ) ) {
+				$slug = preg_replace( '|\.php$|', '', $template_name );
+			}
+
+			$hierarchy = static::get_template_part_root_hierarchy( $slug, $name );
 			foreach ( $hierarchy as $root ) {
 				$located = trailingslashit( $root ) . $template_name;
 				if ( ! file_exists( $located ) ) {

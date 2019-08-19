@@ -102,7 +102,7 @@ class Template_Part {
 		do_action( 'get_template_part', $this->slug, $this->name, $template_names );
 
 		ob_start();
-		Helper::locate_template( $template_names, true, false );
+		Helper::locate_template( $template_names, true, false, $this->slug, $this->name );
 		$html = ob_get_clean();
 
 		// @codingStandardsIgnoreStart
