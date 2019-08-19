@@ -33,6 +33,13 @@ class Template_Part {
 	protected $vars = [];
 
 	/**
+	 * Variables
+	 *
+	 * @var array
+	 */
+	protected $keys_to_wp_query = [];
+
+	/**
 	 * WP_Query object
 	 *
 	 * @var WP_Query
@@ -61,9 +68,10 @@ class Template_Part {
 	 */
 	public function set_var( $key, $value ) {
 		if ( null === $this->wp_query->get( $key, null ) ) {
-			$this->vars[ $key ] = $value;
 			$this->wp_query->set( $key, $value );
+			$this->keys_to_wp_query[ $key ] = $value;
 		}
+		$this->vars[ $key ] = $value;
 	}
 
 	/**
@@ -101,7 +109,7 @@ class Template_Part {
 		echo apply_filters( 'inc2734_view_controller_template_part_render', $html, $this->slug, $this->name, $this->vars );
 		// @codingStandardsIgnoreEnd
 
-		foreach ( $this->vars as $key => $value ) {
+		foreach ( $this->keys_to_wp_query as $key => $value ) {
 			unset( $value );
 			$this->wp_query->set( $key, null );
 		}
