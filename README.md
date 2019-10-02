@@ -77,14 +77,204 @@ This is a function which to pass the variables to WordPress's `get_template_part
 
 ```
 // The caller
-\Inc2734\WP_View_Controller\Helper::get_template_part() 'path/to/template-parts', [
-	'_foo' => 'bar',
-	'_baz' => 'qux',
-] );
+\Inc2734\WP_View_Controller\Helper::get_template_part(
+	'path/to/template-part',
+	null,
+	[
+		'_foo' => 'bar',
+		'_baz' => 'qux',
+	]
+);
 
 // The called template. path/to/template-parts.php
 <ul>
 	<li><?php echo esc_html( $_foo ); // bar ?></li>
 	<li><?php echo esc_html( $_baz ); // qux ?></li>
 </ul>
+```
+
+## Filter hooks
+
+### inc2734_view_controller_config_path
+```
+/**
+ * Change config path
+ *
+ * @param string $path
+ * @return string $path
+ */
+add_filter(
+	'inc2734_view_controller_config_path',
+	function( $path ) {
+		return $path;
+	}
+);
+```
+
+### inc2734_view_controller_template_part_render
+```
+/**
+ * Customize the rendered HTML
+ *
+ * @param string $html
+ * @param string $slug
+ * @param string $name
+ * @param array $vars
+ * @return string
+ */
+add_filter(
+	'inc2734_view_controller_template_part_render',
+	function( $html, $slug, $name, $vars ) {
+		return $html;
+	},
+	10,
+	4
+);
+```
+
+### inc2734_wp_view_controller_layout
+```
+/**
+ * Change layout file
+ *
+ * @param string $layout The layout file template slug
+ * @return string
+ */
+add_filter(
+	'inc2734_wp_view_controller_layout',
+	function( $layout ) {
+		return $layout;
+	}
+);
+```
+
+### inc2734_wp_view_controller_view
+```
+/**
+* Change view file
+*
+* @param string $view The view file template slug
+* @return string
+*/
+add_filter(
+	'inc2734_wp_view_controller_view',
+	function( $view ) {
+		return $view;
+	}
+);
+```
+
+### inc2734_view_controller_config
+```
+/**
+ * Customize config values
+ *
+ * @param array $values
+ * @return array
+*/
+add_filter(
+	'inc2734_view_controller_config',
+	function( $values ) {
+		return $values;
+	}
+);
+```
+
+### inc2734_wp_view_controller_controller
+```
+/**
+ * Change controller
+ *
+ * @param string $template
+ * @param string $filename
+ * @return string
+ */
+add_filter(
+	'inc2734_wp_view_controller_controller',
+	function( $template, $filename ) {
+		return $template;
+	},
+	10,
+	2
+);
+```
+
+### inc2734_view_controller_get_template_part_args
+```
+/**
+ * Customize template part args
+ *
+ * @param array $args
+ *   @var string $slug
+ *   @var string $name
+ *   @var array $vars
+ * @return array
+ */
+add_filter(
+	'inc2734_view_controller_get_template_part_args',
+	function( $args ) {
+		return $args;
+	}
+);
+```
+
+### inc2734_view_controller_template_part_root_hierarchy
+```
+/**
+ * Customize root hierarchy
+ *
+ * @param array $hierarchy
+ * @param string $slug
+ * @param string $name
+ * @param array $vars
+ * @return array
+ */
+add_filter(
+	'inc2734_view_controller_template_part_root_hierarchy',
+	function( $hierarchy, $slug, $name, $vars ) {
+		return $hierarchy;
+	},
+	10,
+	4
+);
+```
+
+### inc2734_view_controller_located_template_slug_fallback
+```
+/**
+ * You can specify a template for fallback
+ *
+ * @param string|null $fallback_slug
+ * @param array $relative_dir_paths
+ * @param string $slug
+ * @param string $name
+ * @return string|null
+ */
+add_filter(
+	'inc2734_view_controller_located_template_slug_fallback',
+	function( $fallback_slug, $relative_dir_paths, $slug, $name ) {
+		return $fallback_slug;
+	},
+	10,
+	4
+);
+```
+
+### inc2734_wp_view_controller_render_type
+```
+/**
+ * Change rendered type.
+ *
+ * loop ... Loading in the WordPress loop
+ * direct ... Simply loading
+ *
+ * @param string $render_type loop or direct
+ * @return string
+ */
+add_filter(
+	'inc2734_wp_view_controller_render_type',
+	function( $render_type ) {
+		return $render_type;
+	}
+);
 ```

@@ -53,10 +53,17 @@ class View {
 		$this->view        = $view;
 		$this->view_suffix = $view_suffix;
 
-		if ( is_singular() ) {
-			$this->_render_loop();
-		} else {
-			$this->_render_direct();
+		$render_type = is_singular() ? 'loop' : 'direct';
+		$render_type = apply_filters( 'inc2734_wp_view_controller_render_type', $render_type );
+		switch ( $render_type ) {
+			case 'loop':
+				$this->_render_loop();
+				break;
+			case 'direct':
+				$this->_render_direct();
+				break;
+			default:
+				break;
 		}
 	}
 
