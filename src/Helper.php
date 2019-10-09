@@ -144,18 +144,6 @@ class Helper {
 
 		do_action( 'inc2734_view_controller_get_template_part_pre_render', $args );
 
-		if ( false !== has_action( 'inc2734_view_controller_get_template_part_' . $args['slug'] ) ) {
-			do_action( 'inc2734_view_controller_get_template_part_' . $args['slug'], $args['name'], $args['vars'] );
-			return;
-		}
-
-		if ( $name ) {
-			if ( false !== has_action( 'inc2734_view_controller_get_template_part_' . $args['slug'] . '-' . $args['name'] ) ) {
-				do_action( 'inc2734_view_controller_get_template_part_' . $args['slug'] . '-' . $args['name'], $args['vars'] );
-				return;
-			}
-		}
-
 		$template_part = new Template_Part( $args['slug'], $args['name'] );
 		$template_part->set_vars( $args['vars'] );
 		$template_part->render();

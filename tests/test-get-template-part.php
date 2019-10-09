@@ -113,4 +113,49 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 		Inc2734\WP_View_Controller\Helper::get_template_part( 'template', 'name' );
 		$this->assertEquals( '', ob_get_clean() );
 	}
+
+	/**
+	 * @test
+	 */
+	public function defined_html() {
+		add_action(
+			'inc2734_view_controller_get_template_part_template-name',
+			function() {
+				echo 'template-name';
+			}
+		);
+
+		add_action(
+			'inc2734_view_controller_get_template_part_template-name',
+			function() {
+				echo '2-template-name';
+			}
+		);
+
+		add_action(
+			'inc2734_view_controller_get_template_part_template',
+			function() {
+				echo 'template';
+			}
+		);
+
+		ob_start();
+		Inc2734\WP_View_Controller\Helper::get_template_part( 'template', 'name' );
+		$this->assertEquals( 'template-name2-template-name', ob_get_clean() );
+
+		add_filter(
+			'inc2734_view_controller_template_part_render',
+			function( $html, $slug, $name ) {
+				if ( 'template' === $slug && 'name' === $name ) {
+					return '3-template-name';
+				}
+			},
+			10,
+			3
+		);
+
+		ob_start();
+		Inc2734\WP_View_Controller\Helper::get_template_part( 'template', 'name' );
+		$this->assertEquals( '3-template-name', ob_get_clean() );
+	}
 }
