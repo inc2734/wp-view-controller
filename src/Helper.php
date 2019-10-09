@@ -200,7 +200,8 @@ class Helper {
 				$slug = static::filename_to_slug( $template_name );
 			}
 
-			$hierarchy = static::get_template_part_root_hierarchy( $slug, $name );
+			$hierarchy = static::_get_completed_hierarchy( $slug, $name );
+
 			foreach ( $hierarchy as $root ) {
 				$located = trailingslashit( $root ) . $template_name;
 				if ( ! file_exists( $located ) ) {
@@ -215,9 +216,7 @@ class Helper {
 			}
 		}
 
-		$located = \locate_template( $template_names, $load, $require_once );
-		wp_cache_set( $cache_key, $located, $cache_group );
-		return $located;
+		return '';
 	}
 
 	/**
@@ -310,5 +309,72 @@ class Helper {
 		$filename = trim( $filename );
 		$filename = trim( $filename, '/' );
 		return preg_replace( '|\.php$|', '', $filename );
+	}
+
+	/**
+	 * Returns array of layout templates
+	 *
+	 * @return array
+	 */
+	public static function get_wrapper_templates() {
+		return static::_get_candidate_locate_templates( static::config( 'layout' ) );
+	}
+
+	/**
+	 * Returns array of header templates
+	 *
+	 * @return array
+	 */
+	public static function get_header_templates() {
+		return static::_get_candidate_locate_templates( static::config( 'header' ) );
+	}
+
+	/**
+	 * Returns candidate locate templates
+	 *
+	 * @return array
+	 */
+	protected static function _get_candidate_locate_templates( array $relative_dir_paths ) {
+		$hierarchy = static::_get_completed_hierarchy();
+
+		$completed_hierarchy = [];
+		foreach ( $hierarchy as $root ) {
+			foreach ( $relative_dir_paths as $relative_dir_path ) {
+				$completed_hierarchy[] = $root . '/' . $relative_dir_path;
+			}
+		}
+
+		$wp_theme = wp_get_theme();
+		$text_domain = is_child_theme() ? $wp_theme->parent()->get( 'TextDomain' ) : $wp_theme->get( 'TextDomain' );
+
+		$templates = [];
+		foreach ( $completed_hierarchy as $wrapper_dir ) {
+			foreach ( glob( $wrapper_dir . '/*.php' ) as $file ) {
+				$slug = static::filename_to_slug( str_replace( $wrapper_dir . '/', '', $file ) );
+				$name = trim( preg_match( '|Name:(.*)$|mi', file_get_contents( $file ), $header ) ? $header[1] : $slug );
+				// @codingStandardsIgnoreStart
+				$templates[ $slug ] = translate( $name, $text_domain );
+				// @codingStandardsIgnoreEnd
+			}
+		}
+
+		return $templates;
+	}
+
+	/**
+	 * Return hierarchy + stylesheet_directory + template_directory
+	 *
+	 * @param string $slug
+	 * @param string $name
+	 * @return array
+	 */
+	protected static function _get_completed_hierarchy( $slug = null, $name = null ) {
+		$hierarchy = static::get_template_part_root_hierarchy( $slug, $name );
+		$hierarchy[] = get_stylesheet_directory();
+		if ( is_child_theme() ) {
+			$hierarchy[] = get_template_directory();
+		}
+		$hierarchy = array_unique( $hierarchy );
+		return $hierarchy;
 	}
 }
