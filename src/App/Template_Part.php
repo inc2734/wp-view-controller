@@ -104,9 +104,9 @@ class Template_Part {
 		ob_start();
 		$action_with_name = 'inc2734_view_controller_get_template_part_' . $this->slug . '-' . $this->name;
 		$action           = 'inc2734_view_controller_get_template_part_' . $this->slug;
-		if ( $this->name && false !== has_action( $action_with_name ) ) {
+		if ( $this->name && has_action( $action_with_name ) ) {
 			do_action( $action_with_name, $this->vars );
-		} elseif ( false !== has_action( $action ) ) {
+		} elseif ( has_action( $action ) ) {
 			do_action( $action, $this->name, $this->vars );
 		} else {
 			Helper::locate_template( $template_names, true, false, $this->slug, $this->name );
