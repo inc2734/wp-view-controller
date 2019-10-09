@@ -74,6 +74,7 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 
 	/**
 	 * @test
+	 * @runInSeparateProcess
 	 */
 	public function template_part_root_hierarchy() {
 		$root = untrailingslashit( sys_get_temp_dir() ) . '/template-parts';
@@ -116,6 +117,7 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 
 	/**
 	 * @test
+	 * @runInSeparateProcess
 	 */
 	public function defined_html() {
 		add_action(
