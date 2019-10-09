@@ -209,7 +209,7 @@ class Helper {
 
 		foreach ( (array) $template_names as $template_name ) {
 			if ( is_null( $slug ) ) {
-				$slug = preg_replace( '|\.php$|', '', $template_name );
+				$slug = static::filename_to_slug( $template_name );
 			}
 
 			$hierarchy = static::get_template_part_root_hierarchy( $slug, $name );
@@ -280,21 +280,7 @@ class Helper {
 	 * @return string
 	 */
 	public static function get_located_template_slug( array $relative_dir_paths, $slug, $name = null ) {
-		$slug = trim( $slug );
-		$slug = trim( $slug, '/' );
-		$slug = preg_replace( '|\.php$|', '', $slug );
-
-		$cache_key   = hash( 'sha256', json_encode( $relative_dir_paths ) . '-' . $slug . '-' . $name );
-		$cache_group = 'inc2734/wp-view-controller/get_located_template_slug';
-		$cache       = wp_cache_get( $cache_key, $cache_group );
-
-		if ( is_null( $cache ) ) {
-			return false;
-		}
-
-		if ( false !== $cache && file_exists( $cache ) ) {
-			return $cache;
-		}
+		$slug = static::filename_to_slug( $slug );
 
 		foreach ( $relative_dir_paths as $relative_dir_path ) {
 			$maybe_completed_slug = $relative_dir_path ? trailingslashit( $relative_dir_path ) . $slug : $slug;
@@ -307,18 +293,34 @@ class Helper {
 
 			$located = static::locate_template( $template_names, false );
 			if ( $located ) {
-				wp_cache_set( $cache_key, $maybe_completed_slug, $cache_group );
 				return $maybe_completed_slug;
 			}
 		}
 
-		$fallback_slug = apply_filters( 'inc2734_view_controller_located_template_slug_fallback', null, $relative_dir_paths, $slug, $name );
-		wp_cache_set( $cache_key, $fallback_slug, $cache_group );
+		$fallback_slug = apply_filters(
+			'inc2734_view_controller_located_template_slug_fallback',
+			null,
+			$relative_dir_paths,
+			$slug,
+			$name
+		);
 
 		if ( $fallback_slug ) {
 			return $fallback_slug;
 		}
 
 		return false;
+	}
+
+	/**
+	 * Return slug from filename
+	 *
+	 * @param string $filename
+	 * @return string
+	 */
+	public static function filename_to_slug( $filename ) {
+		$filename = trim( $filename );
+		$filename = trim( $filename, '/' );
+		return preg_replace( '|\.php$|', '', $filename );
 	}
 }
