@@ -95,7 +95,7 @@ This is a function which to pass the variables to WordPress's `get_template_part
 
 ## Filter hooks
 
-### inc2734_view_controller_config_path
+### inc2734_wp_view_controller_config_path
 ```
 /**
  * Change config path
@@ -104,14 +104,14 @@ This is a function which to pass the variables to WordPress's `get_template_part
  * @return string $path
  */
 add_filter(
-	'inc2734_view_controller_config_path',
+	'inc2734_wp_view_controller_config_path',
 	function( $path ) {
 		return $path;
 	}
 );
 ```
 
-### inc2734_view_controller_template_part_render
+### inc2734_wp_view_controller_template_part_render
 ```
 /**
  * Customize the rendered HTML
@@ -123,7 +123,7 @@ add_filter(
  * @return string
  */
 add_filter(
-	'inc2734_view_controller_template_part_render',
+	'inc2734_wp_view_controller_template_part_render',
 	function( $html, $slug, $name, $vars ) {
 		return $html;
 	},
@@ -164,7 +164,7 @@ add_filter(
 );
 ```
 
-### inc2734_view_controller_config
+### inc2734_wp_view_controller_config
 ```
 /**
  * Customize config values
@@ -173,7 +173,7 @@ add_filter(
  * @return array
 */
 add_filter(
-	'inc2734_view_controller_config',
+	'inc2734_wp_view_controller_config',
 	function( $values ) {
 		return $values;
 	}
@@ -186,20 +186,17 @@ add_filter(
  * Change controller
  *
  * @param string $template
- * @param string $filename
  * @return string
  */
 add_filter(
 	'inc2734_wp_view_controller_controller',
-	function( $template, $filename ) {
+	function( $template ) {
 		return $template;
-	},
-	10,
-	2
+	}
 );
 ```
 
-### inc2734_view_controller_get_template_part_args
+### inc2734_wp_view_controller_get_template_part_args
 ```
 /**
  * Customize template part args
@@ -211,14 +208,14 @@ add_filter(
  * @return array
  */
 add_filter(
-	'inc2734_view_controller_get_template_part_args',
+	'inc2734_wp_view_controller_get_template_part_args',
 	function( $args ) {
 		return $args;
 	}
 );
 ```
 
-### inc2734_view_controller_template_part_root_hierarchy
+### inc2734_wp_view_controller_template_part_root_hierarchy
 ```
 /**
  * Customize root hierarchy
@@ -230,7 +227,7 @@ add_filter(
  * @return array
  */
 add_filter(
-	'inc2734_view_controller_template_part_root_hierarchy',
+	'inc2734_wp_view_controller_template_part_root_hierarchy',
 	function( $hierarchy, $slug, $name, $vars ) {
 		return $hierarchy;
 	},
@@ -239,7 +236,7 @@ add_filter(
 );
 ```
 
-### inc2734_view_controller_located_template_slug_fallback
+### inc2734_wp_view_controller_located_template_slug_fallback
 ```
 /**
  * You can specify a template for fallback
@@ -251,7 +248,7 @@ add_filter(
  * @return string|null
  */
 add_filter(
-	'inc2734_view_controller_located_template_slug_fallback',
+	'inc2734_wp_view_controller_located_template_slug_fallback',
 	function( $fallback_slug, $relative_dir_paths, $slug, $name ) {
 		return $fallback_slug;
 	},
@@ -275,6 +272,77 @@ add_filter(
 	'inc2734_wp_view_controller_render_type',
 	function( $render_type ) {
 		return $render_type;
+	}
+);
+```
+
+## Action hooks
+
+### inc2734_wp_view_controller_get_template_part_&lt;slug&gt;-&lt;name&gt;
+```
+/**
+ * Define template
+ *
+ * @param array $vars
+ * @return void
+ */
+add_action(
+	'inc2734_wp_view_controller_get_template_part_&lt;slug&gt;-&lt;name&gt;',
+	function( $vars ) {
+		?>
+		HTML
+		<?php
+	}
+);
+```
+
+### inc2734_wp_view_controller_get_template_part_&lt;slug&gt;
+```
+/**
+ * Define template
+ *
+ * @param string $name
+ * @param array $vars
+ * @return void
+ */
+add_action(
+	'inc2734_wp_view_controller_get_template_part_&lt;slug&gt;',
+	function( $name, $vars ) {
+		?>
+		HTML
+		<?php
+	},
+	10,
+	2
+);
+```
+
+### inc2734_wp_view_controller_get_template_part_pre_render
+```
+/**
+ * Fire before template rendering
+ *
+ * @param array $args
+ */
+add_action(
+	'inc2734_wp_view_controller_get_template_part_pre_render',
+	function( $args ) {
+		// Do something
+	}
+);
+```
+
+### inc2734_wp_view_controller_get_template_part_post_render
+```
+/**
+ * Fire after template rendering
+ *
+ * @param array $args
+ */
+add_action(
+	'inc2734_wp_view_controller_get_template_part_post_render',
+	function( $args ) {
+		// Do something
 	}
 );
 ```

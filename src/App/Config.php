@@ -16,9 +16,17 @@ class Config {
 	 * @return mixed
 	 */
 	public static function get( $key = null ) {
+		/**
+		 * @deprecated
+		 */
 		$path = apply_filters(
 			'inc2734_view_controller_config_path',
 			untrailingslashit( __DIR__ ) . '/../config/config.php'
+		);
+
+		$path = apply_filters(
+			'inc2734_wp_view_controller_config_path',
+			$path
 		);
 
 		if ( ! file_exists( $path ) ) {

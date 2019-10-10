@@ -133,6 +133,9 @@ class Helper {
 	 * @return void
 	 */
 	public static function get_template_part( $slug, $name = null, array $vars = [] ) {
+		/**
+		 * @deprecated
+		 */
 		$args = apply_filters(
 			'inc2734_view_controller_get_template_part_args',
 			[
@@ -142,13 +145,25 @@ class Helper {
 			]
 		);
 
+		$args = apply_filters( 'inc2734_wp_view_controller_get_template_part_args', $args);
+
+		/**
+		 * @deprecated
+		 */
 		do_action( 'inc2734_view_controller_get_template_part_pre_render', $args );
+
+		do_action( 'inc2734_wp_view_controller_get_template_part_pre_render', $args );
 
 		$template_part = new Template_Part( $args['slug'], $args['name'] );
 		$template_part->set_vars( $args['vars'] );
 		$template_part->render();
 
+		/**
+		 * @deprecated
+		 */
 		do_action( 'inc2734_view_controller_get_template_part_post_render', $args );
+
+		do_action( 'inc2734_wp_view_controller_get_template_part_post_render', $args );
 	}
 
 	/**
@@ -200,7 +215,7 @@ class Helper {
 				$slug = static::filename_to_slug( $template_name );
 			}
 
-			$hierarchy = static::_get_completed_hierarchy( $slug, $name );
+			$hierarchy = static::get_completed_hierarchy( $slug, $name );
 
 			foreach ( $hierarchy as $root ) {
 				$located = trailingslashit( $root ) . $template_name;
@@ -245,8 +260,19 @@ class Helper {
 			$hierarchy[] = $root;
 		}
 
+		/**
+		 * @deprecated
+		 */
 		$hierarchy = apply_filters(
 			'inc2734_view_controller_template_part_root_hierarchy',
+			$hierarchy,
+			$slug,
+			$name,
+			$vars
+		);
+
+		$hierarchy = apply_filters(
+			'inc2734_wp_view_controller_template_part_root_hierarchy',
 			$hierarchy,
 			$slug,
 			$name,
@@ -284,9 +310,20 @@ class Helper {
 			}
 		}
 
+		/**
+		 * @deprecated
+		 */
 		$fallback_slug = apply_filters(
 			'inc2734_view_controller_located_template_slug_fallback',
 			null,
+			$relative_dir_paths,
+			$slug,
+			$name
+		);
+
+		$fallback_slug = apply_filters(
+			'inc2734_wp_view_controller_located_template_slug_fallback',
+			$fallback_slug,
 			$relative_dir_paths,
 			$slug,
 			$name
@@ -335,7 +372,7 @@ class Helper {
 	 * @return array
 	 */
 	protected static function _get_candidate_locate_templates( array $relative_dir_paths ) {
-		$hierarchy = static::_get_completed_hierarchy();
+		$hierarchy = static::get_completed_hierarchy();
 
 		$completed_hierarchy = [];
 		foreach ( $hierarchy as $root ) {
@@ -368,12 +405,9 @@ class Helper {
 	 * @param string $name
 	 * @return array
 	 */
-	protected static function _get_completed_hierarchy( $slug = null, $name = null ) {
+	public static function get_completed_hierarchy( $slug = null, $name = null ) {
 		$hierarchy = static::get_template_part_root_hierarchy( $slug, $name );
-		$hierarchy[] = get_stylesheet_directory();
-		if ( is_child_theme() ) {
-			$hierarchy[] = get_template_directory();
-		}
+		$hierarchy = array_merge( $hierarchy, [ get_stylesheet_directory(), get_template_directory() ] );
 		$hierarchy = array_unique( $hierarchy );
 		return $hierarchy;
 	}

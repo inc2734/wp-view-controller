@@ -15,7 +15,7 @@ class Loader {
 	 * @deprecated
 	 * @return void
 	 */
-	public static function load_helpers() {
+	public static function load_deprecated() {
 		static::load( __DIR__ . '/../deprecated' );
 	}
 

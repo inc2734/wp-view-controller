@@ -102,8 +102,20 @@ class Template_Part {
 		do_action( 'get_template_part', $this->slug, $this->name, $template_names );
 
 		ob_start();
+
+		/**
+		 * @deprecated
+		 */
 		$action_with_name = 'inc2734_view_controller_get_template_part_' . $this->slug . '-' . $this->name;
 		$action           = 'inc2734_view_controller_get_template_part_' . $this->slug;
+		if ( $this->name && has_action( $action_with_name ) ) {
+			do_action( $action_with_name, $this->vars );
+		} elseif ( has_action( $action ) ) {
+			do_action( $action, $this->name, $this->vars );
+		}
+
+		$action_with_name = 'inc2734_wp_view_controller_get_template_part_' . $this->slug . '-' . $this->name;
+		$action           = 'inc2734_wp_view_controller_get_template_part_' . $this->slug;
 		if ( $this->name && has_action( $action_with_name ) ) {
 			do_action( $action_with_name, $this->vars );
 		} elseif ( has_action( $action ) ) {
@@ -111,10 +123,16 @@ class Template_Part {
 		} else {
 			Helper::locate_template( $template_names, true, false, $this->slug, $this->name );
 		}
+
 		$html = ob_get_clean();
 
+		/**
+		 * @deprecated
+		 */
+		$html = apply_filters( 'inc2734_view_controller_template_part_render', $html, $this->slug, $this->name, $this->vars );
+
 		// @codingStandardsIgnoreStart
-		echo apply_filters( 'inc2734_view_controller_template_part_render', $html, $this->slug, $this->name, $this->vars );
+		echo apply_filters( 'inc2734_wp_view_controller_template_part_render', $html, $this->slug, $this->name, $this->vars );
 		// @codingStandardsIgnoreEnd
 
 		foreach ( $this->keys_to_wp_query as $key => $value ) {
