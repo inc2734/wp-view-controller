@@ -287,7 +287,7 @@ add_filter(
  * @return void
  */
 add_action(
-	'inc2734_wp_view_controller_get_template_part_&lt;slug&gt;-&lt;name&gt;',
+	'inc2734_wp_view_controller_get_template_part_<slug>-<name>',
 	function( $vars ) {
 		?>
 		HTML
@@ -306,7 +306,7 @@ add_action(
  * @return void
  */
 add_action(
-	'inc2734_wp_view_controller_get_template_part_&lt;slug&gt;',
+	'inc2734_wp_view_controller_get_template_part_<slug>',
 	function( $name, $vars ) {
 		?>
 		HTML
