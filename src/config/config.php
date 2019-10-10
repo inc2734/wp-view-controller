@@ -5,11 +5,8 @@
  * @license GPL-2.0+
  */
 
-/**
- * @deprecated
- */
-$config = apply_filters(
-	'inc2734_view_controller_config',
+return apply_filters(
+	'inc2734_wp_view_controller_config',
 	[
 		'templates'     => [ '' ],
 		'page-template' => [ 'page-templates' ],
@@ -21,5 +18,3 @@ $config = apply_filters(
 		'static'        => [ 'templates/static' ],
 	]
 );
-
-return apply_filters( 'inc2734_wp_view_controller_config',$config );

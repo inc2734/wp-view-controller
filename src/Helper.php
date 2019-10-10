@@ -133,11 +133,8 @@ class Helper {
 	 * @return void
 	 */
 	public static function get_template_part( $slug, $name = null, array $vars = [] ) {
-		/**
-		 * @deprecated
-		 */
 		$args = apply_filters(
-			'inc2734_view_controller_get_template_part_args',
+			'inc2734_wp_view_controller_get_template_part_args',
 			[
 				'slug' => $slug,
 				'name' => $name,
@@ -145,23 +142,11 @@ class Helper {
 			]
 		);
 
-		$args = apply_filters( 'inc2734_wp_view_controller_get_template_part_args', $args);
-
-		/**
-		 * @deprecated
-		 */
-		do_action( 'inc2734_view_controller_get_template_part_pre_render', $args );
-
 		do_action( 'inc2734_wp_view_controller_get_template_part_pre_render', $args );
 
 		$template_part = new Template_Part( $args['slug'], $args['name'] );
 		$template_part->set_vars( $args['vars'] );
 		$template_part->render();
-
-		/**
-		 * @deprecated
-		 */
-		do_action( 'inc2734_view_controller_get_template_part_post_render', $args );
 
 		do_action( 'inc2734_wp_view_controller_get_template_part_post_render', $args );
 	}
@@ -243,33 +228,7 @@ class Helper {
 	 * @return array
 	 */
 	public static function get_template_part_root_hierarchy( $slug = null, $name = null, array $vars = [] ) {
-		/**
-		 * @deprecated
-		 */
-		$root = apply_filters(
-			'inc2734_view_controller_template_part_root',
-			'',
-			$slug,
-			$name,
-			$vars
-		);
-
 		$hierarchy = [];
-
-		if ( $root ) {
-			$hierarchy[] = $root;
-		}
-
-		/**
-		 * @deprecated
-		 */
-		$hierarchy = apply_filters(
-			'inc2734_view_controller_template_part_root_hierarchy',
-			$hierarchy,
-			$slug,
-			$name,
-			$vars
-		);
 
 		$hierarchy = apply_filters(
 			'inc2734_wp_view_controller_template_part_root_hierarchy',
@@ -310,20 +269,9 @@ class Helper {
 			}
 		}
 
-		/**
-		 * @deprecated
-		 */
-		$fallback_slug = apply_filters(
-			'inc2734_view_controller_located_template_slug_fallback',
-			null,
-			$relative_dir_paths,
-			$slug,
-			$name
-		);
-
 		$fallback_slug = apply_filters(
 			'inc2734_wp_view_controller_located_template_slug_fallback',
-			$fallback_slug,
+			null,
 			$relative_dir_paths,
 			$slug,
 			$name

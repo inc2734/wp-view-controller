@@ -51,7 +51,7 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 	 */
 	public function args() {
 		add_filter(
-			'inc2734_view_controller_get_template_part_args',
+			'inc2734_wp_view_controller_get_template_part_args',
 			function( $args ) {
 				$args['slug'] = 'template2';
 				$args['name'] = 'name2';

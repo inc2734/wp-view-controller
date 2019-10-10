@@ -12,7 +12,6 @@ class Loader {
 	/**
 	 * Load helper function
 	 *
-	 * @deprecated
 	 * @return void
 	 */
 	public static function load_deprecated() {

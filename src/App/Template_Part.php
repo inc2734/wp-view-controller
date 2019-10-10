@@ -103,17 +103,6 @@ class Template_Part {
 
 		ob_start();
 
-		/**
-		 * @deprecated
-		 */
-		$action_with_name = 'inc2734_view_controller_get_template_part_' . $this->slug . '-' . $this->name;
-		$action           = 'inc2734_view_controller_get_template_part_' . $this->slug;
-		if ( $this->name && has_action( $action_with_name ) ) {
-			do_action( $action_with_name, $this->vars );
-		} elseif ( has_action( $action ) ) {
-			do_action( $action, $this->name, $this->vars );
-		}
-
 		$action_with_name = 'inc2734_wp_view_controller_get_template_part_' . $this->slug . '-' . $this->name;
 		$action           = 'inc2734_wp_view_controller_get_template_part_' . $this->slug;
 		if ( $this->name && has_action( $action_with_name ) ) {
@@ -125,11 +114,6 @@ class Template_Part {
 		}
 
 		$html = ob_get_clean();
-
-		/**
-		 * @deprecated
-		 */
-		$html = apply_filters( 'inc2734_view_controller_template_part_render', $html, $this->slug, $this->name, $this->vars );
 
 		// @codingStandardsIgnoreStart
 		echo apply_filters( 'inc2734_wp_view_controller_template_part_render', $html, $this->slug, $this->name, $this->vars );
