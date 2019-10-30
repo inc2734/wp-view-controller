@@ -20,6 +20,8 @@ class Bootstrap {
 	protected static $view;
 
 	public function __construct() {
+		load_textdomain( 'inc2734-wp-view-controller', __DIR__ . '/languages/' . get_locale() . '.mo' );
+
 		Loader::load_deprecated();
 		Loader::load_setup_files();
 		static::_set_view();

@@ -1,0 +1,36 @@
+# Copyright (C) 2019 {package-name}
+# This file is distributed under the same license as the {package-name} package.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: https://make.wordpress.org/polyglots/\n"
+"POT-Creation-Date: 2019-10-30 14:23+0900\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2019-10-30 14:23+0900\n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.0.4\n"
+"Last-Translator: inc2734 <inc@2inc.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: ja\n"
+
+#. translators: 1: Template slug
+#: setup/debug-template-overwrite.php:31
+msgid "%1$s is not found. It may have been deleted or moved."
+msgstr "%1$s が見つかりません。削除または移動された可能性があります。"
+
+#. translators: 1: Old template slug, 2: Latest template slug
+#: setup/debug-template-overwrite.php:75
+msgid "The overwrite of %1$s may have failed. The latest position is %2$s."
+msgstr "%1$s の上書きが失敗した可能性があります。最新の位置は %2$s です。"
+
+#. translators: 1: Template slug, 2: Child template version, 3: Parent template
+#. version
+#: setup/debug-template-overwrite.php:124
+msgid ""
+"%1$s has been overwritten with the old version (%2$s). The latest version is "
+"%3$s."
+msgstr ""
+"%1$s は古いバージョン（%2$s）で上書きされました。最新のバージョンは %3$s で"
+"す。"

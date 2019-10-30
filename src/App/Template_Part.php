@@ -94,10 +94,7 @@ class Template_Part {
 	public function render() {
 		do_action( "get_template_part_{$this->slug}", $this->slug, $this->name );
 
-		if ( $this->name ) {
-			$template_names[] = $this->slug . '-' . $this->name . '.php';
-		}
-		$template_names[] = $this->slug . '.php';
+		$template_names = $this->_generate_template_names();
 
 		do_action( 'get_template_part', $this->slug, $this->name, $template_names );
 
@@ -115,13 +112,67 @@ class Template_Part {
 
 		$html = ob_get_clean();
 
+		if ( $html && $this->_enable_debug_mode() ) {
+			$this->_debug_comment( 'Start : ' );
+		}
+
 		// @codingStandardsIgnoreStart
 		echo apply_filters( 'inc2734_wp_view_controller_template_part_render', $html, $this->slug, $this->name, $this->vars );
 		// @codingStandardsIgnoreEnd
+
+		if ( $html && $this->_enable_debug_mode() ) {
+			$this->_debug_comment( 'End : ' );
+		}
 
 		foreach ( $this->keys_to_wp_query as $key => $value ) {
 			unset( $value );
 			$this->wp_query->set( $key, null );
 		}
+	}
+
+	protected function _generate_template_names() {
+		if ( $this->name ) {
+			$template_names[] = $this->slug . '-' . $this->name . '.php';
+		}
+		$template_names[] = $this->slug . '.php';
+
+		return $template_names;
+	}
+
+	/**
+	 * Return true when enable debug mode
+	 *
+	 * @return boolean
+	 */
+	protected function _enable_debug_mode() {
+		if ( ! apply_filters( 'inc2734_wp_view_controller_debug', true ) ) {
+			return;
+		}
+
+		if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
+			return;
+		}
+
+		if ( is_customize_preview() || is_admin() ) {
+			return;
+		}
+
+		if ( function_exists( 'tests_add_filter' ) ) {
+			return;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Print debug comment
+	 *
+	 * @param string $prefix
+	 * @return void
+	 */
+	public function _debug_comment( $prefix = null ) {
+		$slug  = $this->slug;
+		$slug .= $this->name ? '-' . $this->name : '';
+		printf( "\n" . '<!-- %1$s%2$s -->' . "\n", esc_html( $prefix ), esc_html( $slug ) );
 	}
 }
