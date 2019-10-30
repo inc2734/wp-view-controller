@@ -22,6 +22,12 @@ if ( ! apply_filters( 'inc2734_wp_view_controller_debug', true ) ) {
 add_action(
 	'get_template_part',
 	function( $slug, $name, $templates ) {
+		$action_with_name = 'inc2734_wp_view_controller_get_template_part_' . $slug . '-' . $name;
+		$action           = 'inc2734_wp_view_controller_get_template_part_' . $slug;
+		if ( has_action( $action_with_name ) || has_action( $action ) ) {
+			return;
+		}
+
 		if ( \Inc2734\WP_View_Controller\Helper::locate_template( $templates, false ) ) {
 			return;
 		}
@@ -51,6 +57,12 @@ add_action(
 add_action(
 	'get_template_part',
 	function( $slug, $name, $templates ) {
+		$action_with_name = 'inc2734_wp_view_controller_get_template_part_' . $slug . '-' . $name;
+		$action           = 'inc2734_wp_view_controller_get_template_part_' . $slug;
+		if ( has_action( $action_with_name ) || has_action( $action ) ) {
+			return;
+		}
+
 		foreach ( $templates as $template ) {
 			$parent  = get_template_directory() . '/' . $template;
 			$located = \Inc2734\WP_View_Controller\Helper::locate_template( $template, false );
@@ -100,6 +112,12 @@ add_action(
 add_action(
 	'get_template_part',
 	function( $slug, $name, $templates ) {
+		$action_with_name = 'inc2734_wp_view_controller_get_template_part_' . $slug . '-' . $name;
+		$action           = 'inc2734_wp_view_controller_get_template_part_' . $slug;
+		if ( has_action( $action_with_name ) || has_action( $action ) ) {
+			return;
+		}
+
 		foreach ( $templates as $template ) {
 			$parent  = get_template_directory() . '/' . $template;
 			$located = \Inc2734\WP_View_Controller\Helper::locate_template( $template, false );

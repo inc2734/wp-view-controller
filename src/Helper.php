@@ -32,6 +32,10 @@ class Helper {
 	 * @return string
 	 */
 	protected static function _get_file_data( $file ) {
+		if ( ! file_exists( $file ) ) {
+			return false;
+		}
+
 		// We don't need to write to the file, so just open for reading.
 		$file_pointer = fopen( $file, 'r' );
 
@@ -55,6 +59,10 @@ class Helper {
 		// Make sure we catch CR-only line endings.
 		$file_data = static::_get_file_data( $file );
 
+		if ( ! $file_data ) {
+			return false;
+		}
+
 		if ( preg_match( '/^[ \t\/*#@]*@version(.*)$/mi', $file_data, $match ) && $match[1] ) {
 			return _cleanup_header_comment( $match[1] );
 		}
@@ -69,6 +77,10 @@ class Helper {
 	public static function get_file_renamed( $file ) {
 		// Make sure we catch CR-only line endings.
 		$file_data = static::_get_file_data( $file );
+
+		if ( ! $file_data ) {
+			return [];
+		}
 
 		if ( preg_match_all( '/^[ \t\/*#@]*renamed:(.*)$/mi', $file_data, $match ) && $match[1] ) {
 			return array_map( '_cleanup_header_comment', $match[1] );
