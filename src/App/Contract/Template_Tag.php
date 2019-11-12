@@ -201,7 +201,7 @@ trait Template_Tag {
 	 * @return string
 	 */
 	public static function locate_template( $template_names, $load = false, $require_once = true, $slug = null, $name = null ) {
-		$cache_key   = hash( 'sha256', json_encode( $template_names ) );
+		$cache_key   = md5( json_encode( $template_names ) );
 		$cache_group = 'inc2734/wp-view-controller/locate_template';
 		$cache       = wp_cache_get( $cache_key, $cache_group );
 
