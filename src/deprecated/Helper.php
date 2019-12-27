@@ -17,7 +17,7 @@ use Inc2734\WP_View_Controller\App\Template_Part;
  * @return mixed
  */
 function config( $key = null ) {
-	return \Inc2734\WP_View_Controller\Helper::config( $key );
+	return \Inc2734\WP_View_Controller\Config::get( $key );
 }
 
 /**

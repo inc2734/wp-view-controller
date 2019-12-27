@@ -5,6 +5,7 @@
  * @license GPL-2.0+
  */
 
+use Inc2734\WP_View_Controller\App\Config;
 use Inc2734\WP_View_Controller\Helper;
 
 add_action(
@@ -24,7 +25,7 @@ add_action(
 			function( $post_templates, $wp_theme, $post, $post_type ) {
 				$hierarchy = Helper::get_template_part_root_hierarchy();
 				foreach ( $hierarchy as $root ) {
-					$page_templates_dirs = Helper::config( 'page-templates' );
+					$page_templates_dirs = Config::get( 'page-templates' );
 					foreach ( $page_templates_dirs as $page_templates_dir ) {
 						$custom_page_templates = glob( trailingslashit( $root ) . trailingslashit( $page_templates_dir ) . '*.php' );
 						foreach ( $custom_page_templates as $custom_page_template ) {

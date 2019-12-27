@@ -8,21 +8,10 @@
 namespace Inc2734\WP_View_Controller;
 
 use Inc2734\WP_View_Controller\App\Contract;
-use Inc2734\WP_View_Controller\App\Config;
 
 class Helper {
 
 	use Contract\Template_Tag;
-
-	/**
-	 * Getting config value
-	 *
-	 * @param string $key the key of the config
-	 * @return mixed
-	 */
-	public static function config( $key = null ) {
-		return Config::get( $key );
-	}
 
 	/**
 	 * Return file header

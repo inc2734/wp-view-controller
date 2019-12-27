@@ -1,4 +1,5 @@
 <?php
+use Inc2734\WP_View_Controller\App\Config;
 use Inc2734\WP_View_Controller\Helper;
 
 class Inc2734_WP_View_Controller_Config_Test extends WP_UnitTestCase {
@@ -16,22 +17,22 @@ class Inc2734_WP_View_Controller_Config_Test extends WP_UnitTestCase {
 	 * @test
 	 */
 	public function get() {
-		$config = \Inc2734\WP_View_Controller\App\Config::get( 'no-match' );
+		$config = Config::get( 'no-match' );
 		$this->assertNull( $config );
 
-		$config = \Inc2734\WP_View_Controller\App\Config::get();
+		$config = Config::get();
 		$this->assertTrue( is_array( $config ) );
 
-		$config = \Inc2734\WP_View_Controller\App\Config::get( 'layout' );
+		$config = Config::get( 'layout' );
 		$this->assertEquals( [ 'templates/layout/wrapper' ], $config );
 
-		$config = Helper::config( 'no-match' );
+		$config = Config::get( 'no-match' );
 		$this->assertNull( $config );
 
-		$config = Helper::config();
+		$config = Config::get();
 		$this->assertTrue( is_array( $config ) );
 
-		$config = Helper::config( 'layout' );
+		$config = Config::get( 'layout' );
 		$this->assertEquals( [ 'templates/layout/wrapper' ], $config );
 	}
 }

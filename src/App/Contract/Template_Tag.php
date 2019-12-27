@@ -7,6 +7,7 @@
 
 namespace Inc2734\WP_View_Controller\App\Contract;
 
+use Inc2734\WP_View_Controller\App\Config;
 use Inc2734\WP_View_Controller\App\Template_Part;
 
 trait Template_Tag {
@@ -18,7 +19,7 @@ trait Template_Tag {
 	 * @return void
 	 */
 	public static function get_footer_template( $name = 'footer' ) {
-		$slug = static::get_located_template_slug( static::config( 'footer' ), $name );
+		$slug = static::get_located_template_slug( Config::get( 'footer' ), $name );
 
 		if ( ! $slug ) {
 			return;
@@ -36,7 +37,7 @@ trait Template_Tag {
 	public static function get_footer( $name = null ) {
 		do_action( 'get_footer', $name );
 
-		$slug = static::get_located_template_slug( static::config( 'templates' ), 'footer', $name );
+		$slug = static::get_located_template_slug( Config::get( 'templates' ), 'footer', $name );
 
 		if ( ! $slug ) {
 			return;
@@ -52,7 +53,7 @@ trait Template_Tag {
 	 * @return void
 	 */
 	public static function get_header_template( $name = 'header' ) {
-		$slug = static::get_located_template_slug( static::config( 'header' ), $name );
+		$slug = static::get_located_template_slug( Config::get( 'header' ), $name );
 
 		if ( ! $slug ) {
 			return;
@@ -70,7 +71,7 @@ trait Template_Tag {
 	public static function get_header( $name = null ) {
 		do_action( 'get_header', $name );
 
-		$slug = static::get_located_template_slug( static::config( 'templates' ), 'header', $name );
+		$slug = static::get_located_template_slug( Config::get( 'templates' ), 'header', $name );
 
 		if ( ! $slug ) {
 			return;
@@ -86,7 +87,7 @@ trait Template_Tag {
 	 * @return void
 	 */
 	public static function get_sidebar_template( $name = 'sidebar' ) {
-		$slug = static::get_located_template_slug( static::config( 'sidebar' ), $name );
+		$slug = static::get_located_template_slug( Config::get( 'sidebar' ), $name );
 
 		if ( ! $slug ) {
 			return;
@@ -104,7 +105,7 @@ trait Template_Tag {
 	public static function get_sidebar( $name = null ) {
 		do_action( 'get_sidebar', $name );
 
-		$slug = static::get_located_template_slug( static::config( 'templates' ), 'sidebar', $name );
+		$slug = static::get_located_template_slug( Config::get( 'templates' ), 'sidebar', $name );
 
 		if ( ! $slug ) {
 			return;
@@ -121,7 +122,7 @@ trait Template_Tag {
 	 * @return void
 	 */
 	public static function get_wrapper_template( $name = 'wrapper', array $vars = array() ) {
-		$slug = static::get_located_template_slug( static::config( 'layout' ), $name );
+		$slug = static::get_located_template_slug( Config::get( 'layout' ), $name );
 
 		if ( ! $slug ) {
 			return;
@@ -305,7 +306,7 @@ trait Template_Tag {
 	 * @return array
 	 */
 	public static function get_wrapper_templates() {
-		return static::_get_candidate_locate_templates( static::config( 'layout' ) );
+		return static::_get_candidate_locate_templates( Config::get( 'layout' ) );
 	}
 
 	/**
@@ -314,7 +315,17 @@ trait Template_Tag {
 	 * @return array
 	 */
 	public static function get_header_templates() {
-		return static::_get_candidate_locate_templates( static::config( 'header' ) );
+		return static::_get_candidate_locate_templates( Config::get( 'header' ) );
+	}
+
+	/**
+	 * Getting config value
+	 *
+	 * @param string $key the key of the config
+	 * @return mixed
+	 */
+	protected static function config( $key = null ) {
+		return Config::get( $key );
 	}
 
 	/**

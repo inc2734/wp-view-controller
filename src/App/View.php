@@ -7,6 +7,7 @@
 
 namespace Inc2734\WP_View_Controller\App;
 
+use Inc2734\WP_View_Controller\App\Config;
 use Inc2734\WP_View_Controller\Helper;
 
 class View {
@@ -155,7 +156,7 @@ class View {
 			'name' => '',
 		];
 
-		$slug = Helper::get_located_template_slug( Helper::config( 'view' ), $this->view, $this->view_suffix );
+		$slug = Helper::get_located_template_slug( Config::get( 'view' ), $this->view, $this->view_suffix );
 
 		if ( ! $slug ) {
 			return $view;
@@ -194,15 +195,15 @@ class View {
 		$path        = trim( $path, '/' );
 
 		if ( ! $path ) {
-			return Helper::get_located_template_slug( Helper::config( 'static' ), 'index' );
+			return Helper::get_located_template_slug( Config::get( 'static' ), 'index' );
 		}
 
-		$slug = Helper::get_located_template_slug( Helper::config( 'static' ), $path );
+		$slug = Helper::get_located_template_slug( Config::get( 'static' ), $path );
 		if ( $slug ) {
 			return $slug;
 		}
 
-		$slug = Helper::get_located_template_slug( Helper::config( 'static' ), $path . '/index' );
+		$slug = Helper::get_located_template_slug( Config::get( 'static' ), $path . '/index' );
 		if ( $slug ) {
 			return $slug;
 		}
