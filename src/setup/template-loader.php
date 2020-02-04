@@ -51,7 +51,7 @@ add_action(
 		}
 
 		add_filter(
-			"frontpage_template_hierarchy",
+			'frontpage_template_hierarchy',
 			function( $templates ) {
 				$_wp_page_template = get_post_meta( get_the_ID(), '_wp_page_template', true );
 				if ( $_wp_page_template && 'default' !== $_wp_page_template ) {

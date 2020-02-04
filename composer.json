@@ -8,7 +8,7 @@
   "require-dev": {
     "squizlabs/php_codesniffer": "*",
     "wp-coding-standards/wpcs": "*",
-    "phpmd/phpmd": "2.7.0|>=2.8.1",
+    "phpmd/phpmd": "2.7.0|>=2.8.2",
     "phpunit/phpunit": "7.*",
     "phpcompatibility/phpcompatibility-wp": "*",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3"

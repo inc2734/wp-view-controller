@@ -21,7 +21,7 @@ add_action(
 		 * @return array [{ Relative path from the theme => label }]
 		 */
 		add_filter(
-			"theme_templates",
+			'theme_templates',
 			function( $post_templates, $wp_theme, $post, $post_type ) {
 				$hierarchy = Helper::get_template_part_root_hierarchy();
 				foreach ( $hierarchy as $root ) {
@@ -42,11 +42,11 @@ add_action(
 								]
 							);
 
-							if ( ! empty( $custom_page_template_data[ 'template-name' ] ) ) {
-								$template_post_types = $custom_page_template_data[ 'template-post-type' ];
+							if ( ! empty( $custom_page_template_data['template-name'] ) ) {
+								$template_post_types = $custom_page_template_data['template-post-type'];
 								$template_post_types = $template_post_types ? array_map( 'trim', explode( ',', $template_post_types ) ) : [ 'page' ];
 								if ( in_array( $post_type, $template_post_types ) ) {
-									$post_templates[ $base_path ] = $custom_page_template_data[ 'template-name' ];
+									$post_templates[ $base_path ] = $custom_page_template_data['template-name'];
 								}
 							}
 						}
