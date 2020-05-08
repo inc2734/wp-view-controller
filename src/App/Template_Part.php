@@ -94,7 +94,8 @@ class Template_Part {
 	public function render() {
 		do_action( "get_template_part_{$this->slug}", $this->slug, $this->name );
 
-		$template_names = $this->_generate_template_names();
+		$template_names  = $this->_generate_template_names();
+		$locate_template = null;
 
 		do_action( 'get_template_part', $this->slug, $this->name, $template_names );
 
@@ -108,12 +109,13 @@ class Template_Part {
 			do_action( $action, $this->name, $this->vars );
 		} else {
 			Helper::locate_template( $template_names, true, false, $this->slug, $this->name );
+			$locate_template = Helper::locate_template( $template_names, false, false, $this->slug, $this->name );
 		}
 
 		$html = ob_get_clean();
 
 		if ( $html && $this->_enable_debug_mode() ) {
-			$this->_debug_comment( 'Start : ' );
+			$this->_debug_comment( 'Start : ', $locate_template );
 		}
 
 		// @codingStandardsIgnoreStart
@@ -121,7 +123,7 @@ class Template_Part {
 		// @codingStandardsIgnoreEnd
 
 		if ( $html && $this->_enable_debug_mode() ) {
-			$this->_debug_comment( 'End : ' );
+			$this->_debug_comment( 'End : ', $locate_template );
 		}
 
 		foreach ( $this->keys_to_wp_query as $key => $value ) {
@@ -131,6 +133,8 @@ class Template_Part {
 	}
 
 	protected function _generate_template_names() {
+		$template_names = [];
+
 		if ( $this->name ) {
 			$template_names[] = $this->slug . '-' . $this->name . '.php';
 		}
@@ -168,11 +172,28 @@ class Template_Part {
 	 * Print debug comment
 	 *
 	 * @param string $prefix
+	 * @param string $locate_template
 	 * @return void
 	 */
-	public function _debug_comment( $prefix = null ) {
-		$slug  = $this->slug;
-		$slug .= $this->name ? '-' . $this->name : '';
-		printf( "\n" . '<!-- %1$s%2$s -->' . "\n", esc_html( $prefix ), esc_html( $slug ) );
+	public function _debug_comment( $prefix = null, $locate_template = null ) {
+		$template_slug = null;
+
+		if ( $locate_template ) {
+			$hierarchy = Helper::get_completed_hierarchy( $this->slug, $this->name );
+			foreach ( $hierarchy as $root ) {
+				if ( 0 === strpos( $locate_template, $root ) ) {
+					$template_slug = Helper::filename_to_slug( str_replace( $root, '', $locate_template ) );
+					break;
+				}
+			}
+		}
+
+		printf(
+			"\n" . '<!-- %1$s[slug] => %2$s [name] => %3$s [template-slug] => %4$s -->' . "\n",
+			esc_html( $prefix ),
+			esc_html( $this->slug ),
+			esc_html( $this->name ),
+			esc_html( $template_slug )
+		);
 	}
 }

@@ -134,8 +134,6 @@ trait Template_Tag {
 	/**
 	 * Return located template slug
 	 *
-	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-	 *
 	 * @param array $relative_dir_paths
 	 * @param string $slug
 	 * @param string $name
@@ -188,9 +186,6 @@ trait Template_Tag {
 
 	/**
 	 * Add template_part_root_hierarchy check to locate_template()
-	 *
-	 * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
-	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
 	 *
 	 * @see https://developer.wordpress.org/reference/functions/locate_template/
 	 *
