@@ -111,6 +111,36 @@ add_filter(
 );
 ```
 
+$pre = apply_filters(
+	'inc2734_wp_view_controller_pre_template_part_render',
+	null,
+	$this->slug,
+	$this->name,
+	$this->vars
+);
+
+### inc2734_wp_view_controller_pre_template_part_render
+```
+/**
+ * Define and return the content before loading the template.
+ * If a string is returned, the template will not load.
+ *
+ * @param null $html
+ * @param string $slug
+ * @param string $name
+ * @param array $vars
+ * @return string
+ */
+add_filter(
+	'inc2734_wp_view_controller_pre_template_part_render',
+	function( $html, $slug, $name, $vars ) {
+		return $html;
+	},
+	10,
+	4
+);
+```
+
 ### inc2734_wp_view_controller_template_part_render
 ```
 /**

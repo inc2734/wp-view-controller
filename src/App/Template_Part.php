@@ -101,15 +101,27 @@ class Template_Part {
 
 		ob_start();
 
-		$action_with_name = 'inc2734_wp_view_controller_get_template_part_' . $this->slug . '-' . $this->name;
-		$action           = 'inc2734_wp_view_controller_get_template_part_' . $this->slug;
-		if ( $this->name && has_action( $action_with_name ) ) {
-			do_action( $action_with_name, $this->vars );
-		} elseif ( has_action( $action ) ) {
-			do_action( $action, $this->name, $this->vars );
+		$pre = apply_filters(
+			'inc2734_wp_view_controller_pre_template_part_render',
+			null,
+			$this->slug,
+			$this->name,
+			$this->vars
+		);
+
+		if ( $pre ) {
+			echo $pre; // xss ok.
 		} else {
-			Helper::locate_template( $template_names, true, false, $this->slug, $this->name );
-			$locate_template = Helper::locate_template( $template_names, false, false, $this->slug, $this->name );
+			$action_with_name = 'inc2734_wp_view_controller_get_template_part_' . $this->slug . '-' . $this->name;
+			$action           = 'inc2734_wp_view_controller_get_template_part_' . $this->slug;
+			if ( $this->name && has_action( $action_with_name ) ) {
+				do_action( $action_with_name, $this->vars );
+			} elseif ( has_action( $action ) ) {
+				do_action( $action, $this->name, $this->vars );
+			} else {
+				Helper::locate_template( $template_names, true, false, $this->slug, $this->name );
+				$locate_template = Helper::locate_template( $template_names, false, false, $this->slug, $this->name );
+			}
 		}
 
 		$html = ob_get_clean();
@@ -118,9 +130,15 @@ class Template_Part {
 			$this->_debug_comment( 'Start : ', $locate_template );
 		}
 
-		// @codingStandardsIgnoreStart
-		echo apply_filters( 'inc2734_wp_view_controller_template_part_render', $html, $this->slug, $this->name, $this->vars );
-		// @codingStandardsIgnoreEnd
+		$html = apply_filters(
+			'inc2734_wp_view_controller_template_part_render',
+			$html,
+			$this->slug,
+			$this->name,
+			$this->vars
+		);
+
+		echo $html; // xss ok.
 
 		if ( $html && $this->_enable_debug_mode() ) {
 			$this->_debug_comment( 'End : ', $locate_template );
