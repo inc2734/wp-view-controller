@@ -99,9 +99,7 @@ class Template_Part {
 
 		do_action( 'get_template_part', $this->slug, $this->name, $template_names );
 
-		ob_start();
-
-		$pre = apply_filters(
+		$html = apply_filters(
 			'inc2734_wp_view_controller_pre_template_part_render',
 			null,
 			$this->slug,
@@ -109,9 +107,9 @@ class Template_Part {
 			$this->vars
 		);
 
-		if ( $pre ) {
-			echo $pre; // xss ok.
-		} else {
+		if ( is_null( $html ) ) {
+			ob_start();
+
 			$action_with_name = 'inc2734_wp_view_controller_get_template_part_' . $this->slug . '-' . $this->name;
 			$action           = 'inc2734_wp_view_controller_get_template_part_' . $this->slug;
 			if ( $this->name && has_action( $action_with_name ) ) {
@@ -122,9 +120,9 @@ class Template_Part {
 				Helper::locate_template( $template_names, true, false, $this->slug, $this->name );
 				$locate_template = Helper::locate_template( $template_names, false, false, $this->slug, $this->name );
 			}
-		}
 
-		$html = ob_get_clean();
+			$html = ob_get_clean();
+		}
 
 		if ( $html && $this->_enable_debug_mode() ) {
 			$this->_debug_comment( 'Start : ', $locate_template );
