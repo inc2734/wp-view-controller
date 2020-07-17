@@ -108,19 +108,25 @@ class Template_Part {
 		);
 
 		if ( is_null( $html ) ) {
-			ob_start();
-
 			$action_with_name = 'inc2734_wp_view_controller_get_template_part_' . $this->slug . '-' . $this->name;
 			$action           = 'inc2734_wp_view_controller_get_template_part_' . $this->slug;
 			if ( $this->name && has_action( $action_with_name ) ) {
+				ob_start();
 				do_action( $action_with_name, $this->vars );
+				$html = ob_get_clean();
 			} elseif ( has_action( $action ) ) {
+				ob_start();
 				do_action( $action, $this->name, $this->vars );
-			} else {
-				Helper::locate_template( $template_names, true, false, $this->slug, $this->name );
-				$locate_template = Helper::locate_template( $template_names, false, false, $this->slug, $this->name );
+				$html = ob_get_clean();
 			}
+		}
 
+		do_action( 'inc2734_wp_view_controller_get_template_part', $this->slug, $this->name, $template_names, $html );
+
+		if ( is_null( $html ) ) {
+			ob_start();
+			Helper::locate_template( $template_names, true, false, $this->slug, $this->name );
+			$locate_template = Helper::locate_template( $template_names, false, false, $this->slug, $this->name );
 			$html = ob_get_clean();
 		}
 
