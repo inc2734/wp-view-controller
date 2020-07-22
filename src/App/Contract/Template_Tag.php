@@ -15,18 +15,19 @@ trait Template_Tag {
 	/**
 	 * Load footer template
 	 *
+	 * @param string $slug
 	 * @param string $name
 	 * @param array $args
 	 * @return void
 	 */
-	public static function get_footer_template( $name = 'footer', array $args = [] ) {
-		$slug = static::get_located_template_slug( Config::get( 'footer' ), $name );
+	public static function get_footer_template( $slug = 'footer', $name = null, array $args = [] ) {
+		$slug = static::get_located_template_slug( Config::get( 'footer' ), $slug );
 
 		if ( ! $slug ) {
 			return;
 		}
 
-		static::get_template_part( $slug, $args );
+		static::get_template_part( $slug, $name, $args );
 	}
 
 	/**
@@ -51,18 +52,19 @@ trait Template_Tag {
 	/**
 	 * Load header template
 	 *
+	 * @param string $slug
 	 * @param string $name
 	 * @param array $args
 	 * @return void
 	 */
-	public static function get_header_template( $name = 'header', array $args = [] ) {
-		$slug = static::get_located_template_slug( Config::get( 'header' ), $name );
+	public static function get_header_template( $slug = 'header', $name = null, array $args = [] ) {
+		$slug = static::get_located_template_slug( Config::get( 'header' ), $slug );
 
 		if ( ! $slug ) {
 			return;
 		}
 
-		static::get_template_part( $slug, $args );
+		static::get_template_part( $slug, $name, $args );
 	}
 
 	/**
@@ -87,18 +89,19 @@ trait Template_Tag {
 	/**
 	 * Load sidebar template
 	 *
+	 * @param string $slug
 	 * @param string $name
 	 * @param array $args
 	 * @return void
 	 */
-	public static function get_sidebar_template( $name = 'sidebar', array $args = [] ) {
-		$slug = static::get_located_template_slug( Config::get( 'sidebar' ), $name );
+	public static function get_sidebar_template( $slug = 'sidebar', $name = null, array $args = [] ) {
+		$slug = static::get_located_template_slug( Config::get( 'sidebar' ), $slug );
 
 		if ( ! $slug ) {
 			return;
 		}
 
-		static::get_template_part( $slug, $args );
+		static::get_template_part( $slug, $name, $args );
 	}
 
 	/**
@@ -123,12 +126,12 @@ trait Template_Tag {
 	/**
 	 * Load wrapper template
 	 *
-	 * @param string $name
+	 * @param string $slug
 	 * @param array $vars
 	 * @return void
 	 */
-	public static function get_wrapper_template( $name = 'wrapper', array $vars = [] ) {
-		$slug = static::get_located_template_slug( Config::get( 'layout' ), $name );
+	public static function get_wrapper_template( $slug = 'wrapper', array $vars = [] ) {
+		$slug = static::get_located_template_slug( Config::get( 'layout' ), $slug );
 
 		if ( ! $slug ) {
 			return;
