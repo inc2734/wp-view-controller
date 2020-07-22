@@ -1,6 +1,6 @@
 # WP View Controller
 
-[![Build Status](https://travis-ci.org/inc2734/wp-view-controller.svg?branch=master)](https://travis-ci.org/inc2734/wp-view-controller)
+[![Build Status](https://travis-ci.com/inc2734/wp-view-controller.svg?branch=master)](https://travis-ci.com/inc2734/wp-view-controller)
 [![Latest Stable Version](https://poser.pugx.org/inc2734/wp-view-controller/v/stable)](https://packagist.org/packages/inc2734/wp-view-controller)
 [![License](https://poser.pugx.org/inc2734/wp-view-controller/license)](https://packagist.org/packages/inc2734/wp-view-controller)
 
@@ -73,25 +73,7 @@ Bootstrap::render( 'content', 'news' );
 
 ### \\Inc2734\\WP_View_Controller\\Helper::get_template_part()
 
-This is a function which to pass the variables to WordPress's `get_template_part()`.
-
-```
-// The caller
-\Inc2734\WP_View_Controller\Helper::get_template_part(
-	'path/to/template-part',
-	null,
-	[
-		'_foo' => 'bar',
-		'_baz' => 'qux',
-	]
-);
-
-// The called template. path/to/template-parts.php
-<ul>
-	<li><?php echo esc_html( $_foo ); // bar ?></li>
-	<li><?php echo esc_html( $_baz ); // qux ?></li>
-</ul>
-```
+This method is an extension to `get_template_part()`.
 
 ## Filter hooks
 
