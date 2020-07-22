@@ -16,25 +16,27 @@ trait Template_Tag {
 	 * Load footer template
 	 *
 	 * @param string $name
+	 * @param array $args
 	 * @return void
 	 */
-	public static function get_footer_template( $name = 'footer' ) {
+	public static function get_footer_template( $name = 'footer', array $args = [] ) {
 		$slug = static::get_located_template_slug( Config::get( 'footer' ), $name );
 
 		if ( ! $slug ) {
 			return;
 		}
 
-		static::get_template_part( $slug );
+		static::get_template_part( $slug, $args );
 	}
 
 	/**
 	 * This function like get_footer()
 	 *
 	 * @param string $name
+	 * @param array $args
 	 * @return void
 	 */
-	public static function get_footer( $name = null ) {
+	public static function get_footer( $name = null, array $args = [] ) {
 		do_action( 'get_footer', $name );
 
 		$slug = static::get_located_template_slug( Config::get( 'templates' ), 'footer', $name );
@@ -43,32 +45,34 @@ trait Template_Tag {
 			return;
 		}
 
-		static::get_template_part( $slug, $name );
+		static::get_template_part( $slug, $name, $args );
 	}
 
 	/**
 	 * Load header template
 	 *
 	 * @param string $name
+	 * @param array $args
 	 * @return void
 	 */
-	public static function get_header_template( $name = 'header' ) {
+	public static function get_header_template( $name = 'header', array $args = [] ) {
 		$slug = static::get_located_template_slug( Config::get( 'header' ), $name );
 
 		if ( ! $slug ) {
 			return;
 		}
 
-		static::get_template_part( $slug );
+		static::get_template_part( $slug, $args );
 	}
 
 	/**
 	 * This function like get_header()
 	 *
 	 * @param string $name
+	 * @param array $args
 	 * @return void
 	 */
-	public static function get_header( $name = null ) {
+	public static function get_header( $name = null, array $args = [] ) {
 		do_action( 'get_header', $name );
 
 		$slug = static::get_located_template_slug( Config::get( 'templates' ), 'header', $name );
@@ -77,32 +81,34 @@ trait Template_Tag {
 			return;
 		}
 
-		static::get_template_part( $slug, $name );
+		static::get_template_part( $slug, $name, $args );
 	}
 
 	/**
 	 * Load sidebar template
 	 *
 	 * @param string $name
+	 * @param array $args
 	 * @return void
 	 */
-	public static function get_sidebar_template( $name = 'sidebar' ) {
+	public static function get_sidebar_template( $name = 'sidebar', array $args = [] ) {
 		$slug = static::get_located_template_slug( Config::get( 'sidebar' ), $name );
 
 		if ( ! $slug ) {
 			return;
 		}
 
-		static::get_template_part( $slug );
+		static::get_template_part( $slug, $args );
 	}
 
 	/**
 	 * This function like get_sidebar()
 	 *
 	 * @param string $name
+	 * @param array $args
 	 * @return void
 	 */
-	public static function get_sidebar( $name = null ) {
+	public static function get_sidebar( $name = null, array $args = [] ) {
 		do_action( 'get_sidebar', $name );
 
 		$slug = static::get_located_template_slug( Config::get( 'templates' ), 'sidebar', $name );
@@ -111,7 +117,7 @@ trait Template_Tag {
 			return;
 		}
 
-		static::get_template_part( $slug, $name );
+		static::get_template_part( $slug, $name, $args );
 	}
 
 	/**
@@ -121,7 +127,7 @@ trait Template_Tag {
 	 * @param array $vars
 	 * @return void
 	 */
-	public static function get_wrapper_template( $name = 'wrapper', array $vars = array() ) {
+	public static function get_wrapper_template( $name = 'wrapper', array $vars = [] ) {
 		$slug = static::get_located_template_slug( Config::get( 'layout' ), $name );
 
 		if ( ! $slug ) {
@@ -194,16 +200,17 @@ trait Template_Tag {
 	 * @param boolean $require_once
 	 * @param string $slug Optional
 	 * @param string $name Optional
+	 * @param array $args Optional
 	 * @return string
 	 */
-	public static function locate_template( $template_names, $load = false, $require_once = true, $slug = null, $name = null ) {
+	public static function locate_template( $template_names, $load = false, $require_once = true, $slug = null, $name = null, array $args = [] ) {
 		$cache_key   = md5( json_encode( $template_names ) );
 		$cache_group = 'inc2734/wp-view-controller/locate_template';
 		$cache       = wp_cache_get( $cache_key, $cache_group );
 
 		if ( false !== $cache && file_exists( $cache ) ) {
 			if ( $load ) {
-				load_template( $cache, $require_once );
+				load_template( $cache, $require_once, $args );
 			}
 			return $cache;
 		}
@@ -222,7 +229,7 @@ trait Template_Tag {
 				}
 
 				if ( $load && '' != $located ) {
-					load_template( $located, $require_once );
+					load_template( $located, $require_once, $args );
 				}
 				wp_cache_set( $cache_key, $located, $cache_group );
 				return $located;
@@ -252,8 +259,7 @@ trait Template_Tag {
 
 		do_action( 'inc2734_wp_view_controller_get_template_part_pre_render', $args );
 
-		$template_part = new Template_Part( $args['slug'], $args['name'] );
-		$template_part->set_vars( $args['vars'] );
+		$template_part = new Template_Part( $args['slug'], $args['name'], $args['vars'] );
 		$template_part->render();
 
 		do_action( 'inc2734_wp_view_controller_get_template_part_post_render', $args );

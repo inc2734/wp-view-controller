@@ -33,57 +33,15 @@ class Template_Part {
 	protected $vars = [];
 
 	/**
-	 * Variables
-	 *
-	 * @var array
-	 */
-	protected $keys_to_wp_query = [];
-
-	/**
-	 * WP_Query object
-	 *
-	 * @var WP_Query
-	 */
-	protected $wp_query;
-
-	/**
 	 * @param string $slug
 	 * @param string $name
-	 * @return void
-	 */
-	public function __construct( $slug, $name = null ) {
-		global $wp_query;
-
-		$this->slug     = $slug;
-		$this->name     = $name;
-		$this->wp_query = $wp_query;
-	}
-
-	/**
-	 * Sets a variable
-	 *
-	 * @param string $key
-	 * @param mixed $value
-	 * @return void
-	 */
-	public function set_var( $key, $value ) {
-		if ( null === $this->wp_query->get( $key, null ) ) {
-			$this->wp_query->set( $key, $value );
-			$this->keys_to_wp_query[ $key ] = $value;
-		}
-		$this->vars[ $key ] = $value;
-	}
-
-	/**
-	 * Sets variables
-	 *
 	 * @param array $vars
 	 * @return void
 	 */
-	public function set_vars( array $vars = [] ) {
-		foreach ( $vars as $key => $value ) {
-			$this->set_var( $key, $value );
-		}
+	public function __construct( $slug, $name = null, $vars = [] ) {
+		$this->slug = $slug;
+		$this->name = $name;
+		$this->vars = $vars;
 	}
 
 	/**
@@ -92,12 +50,12 @@ class Template_Part {
 	 * @return void
 	 */
 	public function render() {
-		do_action( "get_template_part_{$this->slug}", $this->slug, $this->name );
+		do_action( "get_template_part_{$this->slug}", $this->slug, $this->name, $this->vars );
 
 		$template_names  = $this->_generate_template_names();
 		$locate_template = null;
 
-		do_action( 'get_template_part', $this->slug, $this->name, $template_names );
+		do_action( 'get_template_part', $this->slug, $this->name, $template_names, $this->vars );
 
 		$html = apply_filters(
 			'inc2734_wp_view_controller_pre_template_part_render',
@@ -121,13 +79,27 @@ class Template_Part {
 			}
 		}
 
-		do_action( 'inc2734_wp_view_controller_get_template_part', $this->slug, $this->name, $template_names, $html );
+		do_action( 'inc2734_wp_view_controller_get_template_part', $this->slug, $this->name, $template_names, $html, $this->vars );
 
 		if ( is_null( $html ) ) {
+			// backward compatibility
+			$keys_to_wp_query = [];
+			foreach ( $this->vars as $var => $value ) {
+				if ( null === get_query_var( $var, null ) ) {
+					set_query_var( $var, $value );
+					$keys_to_wp_query[] = $var;
+				}
+			}
+
 			ob_start();
-			Helper::locate_template( $template_names, true, false, $this->slug, $this->name );
-			$locate_template = Helper::locate_template( $template_names, false, false, $this->slug, $this->name );
+			Helper::locate_template( $template_names, true, false, $this->slug, $this->name, $this->vars );
+			$locate_template = Helper::locate_template( $template_names, false, false, $this->slug, $this->name, $this->vars );
 			$html = ob_get_clean();
+
+			// backward compatibility
+			foreach ( $keys_to_wp_query as $var ) {
+				set_query_var( $var, null );
+			}
 		}
 
 		if ( $html && $this->_enable_debug_mode() ) {
@@ -146,11 +118,6 @@ class Template_Part {
 
 		if ( $html && $this->_enable_debug_mode() ) {
 			$this->_debug_comment( 'End : ', $locate_template );
-		}
-
-		foreach ( $this->keys_to_wp_query as $key => $value ) {
-			unset( $value );
-			$this->wp_query->set( $key, null );
 		}
 	}
 
