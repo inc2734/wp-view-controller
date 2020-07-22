@@ -82,6 +82,7 @@ class Template_Part {
 		do_action( 'inc2734_wp_view_controller_get_template_part', $this->slug, $this->name, $template_names, $html, $this->vars );
 
 		if ( is_null( $html ) ) {
+			// backward compatibility
 			$keys_to_wp_query = [];
 			foreach ( $this->vars as $var => $value ) {
 				if ( null === get_query_var( $var, null ) ) {
@@ -95,6 +96,7 @@ class Template_Part {
 			$locate_template = Helper::locate_template( $template_names, false, false, $this->slug, $this->name, $this->vars );
 			$html = ob_get_clean();
 
+			// backward compatibility
 			foreach ( $keys_to_wp_query as $var ) {
 				set_query_var( $var, null );
 			}
