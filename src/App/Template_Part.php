@@ -84,6 +84,10 @@ class Template_Part {
 		if ( is_null( $html ) ) {
 			// backward compatibility
 			$keys_to_wp_query = [];
+			global $wp_version;
+			if ( version_compare( $wp_version, '5.5' ) < 0 ) {
+				$this->vars['args'] = $this->vars;
+			}
 			foreach ( $this->vars as $var => $value ) {
 				if ( null === get_query_var( $var, null ) ) {
 					set_query_var( $var, $value );
