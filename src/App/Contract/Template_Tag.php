@@ -251,14 +251,13 @@ trait Template_Tag {
 	 * @return void
 	 */
 	public static function get_template_part( $slug, $name = null, array $vars = [] ) {
-		$args = apply_filters(
-			'inc2734_wp_view_controller_get_template_part_args',
-			[
-				'slug' => $slug,
-				'name' => $name,
-				'vars' => $vars,
-			]
-		);
+		$args = [
+			'slug' => $slug,
+			'name' => $name,
+			'vars' => $vars,
+		];
+
+		$args = apply_filters( 'inc2734_wp_view_controller_get_template_part_args', $args );
 
 		do_action( 'inc2734_wp_view_controller_get_template_part_pre_render', $args );
 

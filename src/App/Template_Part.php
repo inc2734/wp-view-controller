@@ -38,7 +38,7 @@ class Template_Part {
 	 * @param array $vars
 	 * @return void
 	 */
-	public function __construct( $slug, $name = null, $vars = [] ) {
+	public function __construct( $slug, $name = null, $vars = [], $templates = [] ) {
 		$this->slug = $slug;
 		$this->name = $name;
 		$this->vars = $vars;
@@ -47,15 +47,22 @@ class Template_Part {
 	/**
 	 * Rendering the template part
 	 *
+	 * @see https://developer.wordpress.org/reference/functions/get_template_part/
+	 *
 	 * @return void
 	 */
 	public function render() {
 		do_action( "get_template_part_{$this->slug}", $this->slug, $this->name, $this->vars );
 
-		$template_names  = $this->_generate_template_names();
-		$locate_template = null;
+		$templates = [];
+		$name      = (string) $this->name;
+		if ( '' !== $name ) {
+			$templates[] = "{$this->slug}-{$name}.php";
+		}
 
-		do_action( 'get_template_part', $this->slug, $this->name, $template_names, $this->vars );
+		$templates[] = "{$this->slug}.php";
+
+		do_action( 'get_template_part', $this->slug, $name, $templates, $this->vars );
 
 		$html = apply_filters(
 			'inc2734_wp_view_controller_pre_template_part_render',
@@ -66,44 +73,33 @@ class Template_Part {
 		);
 
 		if ( is_null( $html ) ) {
-			$action_with_name = 'inc2734_wp_view_controller_get_template_part_' . $this->slug . '-' . $this->name;
-			$action           = 'inc2734_wp_view_controller_get_template_part_' . $this->slug;
+			$action_with_name = "inc2734_wp_view_controller_get_template_part_{$this->slug}-{$this->name}";
+			$action           = "inc2734_wp_view_controller_get_template_part_{$this->slug}";
+
 			if ( $this->name && has_action( $action_with_name ) ) {
 				ob_start();
+				// @deprecated
 				do_action( $action_with_name, $this->vars );
 				$html = ob_get_clean();
 			} elseif ( has_action( $action ) ) {
 				ob_start();
+				// @deprecated
 				do_action( $action, $this->name, $this->vars );
 				$html = ob_get_clean();
 			}
 		}
 
-		do_action( 'inc2734_wp_view_controller_get_template_part', $this->slug, $this->name, $template_names, $html, $this->vars );
+		do_action( 'inc2734_wp_view_controller_get_template_part', $this->slug, $this->name, $templates, $html, $this->vars );
 
 		if ( is_null( $html ) ) {
-			// backward compatibility
-			$keys_to_wp_query = [];
-			global $wp_version;
-			if ( version_compare( $wp_version, '5.5' ) < 0 ) {
-				$this->vars['args'] = $this->vars;
-			}
-			foreach ( $this->vars as $var => $value ) {
-				if ( null === get_query_var( $var, null ) ) {
-					set_query_var( $var, $value );
-					$keys_to_wp_query[] = $var;
-				}
-			}
+			$this->_init_template_args();
 
 			ob_start();
-			Helper::locate_template( $template_names, true, false, $this->slug, $this->name, $this->vars );
-			$locate_template = Helper::locate_template( $template_names, false, false, $this->slug, $this->name, $this->vars );
+			Helper::locate_template( $templates, true, false, $this->slug, $this->name, $this->vars );
+			$locate_template = Helper::locate_template( $templates, false, false, $this->slug, $this->name, $this->vars );
 			$html = ob_get_clean();
 
-			// backward compatibility
-			foreach ( $keys_to_wp_query as $var ) {
-				set_query_var( $var, null );
-			}
+			$this->_reset_template_args();
 		}
 
 		if ( $html && $this->_enable_debug_mode() ) {
@@ -125,15 +121,26 @@ class Template_Part {
 		}
 	}
 
-	protected function _generate_template_names() {
-		$template_names = [];
+	protected function _init_template_args() {
+		global $wp_version, $wp_query;
 
-		if ( $this->name ) {
-			$template_names[] = $this->slug . '-' . $this->name . '.php';
+		set_query_var( '_wp_view_controller_backup_query_vars', $wp_query->query_vars );
+
+		if ( version_compare( $wp_version, '5.5' ) < 0 ) {
+			$this->vars['args'] = $this->vars;
 		}
-		$template_names[] = $this->slug . '.php';
 
-		return $template_names;
+		foreach ( $this->vars as $var => $value ) {
+			if ( null === get_query_var( $var, null ) ) {
+				set_query_var( $var, $value );
+			}
+		}
+	}
+
+	protected function _reset_template_args() {
+		global $wp_query;
+
+		$wp_query->query_vars = get_query_var( '_wp_view_controller_backup_query_vars' );
 	}
 
 	/**

@@ -93,14 +93,6 @@ add_filter(
 );
 ```
 
-$pre = apply_filters(
-	'inc2734_wp_view_controller_pre_template_part_render',
-	null,
-	$this->slug,
-	$this->name,
-	$this->vars
-);
-
 ### inc2734_wp_view_controller_pre_template_part_render
 ```
 /**
@@ -295,6 +287,8 @@ add_filter(
 /**
  * Define template
  *
+ * @deprecated
+ *
  * @param array $vars
  * @return void
  */
@@ -312,6 +306,8 @@ add_action(
 ```
 /**
  * Define template
+ *
+ * @deprecated
  *
  * @param string $name
  * @param array $vars

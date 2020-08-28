@@ -12,7 +12,6 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 
 	/**
 	 * @test
-	 * @runInSeparateProcess
 	 */
 	public function args() {
 		add_filter(
@@ -34,12 +33,12 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 			}
 		);
 
+		add_action( 'inc2734_wp_view_controller_get_template_part_template2-name2', '__return_true' );
 		Inc2734\WP_View_Controller\Helper::get_template_part( 'template', 'name', [ 'key' => 'value' ] );
 	}
 
 	/**
 	 * @test
-	 * @runInSeparateProcess
 	 */
 	public function template_part_root_hierarchy() {
 		$root = untrailingslashit( sys_get_temp_dir() ) . '/template-parts';
@@ -76,13 +75,13 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 
 		file_exists( $file2 ) && unlink( $file2 );
 		ob_start();
+		add_action( 'inc2734_wp_view_controller_get_template_part_template-name', '__return_true' );
 		Inc2734\WP_View_Controller\Helper::get_template_part( 'template', 'name' );
 		$this->assertEquals( '', ob_get_clean() );
 	}
 
 	/**
 	 * @test
-	 * @runInSeparateProcess
 	 */
 	public function defined_html() {
 		add_action(
@@ -114,7 +113,7 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 			'inc2734_wp_view_controller_template_part_render',
 			function( $html, $slug, $name ) {
 				if ( 'template' === $slug && 'name' === $name ) {
-					return '3-template-name';
+					return '4-template-name';
 				}
 			},
 			10,
@@ -123,6 +122,6 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 
 		ob_start();
 		Inc2734\WP_View_Controller\Helper::get_template_part( 'template', 'name' );
-		$this->assertEquals( '3-template-name', ob_get_clean() );
+		$this->assertEquals( '4-template-name', ob_get_clean() );
 	}
 }
