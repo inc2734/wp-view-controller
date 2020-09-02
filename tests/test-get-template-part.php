@@ -8,17 +8,12 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 
 	public function tearDown() {
 		parent::tearDown();
-		remove_all_filters( 'inc2734_wp_view_controller_get_template_part_args' );
-		remove_all_filters( 'inc2734_wp_view_controller_get_template_part_pre_render' );
-		remove_all_filters( 'inc2734_wp_view_controller_template_part_root_hierarchy' );
-		remove_all_filters( 'inc2734_wp_view_controller_template_part_render' );
-		remove_all_actions( 'inc2734_wp_view_controller_get_template_part_template2-name2' );
-		remove_all_actions( 'inc2734_wp_view_controller_get_template_part_template-name' );
-		remove_all_actions( 'inc2734_wp_view_controller_get_template_part_template' );
 	}
 
 	/**
 	 * @test
+	 * @runInSeparateProcess
+	 * @preserveGlobalState disabled
 	 */
 	public function args() {
 		add_filter(
@@ -46,6 +41,8 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 
 	/**
 	 * @test
+	 * @runInSeparateProcess
+	 * @preserveGlobalState disabled
 	 */
 	public function template_part_root_hierarchy() {
 		$root = untrailingslashit( sys_get_temp_dir() ) . '/template-parts';
@@ -89,6 +86,8 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 
 	/**
 	 * @test
+	 * @runInSeparateProcess
+	 * @preserveGlobalState disabled
 	 */
 	public function defined_html() {
 		add_action(
