@@ -160,7 +160,7 @@ trait Template_Tag {
 			}
 			$template_names[] = $maybe_completed_slug . '.php';
 
-			$located = static::locate_template( $template_names, false );
+			$located = static::locate_template( $template_names, false, false, $slug, $name );
 			if ( $located ) {
 				return $maybe_completed_slug;
 			}

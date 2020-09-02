@@ -26,7 +26,7 @@ add_action(
 			return;
 		}
 
-		if ( Helper::locate_template( $templates, false ) ) {
+		if ( Helper::locate_template( $templates, false, false, $slug, $name ) ) {
 			return;
 		}
 
@@ -61,7 +61,7 @@ add_action(
 
 		foreach ( $templates as $template ) {
 			$parent  = get_template_directory() . '/' . $template;
-			$located = Helper::locate_template( $template, false );
+			$located = Helper::locate_template( $template, false, false, $slug, $name );
 
 			if ( ! $located ) {
 				continue;
@@ -73,7 +73,7 @@ add_action(
 
 			$renameds = Helper::get_file_renamed( $parent );
 			foreach ( $renameds as $renamed ) {
-				$old_template_located = Helper::locate_template( $renamed, false );
+				$old_template_located = Helper::locate_template( $renamed, false, false, $slug, $name );
 				if ( ! $old_template_located ) {
 					continue;
 				}
@@ -114,7 +114,7 @@ add_action(
 
 		foreach ( $templates as $template ) {
 			$parent  = get_template_directory() . '/' . $template;
-			$located = Helper::locate_template( $template, false );
+			$located = Helper::locate_template( $template, false, false, $slug, $name );
 
 			if ( ! $located ) {
 				continue;
