@@ -54,6 +54,8 @@ class Template_Part {
 	public function render() {
 		do_action( "get_template_part_{$this->slug}", $this->slug, $this->name, $this->vars );
 
+		$locate_template = null;
+
 		$templates = [];
 		$name      = (string) $this->name;
 		if ( '' !== $name ) {
@@ -95,8 +97,7 @@ class Template_Part {
 			$this->_init_template_args();
 
 			ob_start();
-			Helper::locate_template( $templates, true, false, $this->slug, $this->name, $this->vars );
-			$locate_template = Helper::locate_template( $templates, false, false, $this->slug, $this->name, $this->vars );
+			$locate_template = Helper::locate_template( $templates, true, false, $this->slug, $this->name, $this->vars );
 			$html = ob_get_clean();
 
 			$this->_reset_template_args();
