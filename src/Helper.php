@@ -14,10 +14,11 @@ class Helper {
 	use Contract\Template_Tag;
 
 	/**
-	 * Return file header
+	 * Return file header.
 	 *
 	 * @see https://developer.wordpress.org/reference/functions/get_file_data/
-	 * @param string $file Full file path
+	 *
+	 * @param string $file Full file path.
 	 * @return string
 	 */
 	protected static function _get_file_data( $file ) {
@@ -39,9 +40,9 @@ class Helper {
 	}
 
 	/**
-	 * Return @version data
+	 * Return @version data.
 	 *
-	 * @param string $file Full file path
+	 * @param string $file Full file path.
 	 * @return string|null
 	 */
 	public static function get_file_version( $file ) {
@@ -58,9 +59,9 @@ class Helper {
 	}
 
 	/**
-	 * Return renamed: data
+	 * Return renamed: data.
 	 *
-	 * @param string $file Full file path
+	 * @param string $file Full file path.
 	 * @return array
 	 */
 	public static function get_file_renamed( $file ) {

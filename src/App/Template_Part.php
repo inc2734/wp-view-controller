@@ -12,40 +12,42 @@ use Inc2734\WP_View_Controller\Helper;
 class Template_Part {
 
 	/**
-	 * The template path like get_template_part()
+	 * The template path like get_template_part().
 	 *
 	 * @var string
 	 */
 	protected $slug;
 
 	/**
-	 * The name like get_template_part()
+	 * The name like get_template_part().
 	 *
 	 * @var string
 	 */
 	protected $name;
 
 	/**
-	 * Variables
+	 * Variables.
 	 *
 	 * @var array
 	 */
 	protected $vars = [];
 
 	/**
-	 * @param string $slug
-	 * @param string $name
-	 * @param array $vars
+	 * Constructor.
+
+	 * @param string $slug The slug name for the generic template.
+	 * @param string $name The name of the specialised template.
+	 * @param array  $vars Additional arguments passed to the template.
 	 * @return void
 	 */
-	public function __construct( $slug, $name = null, $vars = [], $templates = [] ) {
+	public function __construct( $slug, $name = null, $vars = [] ) {
 		$this->slug = $slug;
 		$this->name = $name;
 		$this->vars = $vars;
 	}
 
 	/**
-	 * Rendering the template part
+	 * Rendering the template part.
 	 *
 	 * @see https://developer.wordpress.org/reference/functions/get_template_part/
 	 *
@@ -98,7 +100,7 @@ class Template_Part {
 
 			ob_start();
 			$locate_template = Helper::locate_template( $templates, true, false, $this->slug, $this->name, $this->vars );
-			$html = ob_get_clean();
+			$html            = ob_get_clean();
 
 			$this->_reset_template_args();
 		}
@@ -122,6 +124,9 @@ class Template_Part {
 		}
 	}
 
+	/**
+	 * Initialize template args.
+	 */
 	protected function _init_template_args() {
 		global $wp_version, $wp_query;
 
@@ -138,6 +143,9 @@ class Template_Part {
 		}
 	}
 
+	/**
+	 * Reset template args.
+	 */
 	protected function _reset_template_args() {
 		global $wp_query;
 
@@ -145,7 +153,7 @@ class Template_Part {
 	}
 
 	/**
-	 * Return true when enable debug mode
+	 * Return true when enable debug mode.
 	 *
 	 * @return boolean
 	 */
@@ -170,10 +178,10 @@ class Template_Part {
 	}
 
 	/**
-	 * Print debug comment
+	 * Print debug comment.
 	 *
-	 * @param string $prefix
-	 * @param string $locate_template
+	 * @param string $prefix          Prefix message.
+	 * @param string $locate_template Result of Helper::locate_template().
 	 * @return void
 	 */
 	public function _debug_comment( $prefix = null, $locate_template = null ) {

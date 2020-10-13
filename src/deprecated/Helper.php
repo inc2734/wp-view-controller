@@ -11,9 +11,9 @@ use Inc2734\WP_View_Controller\App\Config;
 use Inc2734\WP_View_Controller\App\Template_Part;
 
 /**
- * Getting config value
+ * Getting config value.
  *
- * @param string $key the key of the config
+ * @param string $key The key of the config.
  * @return mixed
  */
 function config( $key = null ) {
@@ -21,9 +21,9 @@ function config( $key = null ) {
 }
 
 /**
- * Load footer template
+ * Load footer template.
  *
- * @param string $name
+ * @param string $name The name of the specialised template.
  * @return void
  */
 function get_footer_template( $name = 'footer' ) {
@@ -31,9 +31,9 @@ function get_footer_template( $name = 'footer' ) {
 }
 
 /**
- * This function like get_footer()
+ * This function like get_footer().
  *
- * @param string $name
+ * @param string $name The name of the specialised template.
  * @return void
  */
 function get_footer( $name = null ) {
@@ -41,9 +41,9 @@ function get_footer( $name = null ) {
 }
 
 /**
- * Load header template
+ * Load header template.
  *
- * @param string $name
+ * @param string $name The name of the specialised template.
  * @return void
  */
 function get_header_template( $name = 'header' ) {
@@ -51,9 +51,9 @@ function get_header_template( $name = 'header' ) {
 }
 
 /**
- * This function like get_header()
+ * This function like get_header().
  *
- * @param string $name
+ * @param string $name The name of the specialised template.
  * @return void
  */
 function get_header( $name = null ) {
@@ -61,9 +61,9 @@ function get_header( $name = null ) {
 }
 
 /**
- * Load sidebar template
+ * Load sidebar template.
  *
- * @param string $name
+ * @param string $name The name of the specialised template.
  * @return void
  */
 function get_sidebar_template( $name = 'sidebar' ) {
@@ -73,7 +73,7 @@ function get_sidebar_template( $name = 'sidebar' ) {
 /**
  * This function like get_sidebar()
  *
- * @param string $name
+ * @param string $name The name of the specialised template.
  * @return void
  */
 function get_sidebar( $name = null ) {
@@ -81,11 +81,11 @@ function get_sidebar( $name = null ) {
 }
 
 /**
- * A template tag that is get_template_part() using variables
+ * A template tag that is get_template_part() using variables.
  *
- * @param string $slug
- * @param string $name
- * @param array $vars
+ * @param string $slug The slug name for the generic template.
+ * @param string $name The name of the specialised template.
+ * @param array  $vars  Additional arguments passed to the template.
  * @return void
  */
 function get_template_part( $slug, $name = null, array $vars = [] ) {
@@ -101,10 +101,10 @@ function get_template_part( $slug, $name = null, array $vars = [] ) {
 }
 
 /**
- * Load wrapper template
+ * Load wrapper template.
  *
- * @param string $name
- * @param array $args
+ * @param string $name The name of the specialised template.
+ * @param array  $args Additional arguments passed to the template.
  * @return void
  */
 function get_wrapper_template( $name = 'wrapper', array $args = array() ) {

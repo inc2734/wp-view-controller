@@ -10,9 +10,9 @@ namespace Inc2734\WP_View_Controller\App;
 class Config {
 
 	/**
-	 * Getting config value
+	 * Getting config value.
 	 *
-	 * @param string $key the key of the config
+	 * @param string $key The key of the config.
 	 * @return mixed
 	 */
 	public static function get( $key = null ) {

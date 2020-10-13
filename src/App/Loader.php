@@ -10,7 +10,7 @@ namespace Inc2734\WP_View_Controller\App;
 class Loader {
 
 	/**
-	 * Load helper function
+	 * Load helper function.
 	 *
 	 * @return void
 	 */
@@ -19,7 +19,7 @@ class Loader {
 	}
 
 	/**
-	 * Load files for setup
+	 * Load files for setup.
 	 *
 	 * @return void
 	 */
@@ -28,9 +28,9 @@ class Loader {
 	}
 
 	/**
-	 * Load files
+	 * Load files.
 	 *
-	 * @param string $directory
+	 * @param string $directory Target directory path.
 	 * @return void
 	 */
 	protected static function load( $directory ) {

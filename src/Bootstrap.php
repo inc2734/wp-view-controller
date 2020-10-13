@@ -13,12 +13,15 @@ use Inc2734\WP_View_Controller\App\View;
 class Bootstrap {
 
 	/**
-	 * View object
+	 * View object.
 	 *
 	 * @var View
 	 */
 	protected static $view;
 
+	/**
+	 * Constructor.
+	 */
 	public function __construct() {
 		load_textdomain( 'inc2734-wp-view-controller', __DIR__ . '/languages/' . get_locale() . '.mo' );
 
@@ -28,10 +31,10 @@ class Bootstrap {
 	}
 
 	/**
-	 * Rendering the page
+	 * Rendering the page.
 	 *
-	 * @param string $view view template path
-	 * @param string $view_suffix view template suffix
+	 * @param string $view view   The template path.
+	 * @param string $view_suffix The view template suffix.
 	 * @return void
 	 */
 	public static function render( $view, $view_suffix = '' ) {
@@ -40,9 +43,9 @@ class Bootstrap {
 	}
 
 	/**
-	 * Sets the layout template
+	 * Sets the layout template.
 	 *
-	 * @param string $layout layout template path
+	 * @param string $layout The layout template path.
 	 * @return void
 	 */
 	public static function layout( $layout ) {
@@ -51,7 +54,7 @@ class Bootstrap {
 	}
 
 	/**
-	 * Return layout arg
+	 * Return layout arg.
 	 *
 	 * @return string
 	 */
@@ -60,7 +63,7 @@ class Bootstrap {
 	}
 
 	/**
-	 * Return view arg
+	 * Return view arg.
 	 *
 	 * @return string
 	 */
@@ -69,7 +72,7 @@ class Bootstrap {
 	}
 
 	/**
-	 * Return view_suffix arg
+	 * Return view_suffix arg.
 	 *
 	 * @return string
 	 */
@@ -78,7 +81,7 @@ class Bootstrap {
 	}
 
 	/**
-	 * Set View object
+	 * Set View object.
 	 *
 	 * @return void
 	 */

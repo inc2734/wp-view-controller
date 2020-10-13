@@ -1,0 +1,9 @@
+{
+  "core": null,
+  "mappings": {
+    "wp-content/plugins/wp-view-controller": "./"
+  },
+  "config": {
+    "WP_DEBUG": true
+  }
+}

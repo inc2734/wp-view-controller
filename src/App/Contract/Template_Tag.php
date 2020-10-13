@@ -13,11 +13,11 @@ use Inc2734\WP_View_Controller\App\Template_Part;
 trait Template_Tag {
 
 	/**
-	 * Load footer template
+	 * Load footer template.
 	 *
-	 * @param string $slug
-	 * @param string $name
-	 * @param array $args
+	 * @param string $slug The slug name for the generic template.
+	 * @param string $name The name of the specialised template.
+	 * @param array  $args Additional arguments passed to the template.
 	 * @return void
 	 */
 	public static function get_footer_template( $slug = 'footer', $name = null, array $args = [] ) {
@@ -31,10 +31,10 @@ trait Template_Tag {
 	}
 
 	/**
-	 * This function like get_footer()
+	 * This function like get_footer().
 	 *
-	 * @param string $name
-	 * @param array $args
+	 * @param string $name The name of the specialised template.
+	 * @param array  $args Additional arguments passed to the template.
 	 * @return void
 	 */
 	public static function get_footer( $name = null, array $args = [] ) {
@@ -50,11 +50,11 @@ trait Template_Tag {
 	}
 
 	/**
-	 * Load header template
+	 * Load header template.
 	 *
-	 * @param string $slug
-	 * @param string $name
-	 * @param array $args
+	 * @param string $slug The slug name for the generic template.
+	 * @param string $name The name of the specialised template.
+	 * @param array  $args Additional arguments passed to the template.
 	 * @return void
 	 */
 	public static function get_header_template( $slug = 'header', $name = null, array $args = [] ) {
@@ -68,10 +68,10 @@ trait Template_Tag {
 	}
 
 	/**
-	 * This function like get_header()
+	 * This function like get_header().
 	 *
-	 * @param string $name
-	 * @param array $args
+	 * @param string $name The name of the specialised template.
+	 * @param array  $args Additional arguments passed to the template.
 	 * @return void
 	 */
 	public static function get_header( $name = null, array $args = [] ) {
@@ -87,11 +87,11 @@ trait Template_Tag {
 	}
 
 	/**
-	 * Load sidebar template
+	 * Load sidebar template.
 	 *
-	 * @param string $slug
-	 * @param string $name
-	 * @param array $args
+	 * @param string $slug The slug name for the generic template.
+	 * @param string $name The name of the specialised template.
+	 * @param array  $args Additional arguments passed to the template.
 	 * @return void
 	 */
 	public static function get_sidebar_template( $slug = 'sidebar', $name = null, array $args = [] ) {
@@ -105,10 +105,10 @@ trait Template_Tag {
 	}
 
 	/**
-	 * This function like get_sidebar()
+	 * This function like get_sidebar().
 	 *
-	 * @param string $name
-	 * @param array $args
+	 * @param string $name The name of the specialised template.
+	 * @param array  $args Additional arguments passed to the template.
 	 * @return void
 	 */
 	public static function get_sidebar( $name = null, array $args = [] ) {
@@ -124,10 +124,10 @@ trait Template_Tag {
 	}
 
 	/**
-	 * Load wrapper template
+	 * Load wrapper template.
 	 *
-	 * @param string $slug
-	 * @param array $vars
+	 * @param string $slug The slug name for the generic template.
+	 * @param array  $vars Additional arguments passed to the template.
 	 * @return void
 	 */
 	public static function get_wrapper_template( $slug = 'wrapper', array $vars = [] ) {
@@ -143,9 +143,9 @@ trait Template_Tag {
 	/**
 	 * Return located template slug
 	 *
-	 * @param array $relative_dir_paths
-	 * @param string $slug
-	 * @param string $name
+	 * @param array  $relative_dir_paths Relative papth of target directories.
+	 * @param string $slug               The slug name for the generic template.
+	 * @param string $name               The name of the specialised template.
 	 * @return string
 	 */
 	public static function get_located_template_slug( array $relative_dir_paths, $slug, $name = null ) {
@@ -182,9 +182,9 @@ trait Template_Tag {
 	}
 
 	/**
-	 * Return slug from filename
+	 * Return slug from filename.
 	 *
-	 * @param string $filename
+	 * @param string $filename The file name.
 	 * @return string
 	 */
 	public static function filename_to_slug( $filename ) {
@@ -194,16 +194,16 @@ trait Template_Tag {
 	}
 
 	/**
-	 * Add template_part_root_hierarchy check to locate_template()
+	 * Add template_part_root_hierarchy check to locate_template().
 	 *
 	 * @see https://developer.wordpress.org/reference/functions/locate_template/
 	 *
-	 * @param string|array $template_names
-	 * @param boolean $load
-	 * @param boolean $require_once
-	 * @param string $slug Optional
-	 * @param string $name Optional
-	 * @param array $args Optional
+	 * @param string|array $template_names Template file(s) to search for, in order.
+	 * @param boolean      $load           If true the template file will be loaded if it is found.
+	 * @param boolean      $require_once   Whether to require_once or require.
+	 * @param string       $slug           The slug name for the generic template.
+	 * @param string       $name           The name of the specialised template.
+	 * @param array        $args           Additional arguments passed to the template.
 	 * @return string
 	 */
 	public static function locate_template( $template_names, $load = false, $require_once = true, $slug = null, $name = null, array $args = [] ) {
@@ -231,7 +231,7 @@ trait Template_Tag {
 					continue;
 				}
 
-				if ( $load && '' != $located ) {
+				if ( $load && $located ) {
 					load_template( $located, $require_once, $args );
 				}
 				wp_cache_set( $cache_key, $located, $cache_group );
@@ -245,9 +245,9 @@ trait Template_Tag {
 	/**
 	 * A template tag that is get_template_part() using variables
 	 *
-	 * @param string $slug
-	 * @param string $name
-	 * @param array $vars
+	 * @param string $slug The slug name for the generic template.
+	 * @param string $name The name of the specialised template.
+	 * @param array  $vars Additional arguments passed to the template.
 	 * @return void
 	 */
 	public static function get_template_part( $slug, $name = null, array $vars = [] ) {
@@ -272,8 +272,8 @@ trait Template_Tag {
 	/**
 	 * Return hierarchy + stylesheet_directory + template_directory
 	 *
-	 * @param string $slug
-	 * @param string $name
+	 * @param string $slug The slug name for the generic template.
+	 * @param string $name The name of the specialised template.
 	 * @return array
 	 */
 	public static function get_completed_hierarchy( $slug = null, $name = null ) {
@@ -286,9 +286,9 @@ trait Template_Tag {
 	/**
 	 * Return template part root hierarchy
 	 *
-	 * @param string $slug
-	 * @param string $name
-	 * @param array $vars
+	 * @param string $slug The slug name for the generic template.
+	 * @param string $name The name of the specialised template.
+	 * @param array  $vars Additional arguments passed to the template.
 	 * @return array
 	 */
 	public static function get_template_part_root_hierarchy( $slug = null, $name = null, array $vars = [] ) {
@@ -306,7 +306,7 @@ trait Template_Tag {
 	}
 
 	/**
-	 * Returns array of layout templates
+	 * Returns array of layout templates.
 	 *
 	 * @return array
 	 */
@@ -315,7 +315,7 @@ trait Template_Tag {
 	}
 
 	/**
-	 * Returns array of header templates
+	 * Returns array of header templates.
 	 *
 	 * @return array
 	 */
@@ -324,9 +324,9 @@ trait Template_Tag {
 	}
 
 	/**
-	 * Getting config value
+	 * Getting config value.
 	 *
-	 * @param string $key the key of the config
+	 * @param string $key The key of the config.
 	 * @return mixed
 	 */
 	protected static function config( $key = null ) {
@@ -334,8 +334,9 @@ trait Template_Tag {
 	}
 
 	/**
-	 * Returns candidate locate templates
+	 * Returns candidate locate templates.
 	 *
+	 * @param array $relative_dir_paths Relative path of target directories.
 	 * @return array
 	 */
 	protected static function _get_candidate_locate_templates( array $relative_dir_paths ) {
@@ -348,7 +349,7 @@ trait Template_Tag {
 			}
 		}
 
-		$wp_theme = wp_get_theme();
+		$wp_theme    = wp_get_theme();
 		$text_domain = is_child_theme() ? $wp_theme->parent()->get( 'TextDomain' ) : $wp_theme->get( 'TextDomain' );
 
 		$templates = [];

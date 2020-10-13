@@ -13,30 +13,30 @@ use Inc2734\WP_View_Controller\Helper;
 class View {
 
 	/**
-	 * The layout template path
+	 * The layout template path.
 	 *
 	 * @var string
 	 */
 	protected $layout;
 
 	/**
-	 * The view template path
+	 * The view template path.
 	 *
 	 * @var string
 	 */
 	protected $view;
 
 	/**
-	 * The view template name suffix
+	 * The view template name suffix.
 	 *
 	 * @var string
 	 */
 	protected $view_suffix;
 
 	/**
-	 * Sets the layout template
+	 * Sets the layout template.
 	 *
-	 * @param string $layout layout template path
+	 * @param string $layout The layout template path.
 	 * @return void
 	 */
 	public function layout( $layout ) {
@@ -44,10 +44,10 @@ class View {
 	}
 
 	/**
-	 * Rendering the page
+	 * Rendering the page.
 	 *
-	 * @param string $view view template path
-	 * @param string $view_suffix view template suffix
+	 * @param string $view        The view template path.
+	 * @param string $view_suffix The view template suffix.
 	 * @return void
 	 */
 	public function render( $view, $view_suffix = '' ) {
@@ -69,7 +69,7 @@ class View {
 	}
 
 	/**
-	 * Rendering in the WordPress loop
+	 * Rendering in the WordPress loop.
 	 *
 	 * @return void
 	 */
@@ -81,7 +81,7 @@ class View {
 	}
 
 	/**
-	 * Rendering not in the WordPress loop
+	 * Rendering not in the WordPress loop.
 	 *
 	 * @return void
 	 */
@@ -92,7 +92,7 @@ class View {
 	}
 
 	/**
-	 * Rendering the layout template
+	 * Rendering the layout template.
 	 *
 	 * @return void
 	 */
@@ -108,7 +108,7 @@ class View {
 	}
 
 	/**
-	 * Return layout arg
+	 * Return layout arg.
 	 *
 	 * @return string
 	 */
@@ -117,7 +117,7 @@ class View {
 	}
 
 	/**
-	 * Return view arg
+	 * Return view arg.
 	 *
 	 * @return string
 	 */
@@ -126,7 +126,7 @@ class View {
 	}
 
 	/**
-	 * Return view_suffix arg
+	 * Return view_suffix arg.
 	 *
 	 * @return string
 	 */
@@ -135,7 +135,7 @@ class View {
 	}
 
 	/**
-	 * Loading the view template in layout template
+	 * Loading the view template in layout template.
 	 *
 	 * @return void
 	 */
@@ -146,12 +146,12 @@ class View {
 	}
 
 	/**
-	 * Gets the view args
+	 * Gets the view args.
 	 *
 	 * @return array
 	 */
 	protected function _get_args_for_template_part() {
-		$view  = [
+		$view = [
 			'slug' => '',
 			'name' => '',
 		];
@@ -162,7 +162,7 @@ class View {
 			return $view;
 		}
 
-		$view  = [
+		$view = [
 			'slug' => $slug,
 			'name' => $this->view_suffix,
 		];
@@ -183,7 +183,7 @@ class View {
 	}
 
 	/**
-	 * Returns static view template name
+	 * Returns static view template name.
 	 *
 	 * @return string|null
 	 */
@@ -210,9 +210,9 @@ class View {
 	}
 
 	/**
-	 * Return relative path from $uri
+	 * Return relative path from $uri.
 	 *
-	 * @param string $uri
+	 * @param string $uri The URI.
 	 * @return string
 	 */
 	protected function _get_relative_path( $uri ) {
@@ -220,9 +220,9 @@ class View {
 	}
 
 	/**
-	 * Return uri that removed http queries
+	 * Return uri that removed http queries.
 	 *
-	 * @param string $uri
+	 * @param string $uri The URI.
 	 * @return string
 	 */
 	protected function _remove_http_query( $uri ) {
@@ -232,9 +232,9 @@ class View {
 	}
 
 	/**
-	 * Return uri that removed /page/xx/ and /paged/xx/
+	 * Return uri that removed /page/xx/ and /paged/xx/.
 	 *
-	 * @param string $uri
+	 * @param string $uri The URI.
 	 * @return string
 	 */
 	protected function _remove_paged_slug( $uri ) {

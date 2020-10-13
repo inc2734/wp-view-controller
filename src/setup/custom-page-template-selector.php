@@ -45,7 +45,7 @@ add_action(
 							if ( ! empty( $custom_page_template_data['template-name'] ) ) {
 								$template_post_types = $custom_page_template_data['template-post-type'];
 								$template_post_types = $template_post_types ? array_map( 'trim', explode( ',', $template_post_types ) ) : [ 'page' ];
-								if ( in_array( $post_type, $template_post_types ) ) {
+								if ( in_array( $post_type, $template_post_types, true ) ) {
 									$post_templates[ $base_path ] = $custom_page_template_data['template-name'];
 								}
 							}
