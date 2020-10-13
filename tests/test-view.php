@@ -42,6 +42,9 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 
 		create_initial_taxonomies();
 		$wp_rewrite->flush_rules();
+
+		$this->static_view_directory = get_template_directory() . '/templates/static';
+		system( 'mkdir ' . $this->static_view_directory );
 	}
 
 	public function tearDown() {
@@ -50,13 +53,12 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 		_unregister_post_type( $this->post_type );
 		_unregister_taxonomy( $this->taxonomy, $this->post_type );
 
-		$static_view_directory = get_template_directory() . '/templates/static';
-		system( 'chmod -R 755 ' . $static_view_directory );
-		system( 'rm -R ' . $static_view_directory );
+		system( 'chmod -R 755 ' . $this->static_view_directory );
+		system( 'rm -R ' . $this->static_view_directory );
 	}
 
 	protected function _create_static_view_dir( $subdir ) {
-		$static_view_directory = get_template_directory() . '/templates/static/' . trim( $subdir, '/' );
+		$static_view_directory = $this->static_view_directory . '/' . trim( $subdir, '/' );
 		if ( ! is_dir( $static_view_directory ) ) {
 			mkdir( $static_view_directory, 0755, true);
 		}
