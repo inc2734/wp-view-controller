@@ -44,7 +44,6 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 		$wp_rewrite->flush_rules();
 
 		$this->static_view_directory = get_template_directory() . '/templates/static';
-		wp_mkdir_p( $this->static_view_directory );
 	}
 
 	public function tearDown() {
@@ -60,7 +59,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	protected function _create_static_view_dir( $subdir ) {
 		$static_view_directory = $this->static_view_directory . '/' . trim( $subdir, '/' );
 		if ( ! is_dir( $static_view_directory ) ) {
-			mkdir( $static_view_directory, 0755, true);
+			wp_mkdir_p( $static_view_directory );
 		}
 		chmod( $static_view_directory, 0755 );
 		if ( is_dir( $static_view_directory ) ) {

@@ -1,5 +1,8 @@
 {
   "core": null,
+  "themes": [
+    "https://downloads.wordpress.org/theme/twentytwenty.zip"
+  ],
   "mappings": {
     "wp-content/plugins/wp-view-controller": "./"
   },
