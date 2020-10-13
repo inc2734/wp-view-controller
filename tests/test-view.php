@@ -44,7 +44,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 		$wp_rewrite->flush_rules();
 
 		$this->static_view_directory = get_template_directory() . '/templates/static';
-		system( 'mkdir ' . $this->static_view_directory );
+		wp_mkdir_p( $this->static_view_directory );
 	}
 
 	public function tearDown() {
