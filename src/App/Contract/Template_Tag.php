@@ -257,7 +257,9 @@ trait Template_Tag {
 			'vars' => $vars,
 		];
 
-		$args = apply_filters( 'inc2734_wp_view_controller_get_template_part_args', $args );
+		$context                  = isset( $args['_context'] ) ? $args['_context'] : null;
+		$args                     = apply_filters( 'inc2734_wp_view_controller_get_template_part_args', $args );
+		$args['vars']['_context'] = $context;
 
 		do_action( 'inc2734_wp_view_controller_get_template_part_pre_render', $args );
 

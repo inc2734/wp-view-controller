@@ -44,6 +44,33 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 	 * @runInSeparateProcess
 	 * @preserveGlobalState disabled
 	 */
+	public function context() {
+		add_filter(
+			'inc2734_wp_view_controller_get_template_part_args',
+			function( $args ) {
+				$args['vars']['_context'] = 'fuga';
+				return $args;
+			}
+		);
+
+		add_action(
+			'inc2734_wp_view_controller_get_template_part_pre_render',
+			function( $args ) {
+				$this->assertEquals( 'template', $args['slug'] );
+				$this->assertEquals( 'name', $args['name'] );
+				$this->assertEquals( null, $args['vars']['_context'] );
+			}
+		);
+
+		add_action( 'inc2734_wp_view_controller_get_template_part_template-name', '__return_true' );
+		Inc2734\WP_View_Controller\Helper::get_template_part( 'template', 'name' );
+	}
+
+	/**
+	 * @test
+	 * @runInSeparateProcess
+	 * @preserveGlobalState disabled
+	 */
 	public function template_part_root_hierarchy() {
 		$root = untrailingslashit( sys_get_temp_dir() ) . '/template-parts';
 		$file = $root . '/template-name.php';
