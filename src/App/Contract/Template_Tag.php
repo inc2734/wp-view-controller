@@ -257,9 +257,18 @@ trait Template_Tag {
 			'vars' => $vars,
 		];
 
-		$context                  = isset( $args['_context'] ) ? $args['_context'] : null;
-		$args                     = apply_filters( 'inc2734_wp_view_controller_get_template_part_args', $args );
-		$args['vars']['_context'] = $context;
+		if ( array_key_exists( '_context', $args['vars'] ) ) {
+			$context = $args['vars']['_context'];
+		}
+
+		$args = apply_filters( 'inc2734_wp_view_controller_get_template_part_args', $args );
+		if ( isset( $args['vars']['_context'] ) ) {
+			unset( $args['vars']['_context'] );
+		}
+
+		if ( isset( $context ) ) {
+			$args['vars']['_context'] = $context;
+		}
 
 		do_action( 'inc2734_wp_view_controller_get_template_part_pre_render', $args );
 
