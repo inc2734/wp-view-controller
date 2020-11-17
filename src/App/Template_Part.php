@@ -149,7 +149,9 @@ class Template_Part {
 	protected function _reset_template_args() {
 		global $wp_query;
 
-		$wp_query->query_vars = get_query_var( '_wp_view_controller_backup_query_vars' );
+		$backup_query_vars    = get_query_var( '_wp_view_controller_backup_query_vars' );
+		$backup_query_vars    = is_array( $backup_query_vars ) ? $backup_query_vars : [];
+		$wp_query->query_vars = $backup_query_vars;
 	}
 
 	/**
