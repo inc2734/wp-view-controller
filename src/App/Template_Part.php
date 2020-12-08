@@ -12,131 +12,100 @@ use Inc2734\WP_View_Controller\Helper;
 class Template_Part {
 
 	/**
-	 * The template path like get_template_part().
-	 *
-	 * @var string
-	 */
-	protected $slug;
-
-	/**
-	 * The name like get_template_part().
-	 *
-	 * @var string
-	 */
-	protected $name;
-
-	/**
-	 * Variables.
-	 *
-	 * @var array
-	 */
-	protected $vars = [];
-
-	/**
-	 * Constructor.
-
-	 * @param string $slug The slug name for the generic template.
-	 * @param string $name The name of the specialised template.
-	 * @param array  $vars Additional arguments passed to the template.
-	 * @return void
-	 */
-	public function __construct( $slug, $name = null, $vars = [] ) {
-		$this->slug = $slug;
-		$this->name = $name;
-		$this->vars = $vars;
-	}
-
-	/**
 	 * Rendering the template part.
 	 *
 	 * @see https://developer.wordpress.org/reference/functions/get_template_part/
 	 *
-	 * @return void
+	 * @param string $slug The slug name for the generic template.
+	 * @param string $name The name of the specialised template.
+	 * @param array  $vars Additional arguments passed to the template.
 	 */
-	public function render() {
-		do_action( "get_template_part_{$this->slug}", $this->slug, $this->name, $this->vars );
+	public static function render( $slug, $name = null, $vars = [] ) {
+		do_action( "get_template_part_{$slug}", $slug, $name, $vars );
 
 		$locate_template = null;
 
 		$templates = [];
-		$name      = (string) $this->name;
+		$name      = (string) $name;
 		if ( '' !== $name ) {
-			$templates[] = "{$this->slug}-{$name}.php";
+			$templates[] = "{$slug}-{$name}.php";
 		}
 
-		$templates[] = "{$this->slug}.php";
+		$templates[] = "{$slug}.php";
 
-		do_action( 'get_template_part', $this->slug, $name, $templates, $this->vars );
+		do_action( 'get_template_part', $slug, $name, $templates, $vars );
 
 		$html = apply_filters(
 			'inc2734_wp_view_controller_pre_template_part_render',
 			null,
-			$this->slug,
-			$this->name,
-			$this->vars
+			$slug,
+			$name,
+			$vars
 		);
 
 		if ( is_null( $html ) ) {
-			$action_with_name = "inc2734_wp_view_controller_get_template_part_{$this->slug}-{$this->name}";
-			$action           = "inc2734_wp_view_controller_get_template_part_{$this->slug}";
+			$action_with_name = "inc2734_wp_view_controller_get_template_part_{$slug}-{$name}";
+			$action           = "inc2734_wp_view_controller_get_template_part_{$slug}";
 
-			if ( $this->name && has_action( $action_with_name ) ) {
+			if ( $name && has_action( $action_with_name ) ) {
 				ob_start();
 				// @deprecated
-				do_action( $action_with_name, $this->vars );
+				do_action( $action_with_name, $vars );
 				$html = ob_get_clean();
 			} elseif ( has_action( $action ) ) {
 				ob_start();
 				// @deprecated
-				do_action( $action, $this->name, $this->vars );
+				do_action( $action, $name, $vars );
 				$html = ob_get_clean();
 			}
 		}
 
-		do_action( 'inc2734_wp_view_controller_get_template_part', $this->slug, $this->name, $templates, $html, $this->vars );
+		do_action( 'inc2734_wp_view_controller_get_template_part', $slug, $name, $templates, $html, $vars );
 
 		if ( is_null( $html ) ) {
-			$this->_init_template_args();
+			static::_init_template_args( $vars );
 
 			ob_start();
-			$locate_template = Helper::locate_template( $templates, true, false, $this->slug, $this->name, $this->vars );
+			$locate_template = Helper::locate_template( $templates, true, false, $slug, $name, $vars );
 			$html            = ob_get_clean();
 
-			$this->_reset_template_args();
+			static::_reset_template_args();
 		}
 
-		if ( $html && $this->_enable_debug_mode() ) {
-			$this->_debug_comment( 'Start : ', $locate_template );
+		if ( $html && static::_enable_debug_mode() ) {
+			static::_debug_comment( $slug, $name, 'Start : ', $locate_template );
 		}
 
 		$html = apply_filters(
 			'inc2734_wp_view_controller_template_part_render',
 			$html,
-			$this->slug,
-			$this->name,
-			$this->vars
+			$slug,
+			$name,
+			$vars
 		);
 
 		echo $html; // xss ok.
 
-		if ( $html && $this->_enable_debug_mode() ) {
-			$this->_debug_comment( 'End : ', $locate_template );
+		if ( $html && static::_enable_debug_mode() ) {
+			static::_debug_comment( 'End : ', $locate_template );
 		}
 	}
 
 	/**
 	 * Initialize template args.
+	 *
+	 * @param array $vars Additional arguments passed to the template.
 	 */
-	protected function _init_template_args() {
+	protected static function _init_template_args( $vars ) {
 		global $wp_version, $wp_query;
 
 		set_query_var( '_wp_view_controller_backup_query_vars', $wp_query->query_vars );
 
 		if ( version_compare( $wp_version, '5.5' ) < 0 ) {
-			$this->vars['args'] = $this->vars;
+			$vars['args'] = $vars;
 		}
 
-		foreach ( $this->vars as $var => $value ) {
+		foreach ( $vars as $var => $value ) {
 			if ( null === get_query_var( $var, null ) ) {
 				set_query_var( $var, $value );
 			}
@@ -146,7 +115,7 @@ class Template_Part {
 	/**
 	 * Reset template args.
 	 */
-	protected function _reset_template_args() {
+	protected static function _reset_template_args() {
 		global $wp_query;
 
 		$backup_query_vars    = get_query_var( '_wp_view_controller_backup_query_vars' );
@@ -159,7 +128,7 @@ class Template_Part {
 	 *
 	 * @return boolean
 	 */
-	protected function _enable_debug_mode() {
+	protected static function _enable_debug_mode() {
 		if ( ! apply_filters( 'inc2734_wp_view_controller_debug', true ) ) {
 			return;
 		}
@@ -182,15 +151,17 @@ class Template_Part {
 	/**
 	 * Print debug comment.
 	 *
+	 * @param string $slug            The slug name for the generic template.
+	 * @param string $name            The name of the specialised template.
 	 * @param string $prefix          Prefix message.
 	 * @param string $locate_template Result of Helper::locate_template().
 	 * @return void
 	 */
-	public function _debug_comment( $prefix = null, $locate_template = null ) {
+	public static function _debug_comment( $slug, $name, $prefix = null, $locate_template = null ) {
 		$template_slug = null;
 
 		if ( $locate_template ) {
-			$hierarchy = Helper::get_completed_hierarchy( $this->slug, $this->name );
+			$hierarchy = Helper::get_completed_hierarchy( $slug, $name );
 			foreach ( $hierarchy as $root ) {
 				if ( 0 === strpos( $locate_template, $root ) ) {
 					$template_slug = Helper::filename_to_slug( str_replace( $root, '', $locate_template ) );
@@ -202,8 +173,8 @@ class Template_Part {
 		printf(
 			"\n" . '<!-- %1$s[slug] => %2$s [name] => %3$s [template-slug] => %4$s -->' . "\n",
 			esc_html( $prefix ),
-			esc_html( $this->slug ),
-			esc_html( $this->name ),
+			esc_html( $slug ),
+			esc_html( $name ),
 			esc_html( $template_slug )
 		);
 	}

@@ -27,8 +27,20 @@ add_action(
 				foreach ( $hierarchy as $root ) {
 					$page_templates_dirs = Config::get( 'page-templates' );
 					foreach ( $page_templates_dirs as $page_templates_dir ) {
-						$custom_page_templates = glob( trailingslashit( $root ) . trailingslashit( $page_templates_dir ) . '*.php' );
-						foreach ( $custom_page_templates as $custom_page_template ) {
+						$iterator = new RecursiveDirectoryIterator( trailingslashit( $root ) . $page_templates_dir, FilesystemIterator::SKIP_DOTS );
+						$iterator = new RecursiveIteratorIterator( $iterator );
+
+						foreach ( $iterator as $file ) {
+							if ( ! $file->isFile() ) {
+								continue;
+							}
+
+							if ( 'php' !== $file->getExtension() ) {
+								continue;
+							}
+
+							$custom_page_template = realpath( $file->getPathname() );
+
 							$base_path = str_replace( trailingslashit( $root ), '', $custom_page_template );
 							if ( ! empty( $post_templates[ $base_path ] ) ) {
 								continue;

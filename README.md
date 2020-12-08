@@ -1,6 +1,6 @@
 # WP View Controller
 
-[![Build Status](https://travis-ci.com/inc2734/wp-view-controller.svg?branch=master)](https://travis-ci.com/inc2734/wp-view-controller)
+![CI](https://github.com/inc2734/wp-view-controller/workflows/CI/badge.svg)
 [![Latest Stable Version](https://poser.pugx.org/inc2734/wp-view-controller/v/stable)](https://packagist.org/packages/inc2734/wp-view-controller)
 [![License](https://poser.pugx.org/inc2734/wp-view-controller/license)](https://packagist.org/packages/inc2734/wp-view-controller)
 

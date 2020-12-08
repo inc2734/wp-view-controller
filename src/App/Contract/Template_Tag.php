@@ -7,6 +7,9 @@
 
 namespace Inc2734\WP_View_Controller\App\Contract;
 
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use Inc2734\WP_View_Controller\App\Config;
 use Inc2734\WP_View_Controller\App\Template_Part;
 
@@ -207,9 +210,10 @@ trait Template_Tag {
 	 * @return string
 	 */
 	public static function locate_template( $template_names, $load = false, $require_once = true, $slug = null, $name = null, array $args = [] ) {
-		$cache_key   = md5( json_encode( $template_names ) );
-		$cache_group = 'inc2734/wp-view-controller/locate_template';
-		$cache       = wp_cache_get( $cache_key, $cache_group );
+		$template_names = ! $template_names ? [] : (array) $template_names;
+		$cache_key      = md5( implode( ':', $template_names ) );
+		$cache_group    = 'inc2734/wp-view-controller/locate_template';
+		$cache          = wp_cache_get( $cache_key, $cache_group );
 
 		if ( false !== $cache && file_exists( $cache ) ) {
 			if ( $load ) {
@@ -218,7 +222,14 @@ trait Template_Tag {
 			return $cache;
 		}
 
-		foreach ( (array) $template_names as $template_name ) {
+		$default_located = '';
+
+		if ( ! $template_names ) {
+			wp_cache_set( $cache_key, $default_located, $cache_group );
+			return $default_located;
+		}
+
+		foreach ( $template_names as $template_name ) {
 			if ( is_null( $slug ) ) {
 				$slug = static::filename_to_slug( $template_name );
 			}
@@ -239,7 +250,8 @@ trait Template_Tag {
 			}
 		}
 
-		return '';
+		wp_cache_set( $cache_key, $default_located, $cache_group );
+		return $default_located;
 	}
 
 	/**
@@ -272,8 +284,7 @@ trait Template_Tag {
 
 		do_action( 'inc2734_wp_view_controller_get_template_part_pre_render', $args );
 
-		$template_part = new Template_Part( $args['slug'], $args['name'], $args['vars'] );
-		$template_part->render();
+		Template_Part::render( $args['slug'], $args['name'], $args['vars'] );
 
 		do_action( 'inc2734_wp_view_controller_get_template_part_post_render', $args );
 	}
@@ -286,9 +297,18 @@ trait Template_Tag {
 	 * @return array
 	 */
 	public static function get_completed_hierarchy( $slug = null, $name = null ) {
+		$cache_key   = $slug . '__' . $name;
+		$cache_group = 'inc2734/wp-view-controller/get_completed_hierarchy';
+		$cache       = wp_cache_get( $cache_key, $cache_group );
+
+		if ( false !== $cache ) {
+			return $cache;
+		}
+
 		$hierarchy = static::get_template_part_root_hierarchy( $slug, $name );
 		$hierarchy = array_merge( $hierarchy, [ get_stylesheet_directory(), get_template_directory() ] );
 		$hierarchy = array_unique( $hierarchy );
+		wp_cache_set( $cache_key, $hierarchy, $cache_group );
 		return $hierarchy;
 	}
 
@@ -363,9 +383,25 @@ trait Template_Tag {
 
 		$templates = [];
 		foreach ( $completed_hierarchy as $wrapper_dir ) {
-			foreach ( glob( $wrapper_dir . '/*.php' ) as $file ) {
-				$slug = static::filename_to_slug( str_replace( $wrapper_dir . '/', '', $file ) );
-				$name = trim( preg_match( '|Name:(.*)$|mi', file_get_contents( $file ), $header ) ? $header[1] : $slug );
+			$iterator = new RecursiveDirectoryIterator( $wrapper_dir, FilesystemIterator::SKIP_DOTS );
+			$iterator = new RecursiveIteratorIterator( $iterator );
+
+			foreach ( $iterator as $file ) {
+				if ( ! $file->isFile() ) {
+					continue;
+				}
+
+				if ( 'php' !== $file->getExtension() ) {
+					continue;
+				}
+
+				$filepath = realpath( $file->getPathname() );
+				$slug     = static::filename_to_slug( str_replace( $wrapper_dir . '/', '', $filepath ) );
+				$name     = trim(
+					preg_match( '|Name:(.*)$|mi', file_get_contents( $filepath ), $header )
+						? $header[1]
+						: $slug
+				);
 				// @codingStandardsIgnoreStart
 				$templates[ $slug ] = translate( $name, $text_domain );
 				// @codingStandardsIgnoreEnd

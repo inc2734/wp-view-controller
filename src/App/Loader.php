@@ -7,6 +7,10 @@
 
 namespace Inc2734\WP_View_Controller\App;
 
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+
 class Loader {
 
 	/**
@@ -34,8 +38,19 @@ class Loader {
 	 * @return void
 	 */
 	protected static function load( $directory ) {
-		foreach ( glob( $directory . '/*.php' ) as $file ) {
-			require_once( $file );
+		$iterator = new RecursiveDirectoryIterator( $directory, FilesystemIterator::SKIP_DOTS );
+		$iterator = new RecursiveIteratorIterator( $iterator );
+
+		foreach ( $iterator as $file ) {
+			if ( ! $file->isFile() ) {
+				continue;
+			}
+
+			if ( 'php' !== $file->getExtension() ) {
+				continue;
+			}
+
+			include_once( realpath( $file->getPathname() ) );
 		}
 	}
 }
