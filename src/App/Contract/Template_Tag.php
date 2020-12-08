@@ -237,6 +237,10 @@ trait Template_Tag {
 			$hierarchy = static::get_completed_hierarchy( $slug, $name );
 
 			foreach ( $hierarchy as $root ) {
+				if ( ! file_exists( $root ) ) {
+					continue;
+				}
+
 				$located = trailingslashit( $root ) . $template_name;
 				if ( ! file_exists( $located ) ) {
 					continue;
@@ -383,6 +387,10 @@ trait Template_Tag {
 
 		$templates = [];
 		foreach ( $completed_hierarchy as $wrapper_dir ) {
+			if ( ! file_exists( $wrapper_dir ) ) {
+				continue;
+			}
+
 			$iterator = new RecursiveDirectoryIterator( $wrapper_dir, FilesystemIterator::SKIP_DOTS );
 			$iterator = new RecursiveIteratorIterator( $iterator );
 
