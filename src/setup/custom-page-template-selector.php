@@ -27,7 +27,12 @@ add_action(
 				foreach ( $hierarchy as $root ) {
 					$page_templates_dirs = Config::get( 'page-templates' );
 					foreach ( $page_templates_dirs as $page_templates_dir ) {
-						$iterator = new RecursiveDirectoryIterator( trailingslashit( $root ) . $page_templates_dir, FilesystemIterator::SKIP_DOTS );
+						$page_templates_dir_path = trailingslashit( $root ) . $page_templates_dir;
+						if ( ! file_exists( $page_templates_dir_path ) ) {
+							continue;
+						}
+
+						$iterator = new RecursiveDirectoryIterator( $page_templates_dir_path, FilesystemIterator::SKIP_DOTS );
 						$iterator = new RecursiveIteratorIterator( $iterator );
 
 						foreach ( $iterator as $file ) {
