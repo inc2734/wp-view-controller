@@ -7,7 +7,6 @@
 
 namespace Inc2734\WP_View_Controller;
 
-use Inc2734\WP_View_Controller\App\Loader;
 use Inc2734\WP_View_Controller\App\View;
 
 class Bootstrap {
@@ -25,8 +24,12 @@ class Bootstrap {
 	public function __construct() {
 		load_textdomain( 'inc2734-wp-view-controller', __DIR__ . '/languages/' . get_locale() . '.mo' );
 
-		Loader::load_deprecated();
-		Loader::load_setup_files();
+		include_once( __DIR__ . '/deprecated/Helper.php' );
+		include_once( __DIR__ . '/setup/comments-template.php' );
+		include_once( __DIR__ . '/setup/custom-page-template-selector.php' );
+		include_once( __DIR__ . '/setup/debug-template-overwrite.php' );
+		include_once( __DIR__ . '/setup/template-loader.php' );
+
 		static::_set_view();
 	}
 

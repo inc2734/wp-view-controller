@@ -211,7 +211,7 @@ trait Template_Tag {
 	 */
 	public static function locate_template( $template_names, $load = false, $require_once = true, $slug = null, $name = null, array $args = [] ) {
 		$template_names = ! $template_names ? [] : (array) $template_names;
-		$cache_key      = md5( implode( ':', $template_names ) );
+		$cache_key      = crc32( implode( ':', $template_names ) );
 		$cache_group    = 'inc2734/wp-view-controller/locate_template';
 		$cache          = wp_cache_get( $cache_key, $cache_group );
 
@@ -237,10 +237,6 @@ trait Template_Tag {
 			$hierarchy = static::get_completed_hierarchy( $slug, $name );
 
 			foreach ( $hierarchy as $root ) {
-				if ( ! file_exists( $root ) ) {
-					continue;
-				}
-
 				$located = trailingslashit( $root ) . $template_name;
 				if ( ! file_exists( $located ) ) {
 					continue;
@@ -310,7 +306,16 @@ trait Template_Tag {
 		}
 
 		$hierarchy = static::get_template_part_root_hierarchy( $slug, $name );
-		$hierarchy = array_merge( $hierarchy, [ get_stylesheet_directory(), get_template_directory() ] );
+		$hierarchy = array_filter(
+			$hierarchy,
+			function( $root ) {
+				return file_exists( $root );
+			}
+		);
+
+		$hierarchy[] = STYLESHEETPATH;
+		$hierarchy[] = TEMPLATEPATH;
+
 		$hierarchy = array_unique( $hierarchy );
 		wp_cache_set( $cache_key, $hierarchy, $cache_group );
 		return $hierarchy;
@@ -325,17 +330,13 @@ trait Template_Tag {
 	 * @return array
 	 */
 	public static function get_template_part_root_hierarchy( $slug = null, $name = null, array $vars = [] ) {
-		$hierarchy = [];
-
-		$hierarchy = apply_filters(
+		return apply_filters(
 			'inc2734_wp_view_controller_template_part_root_hierarchy',
-			$hierarchy,
+			[],
 			$slug,
 			$name,
 			$vars
 		);
-
-		return array_unique( $hierarchy );
 	}
 
 	/**
