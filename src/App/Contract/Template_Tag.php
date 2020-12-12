@@ -187,12 +187,12 @@ trait Template_Tag {
 	/**
 	 * Return slug from filename.
 	 *
-	 * @param string $filename The file name.
+	 * @param string $filename The file name or slug.
 	 * @return string
 	 */
 	public static function filename_to_slug( $filename ) {
 		$filename = trim( $filename );
-		$filename = trim( $filename, '/' );
+		$filename = trim( $filename, DIRECTORY_SEPARATOR );
 		return preg_replace( '|\.php$|', '', $filename );
 	}
 
@@ -379,7 +379,7 @@ trait Template_Tag {
 		$completed_hierarchy = [];
 		foreach ( $hierarchy as $root ) {
 			foreach ( $relative_dir_paths as $relative_dir_path ) {
-				$completed_hierarchy[] = $root . '/' . $relative_dir_path;
+				$completed_hierarchy[] = $root . DIRECTORY_SEPARATOR . $relative_dir_path;
 			}
 		}
 
@@ -405,7 +405,8 @@ trait Template_Tag {
 				}
 
 				$filepath = realpath( $file->getPathname() );
-				$slug     = static::filename_to_slug( str_replace( $wrapper_dir . '/', '', $filepath ) );
+				$filename = basename( $filepath );
+				$slug     = static::filename_to_slug( $filename );
 				$name     = trim(
 					preg_match( '|Name:(.*)$|mi', file_get_contents( $filepath ), $header )
 						? $header[1]
