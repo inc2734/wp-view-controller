@@ -46,12 +46,14 @@ class Inc2734_WP_View_Controller_Candidate_Locate_Templates_Test extends WP_Unit
 			}
 		);
 
+		$wrapper_templates = Helper::get_wrapper_templates();
+		asort( $wrapper_templates );
 		$this->assertSame(
 			[
-				'wrapper2' => 'wrapper2',
 				'wrapper'  => 'wrapper',
+				'wrapper2' => 'wrapper2',
 			],
-			Helper::get_wrapper_templates()
+			$wrapper_templates
 		);
 
 		file_exists( $file ) && unlink( $file );
@@ -94,12 +96,14 @@ class Inc2734_WP_View_Controller_Candidate_Locate_Templates_Test extends WP_Unit
 			}
 		);
 
+		$header_templates = Helper::get_header_templates();
+		asort( $header_templates );
 		$this->assertSame(
 			[
-				'header2' => 'header2',
 				'header'  => 'header',
+				'header2' => 'header2',
 			],
-			Helper::get_header_templates()
+			$header_templates
 		);
 
 		file_exists( $file ) && unlink( $file );
