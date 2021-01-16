@@ -57,7 +57,7 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 			'inc2734_wp_view_controller_get_template_part_pre_render',
 			function( $args ) {
 				if ( 'template' === $args['slug'] ) {
-					$this->assertArrayNotHasKey( '_context', $args['vars'] );
+					$this->assertSame( null, $args['vars']['_context'] );
 				}
 
 				if ( 'template2' === $args['slug'] ) {
@@ -71,6 +71,40 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 
 		add_action( 'inc2734_wp_view_controller_get_template_part_template2', '__return_true' );
 		Inc2734\WP_View_Controller\Helper::get_template_part( 'template2', null, [ '_context' => 'foo' ] );
+	}
+
+	/**
+	 * @test
+	 * @runInSeparateProcess
+	 * @preserveGlobalState disabled
+	 */
+	public function name() {
+		add_filter(
+			'inc2734_wp_view_controller_get_template_part_args',
+			function( $args ) {
+				$args['vars']['_name'] = 'fuga';
+				return $args;
+			}
+		);
+
+		add_action(
+			'inc2734_wp_view_controller_get_template_part_pre_render',
+			function( $args ) {
+				if ( 'template' === $args['slug'] ) {
+					$this->assertEquals( 'name', $args['vars']['_name'] );
+				}
+
+				if ( 'template2' === $args['slug'] ) {
+					$this->assertEquals( null, $args['vars']['_name'] );
+				}
+			}
+		);
+
+		add_action( 'inc2734_wp_view_controller_get_template_part_template-name', '__return_true' );
+		Inc2734\WP_View_Controller\Helper::get_template_part( 'template', 'name' );
+
+		add_action( 'inc2734_wp_view_controller_get_template_part_template2', '__return_true' );
+		Inc2734\WP_View_Controller\Helper::get_template_part( 'template2', null );
 	}
 
 	/**

@@ -263,24 +263,24 @@ trait Template_Tag {
 	 * @return void
 	 */
 	public static function get_template_part( $slug, $name = null, array $vars = [] ) {
+		global $args;
 		$args = [
 			'slug' => $slug,
 			'name' => $name,
 			'vars' => $vars,
 		];
 
-		if ( array_key_exists( '_context', $args['vars'] ) ) {
-			$context = $args['vars']['_context'];
+		if ( ! array_key_exists( '_context', $args['vars'] ) ) {
+			$args['vars']['_context'] = null;
 		}
+		$context = $args['vars']['_context'];
+
+		$args['vars']['_name'] = $name;
 
 		$args = apply_filters( 'inc2734_wp_view_controller_get_template_part_args', $args );
-		if ( isset( $args['vars']['_context'] ) ) {
-			unset( $args['vars']['_context'] );
-		}
 
-		if ( isset( $context ) ) {
-			$args['vars']['_context'] = $context;
-		}
+		$args['vars']['_context'] = $context;
+		$args['vars']['_name']    = $name;
 
 		do_action( 'inc2734_wp_view_controller_get_template_part_pre_render', $args );
 
