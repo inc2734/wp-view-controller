@@ -87,7 +87,7 @@ class Template_Part {
 		echo $html; // xss ok.
 
 		if ( $html && static::_enable_debug_mode() ) {
-			static::_debug_comment( 'End : ', $locate_template );
+			static::_debug_comment( $slug, $name, 'End : ', $locate_template );
 		}
 	}
 
