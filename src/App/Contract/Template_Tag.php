@@ -407,7 +407,12 @@ trait Template_Tag {
 				$filepath = realpath( $file->getPathname() );
 				$filename = basename( $filepath );
 				$slug     = static::filename_to_slug( $filename );
-				$name     = trim(
+
+				if ( isset( $templates[ $slug ] ) ) {
+					continue;
+				}
+
+				$name = trim(
 					preg_match( '|Name:(.*)$|mi', file_get_contents( $filepath ), $header )
 						? $header[1]
 						: $slug
