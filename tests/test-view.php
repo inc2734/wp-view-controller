@@ -57,9 +57,16 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	}
 
 	protected function _create_static_view_dir( $subdir ) {
+		if ( ! file_exists( get_template_directory() ) ) {
+			throw new Exception( get_template_directory() . ' is not found.' );
+		}
+
 		$static_view_directory = $this->static_view_directory . '/' . trim( $subdir, '/' );
 		if ( ! is_dir( $static_view_directory ) ) {
-			wp_mkdir_p( $static_view_directory );
+			$created = wp_mkdir_p( $static_view_directory );
+			if ( ! $created ) {
+				throw new Exception( 'The static view directory can not created. ' . $static_view_directory );
+			}
 		}
 		chmod( $static_view_directory, 0755 );
 		if ( is_dir( $static_view_directory ) ) {
