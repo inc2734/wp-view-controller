@@ -66,6 +66,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 
 		$static_view_directory = $this->static_view_directory . '/' . trim( $subdir, '/' );
 		if ( ! is_dir( $static_view_directory ) ) {
+			system( 'mkdir -p ' . get_template_directory() . '/templates/static' );
 			$created = wp_mkdir_p( $static_view_directory );
 			if ( ! $created ) {
 				throw new Exception( 'The static view directory can not created. ' . $static_view_directory );
