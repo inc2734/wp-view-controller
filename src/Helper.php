@@ -14,6 +14,17 @@ class Helper {
 	use Contract\Template_Tag;
 
 	/**
+	 * Return inc2734_wp_view_controller_debug.
+	 *
+	 * @return boolean
+	 */
+	public static function is_debug_mode() {
+		$debug = defined( 'WP_DEBUG' ) ? WP_DEBUG : true;
+
+		return apply_filters( 'inc2734_wp_view_controller_debug', $debug );
+	}
+
+	/**
 	 * Return file header.
 	 *
 	 * @see https://developer.wordpress.org/reference/functions/get_file_data/

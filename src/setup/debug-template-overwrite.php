@@ -7,7 +7,7 @@
 
 use Inc2734\WP_View_Controller\Helper;
 
-if ( ! apply_filters( 'inc2734_wp_view_controller_debug', true ) ) {
+if ( ! Helper::is_debug_mode() ) {
 	return;
 }
 

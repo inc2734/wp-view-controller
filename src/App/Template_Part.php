@@ -129,11 +129,7 @@ class Template_Part {
 	 * @return boolean
 	 */
 	protected static function _enable_debug_mode() {
-		if ( ! apply_filters( 'inc2734_wp_view_controller_debug', true ) ) {
-			return;
-		}
-
-		if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
+		if ( ! Helper::is_debug_mode() ) {
 			return;
 		}
 
