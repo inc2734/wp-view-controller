@@ -42,4 +42,7 @@ jobs:
       run: npm install
 
     - name: Running the tests
-      run: npm run test
+      run: |
+        npm run wp-env start
+        npm run cli "mkdir -p /var/www/html/wp-content/themes/twentytwenty/templates/static/"
+        npm run test
