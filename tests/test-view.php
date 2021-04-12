@@ -43,6 +43,8 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 		create_initial_taxonomies();
 		$wp_rewrite->flush_rules();
 
+		error_log( 'The theme directory permission is ' .  fileperms( get_template_directory() ) );
+		system( 'chmod -R 755 ' . get_template_directory() );
 		$this->static_view_directory = get_template_directory() . '/templates/static';
 	}
 
