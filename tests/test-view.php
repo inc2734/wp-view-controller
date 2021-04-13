@@ -9,21 +9,103 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 		parent::setup();
 
 		$wp_rewrite->init();
-		$wp_rewrite->set_permalink_structure( '/%post_id%/' );
+		$wp_rewrite->set_permalink_structure( '/%postname%/' );
 
-		$this->author_id     = $this->factory->user->create();
-		$this->post_ids      = $this->factory->post->create_many( 20, [ 'post_author' => $this->author_id ] );
-		$this->front_page_id = $this->factory->post->create( [ 'post_type' => 'page', 'post_title' => 'HOME' ] );
-		$this->blog_page_id  = $this->factory->post->create( [ 'post_type' => 'page', 'post_title' => 'BLOG' ] );
-		$this->tag_id        = $this->factory->term->create( array( 'taxonomy' => 'post_tag' ) );
-		$this->post_type     = rand_str( 12 );
-		$this->taxonomy      = rand_str( 12 );
+		$this->category_a_id = $this->factory->term->create(
+			[
+				'taxonomy' => 'category',
+				'name'     => 'Category A',
+			]
+		);
+
+		$this->category_b_id = $this->factory->term->create(
+			[
+				'taxonomy' => 'category',
+				'name'     => 'Category B',
+			]
+		);
+
+		$this->tag_a_id = $this->factory->term->create(
+			[
+				'taxonomy' => 'post_tag',
+				'name'     => 'Tag A',
+			]
+		);
+
+		$this->tag_b_id = $this->factory->term->create(
+			[
+				'taxonomy' => 'post_tag',
+				'name'     => 'Tag B',
+			]
+		);
+
+		$this->author_a_id = $this->factory->user->create( [ 'user_login' => 'User A' ] );
+		$this->author_b_id = $this->factory->user->create( [ 'user_login' => 'User B' ] );
+
+		$this->post_2000_01_01_id = $this->factory->post->create(
+			[
+				'post_title'  => 'Post A',
+				'post_name'   => 'post-a',
+				'post_date'   => '2000/01/01 00:00:00',
+				'post_author' => $this->author_a_id,
+			]
+		);
+
+		$this->post_2000_01_02_id = $this->factory->post->create(
+			[
+				'post_title'  => 'Post B',
+				'post_name'   => 'post-b',
+				'post_date'   => '2000/01/02 00:00:00',
+				'post_author' => $this->author_b_id,
+			]
+		);
+
+		$this->post_2000_02_01_id = $this->factory->post->create(
+			[
+				'post_title'  => 'Post C',
+				'post_name'   => 'post-c',
+				'post_date'   => '2000/02/01 00:00:00',
+				'post_author' => $this->author_a_id,
+			]
+		);
+
+		$this->post_2001_01_01_id = $this->factory->post->create(
+			[
+				'post_title'  => 'Post D',
+				'post_name'   => 'post-d',
+				'post_date'   => '2001/01/01 00:00:00',
+				'post_author' => $this->author_a_id,
+			]
+		);
+
+		$this->post_type          = 'news';
+		$this->post_type_no       = 'no';
+		$this->post_type_no_index = 'no-index';
+		$this->taxonomy           = 'news-category';
 
 		register_post_type(
 			$this->post_type,
 			[
 				'public'      => true ,
-				'taxonomies'  => ['category'],
+				'taxonomies'  => [ $this->taxonomy ],
+				'has_archive' => true
+			]
+		);
+
+		register_post_type(
+			$this->post_type_no,
+			[
+				'public'      => true ,
+				'taxonomies'  => [],
+				'has_archive' => true
+			]
+		);
+
+		register_post_type(
+			$this->post_type_no_index,
+			[
+				'public'      => true ,
+				'taxonomies'  => [],
 				'has_archive' => true
 			]
 		);
@@ -36,16 +118,23 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 			]
 		);
 
-		foreach( $this->post_ids as $post_id ) {
-			wp_set_object_terms( $post_id, get_term( $this->tag_id, 'post_tag' )->slug, 'post_tag' );
+		foreach(
+			[
+				$this->post_2000_01_01_id,
+				$this->post_2000_01_02_id,
+				$this->post_2000_02_01_id,
+				$this->post_2001_01_01_id,
+			] as $post_id
+		) {
+			wp_set_object_terms( $post_id, get_term( $this->category_a_id, 'category' )->slug, 'category' );
+			wp_set_object_terms( $post_id, get_term( $this->category_b_id, 'category' )->slug, 'category' );
+			wp_set_object_terms( $post_id, get_term( $this->tag_a_id, 'post_tag' )->slug, 'post_tag' );
+			wp_set_object_terms( $post_id, get_term( $this->tag_b_id, 'post_tag' )->slug, 'post_tag' );
 		}
 
 		create_initial_taxonomies();
 		$wp_rewrite->flush_rules();
 
-		error_log( 'The theme directory permission: ' . substr( sprintf( '%o', fileperms( get_template_directory() ) ), -4 ) );
-		error_log( 'The theme directory owner: ' . fileowner( get_template_directory() ) );
-		error_log( 'Current script owner: ' . get_current_user() );
 		$this->static_view_directory = get_template_directory() . '/templates/static';
 	}
 
@@ -54,34 +143,6 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 
 		_unregister_post_type( $this->post_type );
 		_unregister_taxonomy( $this->taxonomy, $this->post_type );
-
-		system( 'rm -R ' . $this->static_view_directory . '/*' );
-	}
-
-	protected function _create_static_view_dir( $subdir ) {
-		if ( ! file_exists( get_template_directory() ) ) {
-			throw new Exception( get_template_directory() . ' is not found.' );
-		}
-
-		$static_view_directory = $this->static_view_directory . '/' . trim( $subdir, '/' );
-		if ( ! file_exists( $static_view_directory ) ) {
-			$created = wp_mkdir_p( $static_view_directory );
-			if ( ! $created ) {
-				throw new Exception( 'The static view directory can not created. ' . $static_view_directory );
-			}
-		}
-		if ( is_dir( $static_view_directory ) ) {
-			return untrailingslashit( $static_view_directory );
-		}
-	}
-
-	protected function _create_static_view_template( $subdir, $filename ) {
-		$static_view_directory = $this->_create_static_view_dir( trim( $subdir, '/' ) );
-		$static_view_template  = $static_view_directory . '/' . trim( $filename, '/' ) . '.php';
-		if ( is_writable( $static_view_directory ) ) {
-			file_put_contents( $static_view_template, '-' );
-			return $static_view_template;
-		}
 	}
 
 	/**
@@ -89,22 +150,27 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__category() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$category = get_terms( 'category' )[0];
+		$category = get_term( $this->category_a_id, 'category' );
 		$this->go_to( get_term_link( $category ) );
 
-		$static_view_template = $this->_create_static_view_template( 'category', $category->slug );
 		$this->assertEquals(
-			'templates/static/category/' . $category->slug,
+			'templates/static/category/category-a',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
+	}
 
-		$static_view_template = $this->_create_static_view_template( 'category/' . $category->slug, 'index' );
+	/**
+	 * @test
+	 */
+	public function get_static_view_template_name__category__index() {
+		$View = new Inc2734\WP_View_Controller\App\View();
+		$category = get_term( $this->category_b_id, 'category' );
+		$this->go_to( get_term_link( $category ) );
+
 		$this->assertEquals(
-			'templates/static/category/' . $category->slug . '/index',
+			'templates/static/category/category-b/index',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
 	}
 
 	/**
@@ -112,22 +178,27 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__post_tag() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$post_tag = get_terms( 'post_tag' )[0];
+		$post_tag = get_term( $this->tag_a_id, 'post_tag' );
 		$this->go_to( get_term_link( $post_tag ) );
 
-		$static_view_template = $this->_create_static_view_template( 'tag', $post_tag->slug );
 		$this->assertEquals(
-			'templates/static/tag/' . $post_tag->slug,
+			'templates/static/tag/tag-a',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
+	}
 
-		$static_view_template = $this->_create_static_view_template( 'tag/' . $post_tag->slug, 'index' );
+	/**
+	 * @test
+	 */
+	public function get_static_view_template_name__post_tag__index() {
+		$View = new Inc2734\WP_View_Controller\App\View();
+		$post_tag = get_term( $this->tag_b_id, 'post_tag' );
+		$this->go_to( get_term_link( $post_tag ) );
+
 		$this->assertEquals(
-			'templates/static/tag/' . $post_tag->slug . '/index',
+			'templates/static/tag/tag-b/index',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
 	}
 
 	/**
@@ -135,23 +206,29 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__year() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$newest_post = get_post( $this->post_ids[0] );
-		$year = date( 'Y', strtotime( $newest_post->post_date ) );
+		$post = get_post( $this->post_2001_01_01_id );
+		$year = date( 'Y', strtotime( $post->post_date ) );
 		$this->go_to( get_year_link( $year ) );
 
-		$static_view_template = $this->_create_static_view_template( 'date', $year );
 		$this->assertEquals(
-			'templates/static/date/' . $year,
+			'templates/static/2001',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
+	}
 
-		$static_view_template = $this->_create_static_view_template( 'date/' . $year, 'index' );
+	/**
+	 * @test
+	 */
+	public function get_static_view_template_name__year__index() {
+		$View = new Inc2734\WP_View_Controller\App\View();
+		$post = get_post( $this->post_2000_01_01_id );
+		$year = date( 'Y', strtotime( $post->post_date ) );
+		$this->go_to( get_year_link( $year ) );
+
 		$this->assertEquals(
-			'templates/static/date/' . $year . '/index',
+			'templates/static/2000/index',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
 	}
 
 	/**
@@ -159,24 +236,31 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__month() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$newest_post = get_post( $this->post_ids[0] );
-		$year  = date( 'Y', strtotime( $newest_post->post_date ) );
-		$month = date( 'm', strtotime( $newest_post->post_date ) );
+		$post = get_post( $this->post_2000_02_01_id );
+		$year  = date( 'Y', strtotime( $post->post_date ) );
+		$month = date( 'm', strtotime( $post->post_date ) );
 		$this->go_to( get_month_link( $year, $month ) );
 
-		$static_view_template = $this->_create_static_view_template( 'date/' . $year, $month );
 		$this->assertEquals(
-			'templates/static/date/' . $year . '/' . $month,
+			'templates/static/2000/02',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
+	}
 
-		$static_view_template = $this->_create_static_view_template( 'date/' . $year . '/' . $month, 'index' );
+	/**
+	 * @test
+	 */
+	public function get_static_view_template_name__month__index() {
+		$View = new Inc2734\WP_View_Controller\App\View();
+		$post = get_post( $this->post_2000_01_01_id );
+		$year  = date( 'Y', strtotime( $post->post_date ) );
+		$month = date( 'm', strtotime( $post->post_date ) );
+		$this->go_to( get_month_link( $year, $month ) );
+
 		$this->assertEquals(
-			'templates/static/date/' . $year . '/' . $month . '/index',
+			'templates/static/2000/01/index',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
 	}
 
 	/**
@@ -184,25 +268,33 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__day() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$newest_post = get_post( $this->post_ids[0] );
-		$year  = date( 'Y', strtotime( $newest_post->post_date ) );
-		$month = date( 'm', strtotime( $newest_post->post_date ) );
-		$day   = date( 'd', strtotime( $newest_post->post_date ) );
+		$post = get_post( $this->post_2000_01_01_id );
+		$year  = date( 'Y', strtotime( $post->post_date ) );
+		$month = date( 'm', strtotime( $post->post_date ) );
+		$day   = date( 'd', strtotime( $post->post_date ) );
 		$this->go_to( get_day_link( $year, $month, $day ) );
 
-		$static_view_template = $this->_create_static_view_template( 'date/' . $year . '/' . $month, $day );
 		$this->assertEquals(
-			'templates/static/date/' . $year . '/' . $month . '/' . $day,
+			'templates/static/2000/01/01',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
+	}
 
-		$static_view_template = $this->_create_static_view_template( 'date/' . $year . '/' . $month . '/' . $day, 'index' );
+	/**
+	 * @test
+	 */
+	public function get_static_view_template_name__day__index() {
+		$View = new Inc2734\WP_View_Controller\App\View();
+		$post = get_post( $this->post_2000_01_02_id );
+		$year  = date( 'Y', strtotime( $post->post_date ) );
+		$month = date( 'm', strtotime( $post->post_date ) );
+		$day   = date( 'd', strtotime( $post->post_date ) );
+		$this->go_to( get_day_link( $year, $month, $day ) );
+
 		$this->assertEquals(
-			'templates/static/date/' . $year . '/' . $month . '/' . $day . '/index',
+			'templates/static/2000/01/02/index',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
 	}
 
 	/**
@@ -210,23 +302,27 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__author() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$newest_post = get_post( $this->post_ids[0] );
-		$user_nicename = get_the_author_meta( 'user_nicename', $newest_post->post_author );
-		$this->go_to( get_author_posts_url( $newest_post->post_author ) );
+		$post = get_post( $this->post_2000_01_02_id );
+		$this->go_to( get_author_posts_url( $post->post_author ) );
 
-		$static_view_template = $this->_create_static_view_template( 'author', $user_nicename );
 		$this->assertEquals(
-			'templates/static/author/' . $user_nicename,
+			'templates/static/author/user-b',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
+	}
 
-		$static_view_template = $this->_create_static_view_template( 'author/' . $user_nicename, 'index' );
+	/**
+	 * @test
+	 */
+	public function get_static_view_template_name__author__index() {
+		$View = new Inc2734\WP_View_Controller\App\View();
+		$post = get_post( $this->post_2000_01_01_id );
+		$this->go_to( get_author_posts_url( $post->post_author ) );
+
 		$this->assertEquals(
-			'templates/static/author/' . $user_nicename . '/index',
+			'templates/static/author/user-a/index',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
 	}
 
 	/**
@@ -234,23 +330,27 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__single_post() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$newest_post = get_post( $this->post_ids[0] );
-		$categories = get_the_category( $newest_post );
-		$this->go_to( get_permalink( $newest_post ) );
+		$post = get_post( $this->post_2000_01_01_id );
+		$this->go_to( get_permalink( $post ) );
 
-		$static_view_template = $this->_create_static_view_template( '', $this->post_ids[0] );
 		$this->assertEquals(
-			'templates/static/' . $this->post_ids[0],
+			'templates/static/post-a',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
+	}
 
-		$static_view_template = $this->_create_static_view_template( $this->post_ids[0], 'index' );
+	/**
+	 * @test
+	 */
+	public function get_static_view_template_name__single_post__index() {
+		$View = new Inc2734\WP_View_Controller\App\View();
+		$post = get_post( $this->post_2000_01_02_id );
+		$this->go_to( get_permalink( $post ) );
+
 		$this->assertEquals(
-			'templates/static/' . $this->post_ids[0] . '/index',
+			'templates/static/post-b/index',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
 	}
 
 	/**
@@ -258,24 +358,37 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__single_custom_post() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$custom_post_type_id = $this->factory->post->create( [ 'post_type' => $this->post_type ] );
-		$custom_post = get_post( $custom_post_type_id );
+		$custom_post_type_id = $this->factory->post->create(
+			[
+				'post_type'  => $this->post_type,
+				'post_title' => 'News A'
+			]
+		);
 		$this->go_to( get_permalink( $custom_post_type_id ) );
-		$post_type_object = get_post_type_object( $custom_post->post_type );
 
-		$static_view_template = $this->_create_static_view_template( $post_type_object->name, $custom_post->post_name );
 		$this->assertEquals(
-			'templates/static/' . $post_type_object->name . '/' . $custom_post->post_name,
+			'templates/static/news/news-a',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
+	}
 
-		$static_view_template = $this->_create_static_view_template( $post_type_object->name . '/' . $custom_post->post_name, 'index' );
+	/**
+	 * @test
+	 */
+	public function get_static_view_template_name__single_custom_post__index() {
+		$View = new Inc2734\WP_View_Controller\App\View();
+		$custom_post_type_id = $this->factory->post->create(
+			[
+				'post_type'  => $this->post_type,
+				'post_title' => 'News B'
+			]
+		);
+		$this->go_to( get_permalink( $custom_post_type_id ) );
+
 		$this->assertEquals(
-			'templates/static/' . $post_type_object->name . '/' . $custom_post->post_name . '/index',
+			'templates/static/news/news-b/index',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
 	}
 
 	/**
@@ -283,23 +396,27 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__post_type_archive_no_post() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$this->go_to( get_post_type_archive_link( $this->post_type ) );
+		$this->go_to( get_post_type_archive_link( $this->post_type_no ) );
 		$this->assertFalse( get_post_type() );
-		$post_type_object = get_post_type_object( $this->post_type );
 
-		$static_view_template = $this->_create_static_view_template( '', $post_type_object->name );
 		$this->assertEquals(
-			'templates/static/' . $post_type_object->name,
+			'templates/static/no',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
+	}
 
-		$static_view_template = $this->_create_static_view_template( $post_type_object->name, 'index' );
+	/**
+	 * @test
+	 */
+	public function get_static_view_template_name__post_type_archive_no_post__index() {
+		$View = new Inc2734\WP_View_Controller\App\View();
+		$this->go_to( get_post_type_archive_link( $this->post_type_no_index ) );
+		$this->assertFalse( get_post_type() );
+
 		$this->assertEquals(
-			'templates/static/' . $post_type_object->name . '/index',
+			'templates/static/no-index/index',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
 	}
 
 	/**
@@ -307,23 +424,13 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__post_type_archive_have_posts() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$custom_post_type_id = $this->factory->post->create( [ 'post_type' => $this->post_type ] );
+		$this->factory->post->create( [ 'post_type' => $this->post_type ] );
 		$this->go_to( get_post_type_archive_link( $this->post_type ) );
-		$post_type_object = get_post_type_object( $this->post_type );
 		$this->assertNotFalse( get_post_type() );
 
-		$static_view_template = $this->_create_static_view_template( '', $post_type_object->name );
 		$this->assertEquals(
-			'templates/static/' . $post_type_object->name,
+			'templates/static/news/index',
 			$View->get_static_view_template_name()
 		);
-		unlink( $static_view_template );
-
-		$static_view_template = $this->_create_static_view_template( $post_type_object->name, 'index' );
-		$this->assertEquals(
-			'templates/static/' . $post_type_object->name . '/index',
-			$View->get_static_view_template_name()
-		);
-		unlink( $static_view_template );
 	}
 }
