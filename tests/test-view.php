@@ -55,8 +55,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 		_unregister_post_type( $this->post_type );
 		_unregister_taxonomy( $this->taxonomy, $this->post_type );
 
-		system( 'chmod -R 755 ' . $this->static_view_directory );
-		system( 'rm -R ' . $this->static_view_directory );
+		system( 'rm -R ' . $this->static_view_directory . '/*' );
 	}
 
 	protected function _create_static_view_dir( $subdir ) {
@@ -65,14 +64,12 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 		}
 
 		$static_view_directory = $this->static_view_directory . '/' . trim( $subdir, '/' );
-		if ( ! is_dir( $static_view_directory ) ) {
-			system( 'mkdir -p ' . get_template_directory() . '/templates/static' );
+		if ( ! file_exists( $static_view_directory ) ) {
 			$created = wp_mkdir_p( $static_view_directory );
 			if ( ! $created ) {
 				throw new Exception( 'The static view directory can not created. ' . $static_view_directory );
 			}
 		}
-		chmod( $static_view_directory, 0755 );
 		if ( is_dir( $static_view_directory ) ) {
 			return untrailingslashit( $static_view_directory );
 		}

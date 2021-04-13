@@ -4,5 +4,6 @@
 .phpcs.xml.dist export-ignore
 .phpunit.xml.dist export-ignore
 .github export-ignore
+.themes export-ignore
 .wp-env.json export-ignore
 tests export-ignore

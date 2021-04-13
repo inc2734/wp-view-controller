@@ -39,7 +39,7 @@ define( 'GUTENBERG_LOAD_VENDOR_SCRIPTS', false );
  * Manually load the plugin being tested.
  */
 function _manually_load_plugin() {
-	switch_theme( 'twentytwenty' );
+	switch_theme( 'test' );
 	require dirname( dirname( __FILE__ ) ) . '/vendor/autoload.php';
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
