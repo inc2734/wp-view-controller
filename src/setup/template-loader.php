@@ -69,6 +69,24 @@ add_action(
 		);
 
 		add_filter(
+			'home_template_hierarchy',
+			function( $templates ) {
+				$show_on_front = get_option( 'show_on_front' );
+				if ( 'page' !== $show_on_front ) {
+					return $templates;
+				}
+
+				$page_for_posts    = get_option( 'page_for_posts' );
+				$_wp_page_template = get_post_meta( $page_for_posts, '_wp_page_template', true );
+
+				if ( $_wp_page_template && 'default' !== $_wp_page_template ) {
+					$templates = array_merge( [ $_wp_page_template ], $templates );
+				}
+				return $templates;
+			}
+		);
+
+		add_filter(
 			'template_include',
 			function( $template ) {
 				$filtered_template = apply_filters( 'inc2734_wp_view_controller_controller', $template );
