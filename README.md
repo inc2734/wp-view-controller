@@ -361,6 +361,7 @@ add_action(
  * If return false, do not expand get_template_part().
  * The various hooks that extend get_template_part added by this library will no longer be available.
  *
+ * @param boolean $expand
  * @param array $args
  * @return boolean
  */
