@@ -282,6 +282,11 @@ trait Template_Tag {
 		$args['vars']['_context'] = $context;
 		$args['vars']['_name']    = $name;
 
+		if ( ! apply_filters( 'inc2734_wp_view_controller_expand_get_template_part', true, $args ) ) {
+			get_template_part( $args['slug'], $args['name'], $args['vars'] );
+			return;
+		}
+
 		do_action( 'inc2734_wp_view_controller_get_template_part_pre_render', $args );
 
 		Template_Part::render( $args['slug'], $args['name'], $args['vars'] );

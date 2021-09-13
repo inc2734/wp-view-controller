@@ -354,3 +354,18 @@ add_action(
 	}
 );
 ```
+
+### inc2734_wp_view_controller_expand_get_template_part
+```
+/**
+ * If return false, do not expand get_template_part().
+ * The various hooks that extend get_template_part added by this library will no longer be available.
+ *
+ * @param array $args
+ * @return boolean
+ */
+add_filter(
+	'inc2734_wp_view_controller_expand_get_template_part',
+	'__return_false'
+);
+```
