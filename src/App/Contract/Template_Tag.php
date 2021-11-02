@@ -363,6 +363,15 @@ trait Template_Tag {
 	}
 
 	/**
+	 * Returns array of footer templates.
+	 *
+	 * @return array
+	 */
+	public static function get_footer_templates() {
+		return static::_get_candidate_locate_templates( Config::get( 'footer' ) );
+	}
+
+	/**
 	 * Getting config value.
 	 *
 	 * @param string $key The key of the config.
