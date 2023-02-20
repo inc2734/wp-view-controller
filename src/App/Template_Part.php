@@ -20,12 +20,12 @@ class Template_Part {
 	 * @param string $name The name of the specialised template.
 	 * @param array  $vars Additional arguments passed to the template.
 	 */
-	public static function render( $slug, $name = null, $vars = [] ) {
+	public static function render( $slug, $name = null, $vars = array() ) {
 		do_action( "get_template_part_{$slug}", $slug, $name, $vars );
 
 		$locate_template = null;
 
-		$templates = [];
+		$templates = array();
 		$name      = (string) $name;
 		if ( '' !== $name ) {
 			$templates[] = "{$slug}-{$name}.php";
@@ -119,7 +119,7 @@ class Template_Part {
 		global $wp_query;
 
 		$backup_query_vars    = get_query_var( '_wp_view_controller_backup_query_vars' );
-		$backup_query_vars    = is_array( $backup_query_vars ) ? $backup_query_vars : [];
+		$backup_query_vars    = is_array( $backup_query_vars ) ? $backup_query_vars : array();
 		$wp_query->query_vars = $backup_query_vars;
 	}
 

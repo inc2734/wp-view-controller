@@ -101,9 +101,9 @@ class View {
 
 		Helper::get_wrapper_template(
 			$layout,
-			[
+			array(
 				'_view_controller' => $this,
-			]
+			)
 		);
 	}
 
@@ -113,7 +113,8 @@ class View {
 	 * @return string
 	 */
 	public function get_layout() {
-		return $this->layout;
+		$layout = apply_filters( 'inc2734_wp_view_controller_layout', $this->layout );
+		return $layout;
 	}
 
 	/**
@@ -122,7 +123,8 @@ class View {
 	 * @return string
 	 */
 	public function get_view() {
-		return $this->view;
+		$view = apply_filters( 'inc2734_wp_view_controller_view', $this->view );
+		return $view;
 	}
 
 	/**
@@ -151,10 +153,10 @@ class View {
 	 * @return array
 	 */
 	protected function _get_args_for_template_part() {
-		$view = [
+		$view = array(
 			'slug' => '',
 			'name' => '',
-		];
+		);
 
 		$slug = Helper::get_located_template_slug( Config::get( 'view' ), $this->view, $this->view_suffix );
 
@@ -162,10 +164,10 @@ class View {
 			return $view;
 		}
 
-		$view = [
+		$view = array(
 			'slug' => $slug,
 			'name' => $this->view_suffix,
-		];
+		);
 
 		if ( is_404() || is_search() ) {
 			return $view;
@@ -173,10 +175,10 @@ class View {
 
 		$static_template_name = $this->get_static_view_template_name();
 		if ( $static_template_name ) {
-			return [
+			return array(
 				'slug' => $static_template_name,
 				'name' => '',
-			];
+			);
 		}
 
 		return $view;

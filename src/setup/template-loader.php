@@ -13,7 +13,7 @@ use Inc2734\WP_View_Controller\Helper;
 add_action(
 	'after_setup_theme',
 	function() {
-		$types = [
+		$types = array(
 			'index',
 			'404',
 			'archive',
@@ -31,7 +31,7 @@ add_action(
 			'single',
 			'singular',
 			'attachment',
-		];
+		);
 
 		foreach ( $types as $type ) {
 			/**
@@ -55,7 +55,7 @@ add_action(
 			function( $templates ) {
 				$_wp_page_template = get_post_meta( get_the_ID(), '_wp_page_template', true );
 				if ( $_wp_page_template && 'default' !== $_wp_page_template ) {
-					$templates = array_merge( [ $_wp_page_template ], $templates );
+					$templates = array_merge( array( $_wp_page_template ), $templates );
 				}
 				return $templates;
 			}
@@ -80,7 +80,7 @@ add_action(
 				$_wp_page_template = get_post_meta( $page_for_posts, '_wp_page_template', true );
 
 				if ( $_wp_page_template && 'default' !== $_wp_page_template ) {
-					$templates = array_merge( [ $_wp_page_template ], $templates );
+					$templates = array_merge( array( $_wp_page_template ), $templates );
 				}
 				return $templates;
 			}

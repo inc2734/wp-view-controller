@@ -53,15 +53,15 @@ add_action(
 
 							$custom_page_template_data = get_file_data(
 								$custom_page_template,
-								[
+								array(
 									'template-name'      => 'Template Name',
 									'template-post-type' => 'Template Post Type',
-								]
+								)
 							);
 
 							if ( ! empty( $custom_page_template_data['template-name'] ) ) {
 								$template_post_types = $custom_page_template_data['template-post-type'];
-								$template_post_types = $template_post_types ? array_map( 'trim', explode( ',', $template_post_types ) ) : [ 'page' ];
+								$template_post_types = $template_post_types ? array_map( 'trim', explode( ',', $template_post_types ) ) : array( 'page' );
 								if ( in_array( $post_type, $template_post_types, true ) ) {
 									$post_templates[ $base_path ] = $custom_page_template_data['template-name'];
 								}
@@ -74,7 +74,7 @@ add_action(
 					return $post_templates;
 				}
 
-				$filterd_post_templates = [];
+				$filterd_post_templates = array();
 
 				foreach ( $post_templates as $base_path => $template_name ) {
 					$located = Helper::locate_template( $base_path, false );
@@ -86,9 +86,9 @@ add_action(
 				foreach ( $filterd_post_templates as $base_path => $full_page_tempmlate_path ) {
 					$page_template_data = get_file_data(
 						$full_page_tempmlate_path,
-						[
+						array(
 							'template-name' => 'Template Name',
-						]
+						)
 					);
 
 					$template_name = $page_template_data['template-name'];

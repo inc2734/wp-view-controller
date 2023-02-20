@@ -7,14 +7,14 @@
 
 return apply_filters(
 	'inc2734_wp_view_controller_config',
-	[
-		'templates'     => [ '' ],
-		'page-template' => [ 'page-templates' ],
-		'layout'        => [ 'templates/layout/wrapper' ],
-		'header'        => [ 'templates/layout/header' ],
-		'sidebar'       => [ 'templates/layout/sidebar' ],
-		'footer'        => [ 'templates/layout/footer' ],
-		'view'          => [ 'templates/view' ],
-		'static'        => [ 'templates/static' ],
-	]
+	array(
+		'templates'     => array( '' ),
+		'page-template' => array( 'page-templates' ),
+		'layout'        => array( 'templates/layout/wrapper' ),
+		'header'        => array( 'templates/layout/header' ),
+		'sidebar'       => array( 'templates/layout/sidebar' ),
+		'footer'        => array( 'templates/layout/footer' ),
+		'view'          => array( 'templates/view' ),
+		'static'        => array( 'templates/static' ),
+	)
 );

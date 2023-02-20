@@ -80,13 +80,13 @@ class Helper {
 		$file_data = static::_get_file_data( $file );
 
 		if ( ! $file_data ) {
-			return [];
+			return array();
 		}
 
 		if ( preg_match_all( '/^[ \t\/*#@]*renamed:(.*)$/mi', $file_data, $match ) && $match[1] ) {
 			return array_map( '_cleanup_header_comment', $match[1] );
 		}
 
-		return [];
+		return array();
 	}
 }

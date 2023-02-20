@@ -23,7 +23,7 @@ trait Template_Tag {
 	 * @param array  $args Additional arguments passed to the template.
 	 * @return void
 	 */
-	public static function get_footer_template( $slug = 'footer', $name = null, array $args = [] ) {
+	public static function get_footer_template( $slug = 'footer', $name = null, array $args = array() ) {
 		$slug = static::get_located_template_slug( Config::get( 'footer' ), $slug );
 
 		if ( ! $slug ) {
@@ -40,7 +40,7 @@ trait Template_Tag {
 	 * @param array  $args Additional arguments passed to the template.
 	 * @return void
 	 */
-	public static function get_footer( $name = null, array $args = [] ) {
+	public static function get_footer( $name = null, array $args = array() ) {
 		do_action( 'get_footer', $name );
 
 		$slug = static::get_located_template_slug( Config::get( 'templates' ), 'footer', $name );
@@ -60,7 +60,7 @@ trait Template_Tag {
 	 * @param array  $args Additional arguments passed to the template.
 	 * @return void
 	 */
-	public static function get_header_template( $slug = 'header', $name = null, array $args = [] ) {
+	public static function get_header_template( $slug = 'header', $name = null, array $args = array() ) {
 		$slug = static::get_located_template_slug( Config::get( 'header' ), $slug );
 
 		if ( ! $slug ) {
@@ -77,7 +77,7 @@ trait Template_Tag {
 	 * @param array  $args Additional arguments passed to the template.
 	 * @return void
 	 */
-	public static function get_header( $name = null, array $args = [] ) {
+	public static function get_header( $name = null, array $args = array() ) {
 		do_action( 'get_header', $name );
 
 		$slug = static::get_located_template_slug( Config::get( 'templates' ), 'header', $name );
@@ -97,7 +97,7 @@ trait Template_Tag {
 	 * @param array  $args Additional arguments passed to the template.
 	 * @return void
 	 */
-	public static function get_sidebar_template( $slug = 'sidebar', $name = null, array $args = [] ) {
+	public static function get_sidebar_template( $slug = 'sidebar', $name = null, array $args = array() ) {
 		$slug = static::get_located_template_slug( Config::get( 'sidebar' ), $slug );
 
 		if ( ! $slug ) {
@@ -114,7 +114,7 @@ trait Template_Tag {
 	 * @param array  $args Additional arguments passed to the template.
 	 * @return void
 	 */
-	public static function get_sidebar( $name = null, array $args = [] ) {
+	public static function get_sidebar( $name = null, array $args = array() ) {
 		do_action( 'get_sidebar', $name );
 
 		$slug = static::get_located_template_slug( Config::get( 'templates' ), 'sidebar', $name );
@@ -133,7 +133,7 @@ trait Template_Tag {
 	 * @param array  $vars Additional arguments passed to the template.
 	 * @return void
 	 */
-	public static function get_wrapper_template( $slug = 'wrapper', array $vars = [] ) {
+	public static function get_wrapper_template( $slug = 'wrapper', array $vars = array() ) {
 		$slug = static::get_located_template_slug( Config::get( 'layout' ), $slug );
 
 		if ( ! $slug ) {
@@ -157,7 +157,7 @@ trait Template_Tag {
 		foreach ( $relative_dir_paths as $relative_dir_path ) {
 			$maybe_completed_slug = $relative_dir_path ? trailingslashit( $relative_dir_path ) . $slug : $slug;
 
-			$template_names = [];
+			$template_names = array();
 			if ( ! is_null( $name ) && '' !== $name ) {
 				$template_names[] = $maybe_completed_slug . '-' . $name . '.php';
 			}
@@ -209,8 +209,8 @@ trait Template_Tag {
 	 * @param array        $args           Additional arguments passed to the template.
 	 * @return string
 	 */
-	public static function locate_template( $template_names, $load = false, $require_once = true, $slug = null, $name = null, array $args = [] ) {
-		$template_names = ! $template_names ? [] : (array) $template_names;
+	public static function locate_template( $template_names, $load = false, $require_once = true, $slug = null, $name = null, array $args = array() ) {
+		$template_names = ! $template_names ? array() : (array) $template_names;
 		$cache_key      = crc32( implode( ':', $template_names ) );
 		$cache_group    = 'inc2734/wp-view-controller/locate_template';
 		$cache          = wp_cache_get( $cache_key, $cache_group );
@@ -262,13 +262,13 @@ trait Template_Tag {
 	 * @param array  $vars Additional arguments passed to the template.
 	 * @return void
 	 */
-	public static function get_template_part( $slug, $name = null, array $vars = [] ) {
+	public static function get_template_part( $slug, $name = null, array $vars = array() ) {
 		global $args;
-		$args = [
+		$args = array(
 			'slug' => $slug,
 			'name' => $name,
 			'vars' => $vars,
-		];
+		);
 
 		if ( ! array_key_exists( '_context', $args['vars'] ) ) {
 			$args['vars']['_context'] = null;
@@ -334,10 +334,10 @@ trait Template_Tag {
 	 * @param array  $vars Additional arguments passed to the template.
 	 * @return array
 	 */
-	public static function get_template_part_root_hierarchy( $slug = null, $name = null, array $vars = [] ) {
+	public static function get_template_part_root_hierarchy( $slug = null, $name = null, array $vars = array() ) {
 		return apply_filters(
 			'inc2734_wp_view_controller_template_part_root_hierarchy',
-			[],
+			array(),
 			$slug,
 			$name,
 			$vars
@@ -390,7 +390,7 @@ trait Template_Tag {
 	protected static function _get_candidate_locate_templates( array $relative_dir_paths ) {
 		$hierarchy = static::get_completed_hierarchy();
 
-		$completed_hierarchy = [];
+		$completed_hierarchy = array();
 		foreach ( $hierarchy as $root ) {
 			foreach ( $relative_dir_paths as $relative_dir_path ) {
 				$completed_hierarchy[] = $root . DIRECTORY_SEPARATOR . $relative_dir_path;
@@ -400,7 +400,7 @@ trait Template_Tag {
 		$wp_theme    = wp_get_theme();
 		$text_domain = is_child_theme() ? $wp_theme->parent()->get( 'TextDomain' ) : $wp_theme->get( 'TextDomain' );
 
-		$templates = [];
+		$templates = array();
 		foreach ( $completed_hierarchy as $wrapper_dir ) {
 			if ( ! file_exists( $wrapper_dir ) ) {
 				continue;

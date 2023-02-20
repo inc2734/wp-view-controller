@@ -88,7 +88,7 @@ function get_sidebar( $name = null ) {
  * @param array  $vars  Additional arguments passed to the template.
  * @return void
  */
-function get_template_part( $slug, $name = null, array $vars = [] ) {
+function get_template_part( $slug, $name = null, array $vars = array() ) {
 	/**
 	 * Backward compatibility
 	 */
