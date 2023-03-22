@@ -123,7 +123,8 @@ class View {
 	 * @return string
 	 */
 	public function get_view() {
-		$view = apply_filters( 'inc2734_wp_view_controller_view', $this->view );
+		$view = $this->_get_args_for_template_part();
+		$view = apply_filters( 'inc2734_wp_view_controller_view', $view );
 		return $view;
 	}
 
@@ -142,8 +143,7 @@ class View {
 	 * @return void
 	 */
 	public function view() {
-		$view = $this->_get_args_for_template_part();
-		$view = apply_filters( 'inc2734_wp_view_controller_view', $view );
+		$view = $this->get_view();
 		Helper::get_template_part( $view['slug'], $view['name'] );
 	}
 
