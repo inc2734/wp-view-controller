@@ -228,7 +228,7 @@ class View {
 	 * @return string
 	 */
 	protected function _remove_http_query( $uri ) {
-		$uri = str_replace( http_build_query( $_GET, null, '&' ), '', $uri );
+		$uri = str_replace( http_build_query( $_GET, '', '&' ), '', $uri );
 		$uri = rtrim( $uri, '?' );
 		return $uri;
 	}
