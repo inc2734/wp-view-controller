@@ -40,8 +40,8 @@ class Helper {
 		// We don't need to write to the file, so just open for reading.
 		$file_pointer = fopen( $file, 'r' );
 
-		// Pull only the first 8kiB of the file in.
-		$file_data = fread( $file_pointer, 8192 );
+		// Pull only the first 512bytes of the file in.
+		$file_data = fread( $file_pointer, 512 );
 
 		// PHP will close file handle, but we are good citizens.
 		fclose( $file_pointer );
