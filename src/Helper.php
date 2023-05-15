@@ -19,7 +19,7 @@ class Helper {
 	 * @return boolean
 	 */
 	public static function is_debug_mode() {
-		$debug = defined( 'WP_DEBUG' ) ? WP_DEBUG : true;
+		$debug = defined( 'WP_DEBUG' ) ? WP_DEBUG : false;
 
 		return apply_filters( 'inc2734_wp_view_controller_debug', $debug );
 	}
