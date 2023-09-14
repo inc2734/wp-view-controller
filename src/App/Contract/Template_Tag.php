@@ -263,19 +263,18 @@ trait Template_Tag {
 	 * @return void
 	 */
 	public static function get_template_part( $slug, $name = null, array $vars = array() ) {
-		global $args;
 		$args = array(
 			'slug' => $slug,
 			'name' => $name,
 			'vars' => $vars,
 		);
 
-		if ( ! array_key_exists( '_context', $args['vars'] ) ) {
-			$args['vars']['_context'] = null;
-		}
-		$context = $args['vars']['_context'];
+		$default_context = $args['vars']['_context'] ?? null;
+		$new_context     = $vars['_context'] ?? null;
+		$context         = ! is_null( $default_context ) ? $default_context : $new_context;
 
-		$args['vars']['_name'] = $name;
+		$args['vars']['_context'] = $context;
+		$args['vars']['_name']    = $name;
 
 		if ( ! apply_filters( 'inc2734_wp_view_controller_expand_get_template_part', true, $args ) ) {
 			get_template_part( $args['slug'], $args['name'], $args['vars'] );
@@ -289,7 +288,11 @@ trait Template_Tag {
 
 		do_action( 'inc2734_wp_view_controller_get_template_part_pre_render', $args );
 
+		if ( is_null( $args['vars']['_context'] ) ) {
+			unset( $args['vars']['_context'] );
+		}
 		Template_Part::render( $args['slug'], $args['name'], $args['vars'] );
+		$args['vars']['_context'] = $context;
 
 		do_action( 'inc2734_wp_view_controller_get_template_part_post_render', $args );
 	}
