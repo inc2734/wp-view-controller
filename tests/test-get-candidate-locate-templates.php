@@ -3,13 +3,13 @@ use Inc2734\WP_View_Controller\Helper;
 
 class Inc2734_WP_View_Controller_Candidate_Locate_Templates_Test extends WP_UnitTestCase {
 
-	public function setup() {
-		parent::setup();
+	public function set_up() {
+		parent::set_up();
 		new \Inc2734\WP_View_Controller\Bootstrap();
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 	}
 
 	/**

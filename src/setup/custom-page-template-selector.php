@@ -10,7 +10,7 @@ use Inc2734\WP_View_Controller\Helper;
 
 add_action(
 	'after_setup_theme',
-	function() {
+	function () {
 		/**
 		 * Translate page templates on child page
 		 *
@@ -22,7 +22,7 @@ add_action(
 		 */
 		add_filter(
 			'theme_templates',
-			function( $post_templates, $wp_theme, $post, $post_type ) {
+			function ( $post_templates, $wp_theme, $post, $post_type ) {
 				$hierarchy = Helper::get_template_part_root_hierarchy();
 				foreach ( $hierarchy as $root ) {
 					$page_templates_dirs = Config::get( 'page-templates' );

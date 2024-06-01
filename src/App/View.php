@@ -190,7 +190,7 @@ class View {
 	 * @return string|null
 	 */
 	public function get_static_view_template_name() {
-		$request_uri = sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) );
+		$request_uri = sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 		$request_uri = $this->_get_relative_path( $request_uri );
 		$path        = $this->_remove_http_query( $request_uri );
 		$path        = $this->_remove_paged_slug( $path );
@@ -228,7 +228,7 @@ class View {
 	 * @return string
 	 */
 	protected function _remove_http_query( $uri ) {
-		$uri = str_replace( http_build_query( $_GET, '', '&' ), '', $uri );
+		$uri = str_replace( http_build_query( $_GET, '', '&' ), '', $uri ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$uri = rtrim( $uri, '?' );
 		return $uri;
 	}

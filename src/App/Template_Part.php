@@ -84,7 +84,7 @@ class Template_Part {
 			$vars
 		);
 
-		echo $html; // xss ok.
+		echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		if ( $html && static::_enable_debug_mode() ) {
 			static::_debug_comment( $slug, $name, 'End : ', $locate_template );

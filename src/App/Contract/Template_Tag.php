@@ -316,13 +316,13 @@ trait Template_Tag {
 		$hierarchy = static::get_template_part_root_hierarchy( $slug, $name );
 		$hierarchy = array_filter(
 			$hierarchy,
-			function( $root ) {
+			function ( $root ) {
 				return file_exists( $root );
 			}
 		);
 
-		$hierarchy[] = STYLESHEETPATH;
-		$hierarchy[] = TEMPLATEPATH;
+		$hierarchy[] = STYLESHEETPATH; // phpcs:ignore WordPress.WP.DiscouragedConstants.STYLESHEETPATHUsageFound
+		$hierarchy[] = TEMPLATEPATH; // phpcs:ignore WordPress.WP.DiscouragedConstants.TEMPLATEPATHUsageFound
 
 		$hierarchy = array_unique( $hierarchy );
 		wp_cache_set( $cache_key, $hierarchy, $cache_group );

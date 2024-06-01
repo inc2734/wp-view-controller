@@ -12,7 +12,7 @@ use Inc2734\WP_View_Controller\Helper;
  */
 add_action(
 	'after_setup_theme',
-	function() {
+	function () {
 		$types = array(
 			'index',
 			'404',
@@ -41,7 +41,7 @@ add_action(
 			 */
 			add_filter(
 				"{$type}_template",
-				function( $template, $type, $templates ) {
+				function ( $template, $type, $templates ) {
 					$located = Helper::locate_template( $templates, false );
 					return $located ? $located : $template;
 				},
@@ -52,7 +52,7 @@ add_action(
 
 		add_filter(
 			'frontpage_template_hierarchy',
-			function( $templates ) {
+			function ( $templates ) {
 				$_wp_page_template = get_post_meta( get_the_ID(), '_wp_page_template', true );
 				if ( $_wp_page_template && 'default' !== $_wp_page_template ) {
 					$templates = array_merge( array( $_wp_page_template ), $templates );
@@ -63,14 +63,14 @@ add_action(
 
 		add_filter(
 			'frontpage_template',
-			function( $template ) {
+			function ( $template ) {
 				return is_home() ? '' : $template;
 			}
 		);
 
 		add_filter(
 			'home_template_hierarchy',
-			function( $templates ) {
+			function ( $templates ) {
 				$show_on_front = get_option( 'show_on_front' );
 				if ( 'page' !== $show_on_front ) {
 					return $templates;
@@ -88,7 +88,7 @@ add_action(
 
 		add_filter(
 			'template_include',
-			function( $template ) {
+			function ( $template ) {
 				$filtered_template = apply_filters( 'inc2734_wp_view_controller_controller', $template );
 				return file_exists( $filtered_template ) ? $filtered_template : $template;
 			}

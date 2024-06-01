@@ -21,7 +21,7 @@ if ( ! Helper::is_debug_mode() ) {
  */
 add_action(
 	'inc2734_wp_view_controller_get_template_part',
-	function( $slug, $name, $templates, $html ) {
+	function ( $slug, $name, $templates, $html ) {
 		if ( ! is_null( $html ) ) {
 			return;
 		}
@@ -54,7 +54,7 @@ add_action(
  */
 add_action(
 	'inc2734_wp_view_controller_get_template_part',
-	function( $slug, $name, $templates, $html ) {
+	function ( $slug, $name, $templates, $html ) {
 		if ( ! is_null( $html ) ) {
 			return;
 		}
@@ -107,7 +107,7 @@ add_action(
  */
 add_action(
 	'inc2734_wp_view_controller_get_template_part',
-	function( $slug, $name, $templates, $html ) {
+	function ( $slug, $name, $templates, $html ) {
 		if ( ! is_null( $html ) ) {
 			return;
 		}

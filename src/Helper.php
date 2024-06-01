@@ -38,13 +38,13 @@ class Helper {
 		}
 
 		// We don't need to write to the file, so just open for reading.
-		$file_pointer = fopen( $file, 'r' );
+		$file_pointer = fopen( $file, 'r' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 
 		// Pull only the first 512bytes of the file in.
-		$file_data = fread( $file_pointer, 512 );
+		$file_data = fread( $file_pointer, 512 ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
 
 		// PHP will close file handle, but we are good citizens.
-		fclose( $file_pointer );
+		fclose( $file_pointer ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 
 		// Make sure we catch CR-only line endings.
 		return str_replace( "\r", "\n", $file_data );

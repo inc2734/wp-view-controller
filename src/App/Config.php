@@ -25,7 +25,7 @@ class Config {
 			return;
 		}
 
-		$config = include( $path );
+		$config = include $path;
 
 		if ( is_null( $key ) ) {
 			return $config;

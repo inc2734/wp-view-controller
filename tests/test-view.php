@@ -1,12 +1,12 @@
 <?php
 class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 
-	public function setup() {
-		parent::setup();
+	public function set_up() {
+		parent::set_up();
 		new \Inc2734\WP_View_Controller\Bootstrap();
 
 		global $wp_rewrite;
-		parent::setup();
+		parent::set_up();
 
 		$wp_rewrite->init();
 		$wp_rewrite->set_permalink_structure( '/%postname%/' );
@@ -138,8 +138,8 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 		$this->static_view_directory = get_template_directory() . '/templates/static';
 	}
 
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 
 		_unregister_post_type( $this->post_type );
 		_unregister_taxonomy( $this->taxonomy, $this->post_type );
