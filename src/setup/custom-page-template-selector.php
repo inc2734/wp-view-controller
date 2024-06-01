@@ -46,7 +46,8 @@ add_action(
 
 							$custom_page_template = realpath( $file->getPathname() );
 
-							$base_path = str_replace( trailingslashit( $root ), '', $custom_page_template );
+							$base_path = str_replace( realpath( trailingslashit( $root ) ), '', $custom_page_template );
+							$base_path = ltrim( str_replace( DIRECTORY_SEPARATOR, '/', $base_path ), '/' );
 							if ( ! empty( $post_templates[ $base_path ] ) ) {
 								continue;
 							}
