@@ -51,6 +51,10 @@ class View {
 	 * @return void
 	 */
 	public function render( $view, $view_suffix = '' ) {
+		if ( ! $view ) {
+			return;
+		}
+
 		$this->view        = $view;
 		$this->view_suffix = $view_suffix;
 
@@ -157,6 +161,10 @@ class View {
 			'slug' => '',
 			'name' => '',
 		);
+
+		if ( ! $this->view ) {
+			return $view;
+		}
 
 		$slug = Helper::get_located_template_slug( Config::get( 'view' ), $this->view, $this->view_suffix );
 

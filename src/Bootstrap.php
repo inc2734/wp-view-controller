@@ -41,6 +41,10 @@ class Bootstrap {
 	 * @return void
 	 */
 	public static function render( $view, $view_suffix = '' ) {
+		if ( ! $view ) {
+			return;
+		}
+
 		static::_set_view();
 		static::$view->render( $view, $view_suffix );
 	}
