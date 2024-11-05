@@ -22,7 +22,12 @@ class Bootstrap {
 	 * Constructor.
 	 */
 	public function __construct() {
-		load_textdomain( 'inc2734-wp-view-controller', __DIR__ . '/languages/' . get_locale() . '.mo' );
+		add_action(
+			'init',
+			function () {
+				load_textdomain( 'inc2734-wp-view-controller', __DIR__ . '/languages/' . get_locale() . '.mo' );
+			}
+		);
 
 		include_once __DIR__ . '/deprecated/Helper.php';
 		include_once __DIR__ . '/setup/comments-template.php';
