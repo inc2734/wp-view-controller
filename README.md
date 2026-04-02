@@ -78,6 +78,10 @@ This method is an extension to `get_template_part()`.
 ## Filter hooks
 
 ### inc2734_wp_view_controller_config_path
+
+Deprecated. Use `inc2734_wp_view_controller_config` whenever possible.
+When using a custom config file, return a plain array from the file. `inc2734_wp_view_controller_config` is applied after loading.
+
 ```
 /**
  * Change config path
@@ -169,6 +173,9 @@ add_filter(
 ```
 
 ### inc2734_wp_view_controller_config
+
+This filter always runs after loading the config, including when `inc2734_wp_view_controller_config_path` points to a custom config file.
+
 ```
 /**
  * Customize config values
