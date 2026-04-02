@@ -1,4 +1,23 @@
 <?php
+class Inc2734_WP_View_Controller_Template_Tag_Test_Helper {
+
+	use \Inc2734\WP_View_Controller\App\Contract\Template_Tag;
+
+	public static $get_completed_hierarchy_count = 0;
+
+	public static $hierarchy = array();
+
+	public static function reset() {
+		static::$get_completed_hierarchy_count = 0;
+		static::$hierarchy                    = array();
+	}
+
+	public static function get_completed_hierarchy( $slug = null, $name = null ) {
+		++static::$get_completed_hierarchy_count;
+		return static::$hierarchy;
+	}
+}
+
 class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 
 	public function set_up() {
@@ -197,5 +216,54 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 		ob_start();
 		Inc2734\WP_View_Controller\Helper::get_template_part( 'template', 'name' );
 		$this->assertEquals( '4-template-name', ob_get_clean() );
+	}
+
+	/**
+	 * @test
+	 */
+	public function locate_template__get_completed_hierarchy_is_resolved_once_when_slug_is_provided() {
+		$root = untrailingslashit( sys_get_temp_dir() ) . '/locate-template-root';
+		$file = $root . '/template-name.php';
+		file_exists( $file ) && unlink( $file );
+		is_dir( $root ) && rmdir( $root );
+		wp_mkdir_p( $root );
+		file_put_contents( $file, 'template-name' );
+
+		Inc2734_WP_View_Controller_Template_Tag_Test_Helper::reset();
+		Inc2734_WP_View_Controller_Template_Tag_Test_Helper::$hierarchy = array( $root );
+
+		$template_names = array(
+			'template-missing.php',
+			'template-name.php',
+		);
+		$cache_key      = crc32( implode( ':', $template_names ) );
+		wp_cache_delete( $cache_key, 'inc2734/wp-view-controller/locate_template' );
+
+		$located = Inc2734_WP_View_Controller_Template_Tag_Test_Helper::locate_template(
+			$template_names,
+			false,
+			true,
+			'template',
+			'name'
+		);
+
+		$this->assertSame( $file, $located );
+		$this->assertSame( 1, Inc2734_WP_View_Controller_Template_Tag_Test_Helper::$get_completed_hierarchy_count );
+
+		Inc2734_WP_View_Controller_Template_Tag_Test_Helper::reset();
+		$located = Inc2734_WP_View_Controller_Template_Tag_Test_Helper::locate_template(
+			$template_names,
+			false,
+			true,
+			'template',
+			'name'
+		);
+
+		$this->assertSame( $file, $located );
+		$this->assertSame( 0, Inc2734_WP_View_Controller_Template_Tag_Test_Helper::$get_completed_hierarchy_count );
+
+		wp_cache_delete( $cache_key, 'inc2734/wp-view-controller/locate_template' );
+		file_exists( $file ) && unlink( $file );
+		is_dir( $root ) && rmdir( $root );
 	}
 }

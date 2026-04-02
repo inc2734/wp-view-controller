@@ -214,6 +214,7 @@ trait Template_Tag {
 		$cache_key      = crc32( implode( ':', $template_names ) );
 		$cache_group    = 'inc2734/wp-view-controller/locate_template';
 		$cache          = wp_cache_get( $cache_key, $cache_group );
+		$hierarchy      = null;
 
 		if ( false !== $cache && file_exists( $cache ) ) {
 			if ( $load ) {
@@ -229,12 +230,15 @@ trait Template_Tag {
 			return $default_located;
 		}
 
+		if ( ! is_null( $slug ) ) {
+			$hierarchy = static::get_completed_hierarchy( $slug, $name );
+		}
+
 		foreach ( $template_names as $template_name ) {
 			if ( is_null( $slug ) ) {
-				$slug = static::filename_to_slug( $template_name );
+				$slug      = static::filename_to_slug( $template_name );
+				$hierarchy = static::get_completed_hierarchy( $slug, $name );
 			}
-
-			$hierarchy = static::get_completed_hierarchy( $slug, $name );
 
 			foreach ( $hierarchy as $root ) {
 				$located = trailingslashit( $root ) . $template_name;
