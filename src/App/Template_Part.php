@@ -63,13 +63,19 @@ class Template_Part {
 		do_action( 'inc2734_wp_view_controller_get_template_part', $slug, $name, $templates, $html, $vars );
 
 		if ( is_null( $html ) ) {
-			static::_init_template_args( $vars );
+			$should_init_template_args = ! empty( $vars );
+
+			if ( $should_init_template_args ) {
+				static::_init_template_args( $vars );
+			}
 
 			ob_start();
 			$locate_template = Helper::locate_template( $templates, true, false, $slug, $name, $vars );
 			$html            = ob_get_clean();
 
-			static::_reset_template_args();
+			if ( $should_init_template_args ) {
+				static::_reset_template_args();
+			}
 		}
 
 		if ( $html && static::_enable_debug_mode() ) {

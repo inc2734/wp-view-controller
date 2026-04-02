@@ -18,6 +18,28 @@ class Inc2734_WP_View_Controller_Template_Tag_Test_Helper {
 	}
 }
 
+class Inc2734_WP_View_Controller_Template_Part_Test_Helper extends \Inc2734\WP_View_Controller\App\Template_Part {
+
+	public static $init_template_args_count = 0;
+
+	public static $reset_template_args_count = 0;
+
+	public static function reset() {
+		static::$init_template_args_count  = 0;
+		static::$reset_template_args_count = 0;
+	}
+
+	protected static function _init_template_args( $vars ) {
+		++static::$init_template_args_count;
+		parent::_init_template_args( $vars );
+	}
+
+	protected static function _reset_template_args() {
+		++static::$reset_template_args_count;
+		parent::_reset_template_args();
+	}
+}
+
 class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 
 	public function set_up() {
@@ -261,6 +283,95 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 
 		$this->assertSame( $file, $located );
 		$this->assertSame( 0, Inc2734_WP_View_Controller_Template_Tag_Test_Helper::$get_completed_hierarchy_count );
+
+		wp_cache_delete( $cache_key, 'inc2734/wp-view-controller/locate_template' );
+		file_exists( $file ) && unlink( $file );
+		is_dir( $root ) && rmdir( $root );
+	}
+
+	/**
+	 * @test
+	 * @runInSeparateProcess
+	 * @preserveGlobalState disabled
+	 */
+	public function render__skips_template_arg_setup_when_vars_are_empty() {
+		$root = untrailingslashit( sys_get_temp_dir() ) . '/template-part-render-empty';
+		$file = $root . '/template-empty-name.php';
+		file_exists( $file ) && unlink( $file );
+		is_dir( $root ) && rmdir( $root );
+		wp_mkdir_p( $root );
+		file_put_contents( $file, "<?php echo get_query_var( 'key', 'template-empty-name' );" );
+
+		add_filter(
+			'inc2734_wp_view_controller_template_part_root_hierarchy',
+			function( $hierarchy ) use ( $root ) {
+				$hierarchy[] = $root;
+				return $hierarchy;
+			}
+		);
+
+		$template_names = array(
+			'template-empty-name.php',
+			'template-empty.php',
+		);
+		$cache_key      = crc32( implode( ':', $template_names ) );
+		wp_cache_delete( $cache_key, 'inc2734/wp-view-controller/locate_template' );
+
+		Inc2734_WP_View_Controller_Template_Part_Test_Helper::reset();
+
+		ob_start();
+		Inc2734_WP_View_Controller_Template_Part_Test_Helper::render( 'template-empty', 'name', array() );
+		$this->assertSame( 'template-empty-name', ob_get_clean() );
+		$this->assertSame( 0, Inc2734_WP_View_Controller_Template_Part_Test_Helper::$init_template_args_count );
+		$this->assertSame( 0, Inc2734_WP_View_Controller_Template_Part_Test_Helper::$reset_template_args_count );
+
+		wp_cache_delete( $cache_key, 'inc2734/wp-view-controller/locate_template' );
+		file_exists( $file ) && unlink( $file );
+		is_dir( $root ) && rmdir( $root );
+	}
+
+	/**
+	 * @test
+	 * @runInSeparateProcess
+	 * @preserveGlobalState disabled
+	 */
+	public function render__initializes_template_args_when_vars_are_present() {
+		$root = untrailingslashit( sys_get_temp_dir() ) . '/template-part-render-vars';
+		$file = $root . '/template-vars-name.php';
+		file_exists( $file ) && unlink( $file );
+		is_dir( $root ) && rmdir( $root );
+		wp_mkdir_p( $root );
+		file_put_contents( $file, "<?php echo get_query_var( 'wp_view_controller_test_key', 'template-vars-name' );" );
+
+		add_filter(
+			'inc2734_wp_view_controller_template_part_root_hierarchy',
+			function( $hierarchy ) use ( $root ) {
+				$hierarchy[] = $root;
+				return $hierarchy;
+			}
+		);
+
+		$template_names = array(
+			'template-vars-name.php',
+			'template-vars.php',
+		);
+		$cache_key      = crc32( implode( ':', $template_names ) );
+		wp_cache_delete( $cache_key, 'inc2734/wp-view-controller/locate_template' );
+
+		Inc2734_WP_View_Controller_Template_Part_Test_Helper::reset();
+
+		ob_start();
+		Inc2734_WP_View_Controller_Template_Part_Test_Helper::render(
+			'template-vars',
+			'name',
+			array(
+				'wp_view_controller_test_key' => 'value',
+			)
+		);
+		$this->assertSame( 'value', ob_get_clean() );
+		$this->assertSame( 1, Inc2734_WP_View_Controller_Template_Part_Test_Helper::$init_template_args_count );
+		$this->assertSame( 1, Inc2734_WP_View_Controller_Template_Part_Test_Helper::$reset_template_args_count );
+		$this->assertSame( null, get_query_var( 'wp_view_controller_test_key', null ) );
 
 		wp_cache_delete( $cache_key, 'inc2734/wp-view-controller/locate_template' );
 		file_exists( $file ) && unlink( $file );
