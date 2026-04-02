@@ -433,11 +433,7 @@ trait Template_Tag {
 					continue;
 				}
 
-				$name = trim(
-					preg_match( '|Name:(.*)$|mi', file_get_contents( $filepath ), $header )
-						? $header[1]
-						: $slug
-				);
+				$name = static::_get_candidate_locate_template_name( $filepath, $slug );
 				// @codingStandardsIgnoreStart
 				$templates[ $slug ] = translate( $name, $text_domain );
 				// @codingStandardsIgnoreEnd
@@ -445,5 +441,25 @@ trait Template_Tag {
 		}
 
 		return $templates;
+	}
+
+	/**
+	 * Returns template candidate name from the file header.
+	 *
+	 * @param string $filepath Full file path.
+	 * @param string $slug     Template slug.
+	 * @return string
+	 */
+	protected static function _get_candidate_locate_template_name( $filepath, $slug ) {
+		$file_data = file_get_contents( $filepath, false, null, 0, 8 * KB_IN_BYTES );
+		$file_data = false !== $file_data
+			? str_replace( "\r", "\n", $file_data )
+			: '';
+
+		return trim(
+			preg_match( '|Name:(.*)$|mi', $file_data, $header )
+				? $header[1]
+				: $slug
+		);
 	}
 }

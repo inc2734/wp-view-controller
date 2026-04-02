@@ -111,4 +111,51 @@ class Inc2734_WP_View_Controller_Candidate_Locate_Templates_Test extends WP_Unit
 		is_dir( $header ) && rmdir( $header );
 		is_dir( $root ) && rmdir( $root );
 	}
+
+	/**
+	 * @test
+	 * @runInSeparateProcess
+	 * @preserveGlobalState disabled
+	 */
+	public function get_wrapper_templates__uses_name_header_from_file_header() {
+		$root    = untrailingslashit( sys_get_temp_dir() ) . '/root-templates';
+		$wrapper = $root . '/wrapper';
+		$file    = $wrapper . '/wrapper.php';
+		file_exists( $file ) && unlink( $file );
+		is_dir( $wrapper ) && rmdir( $wrapper );
+		is_dir( $root ) && rmdir( $root );
+		wp_mkdir_p( $wrapper );
+		file_put_contents(
+			$file,
+			"<?php\n/**\n * Name: Custom Wrapper\n */\n"
+		);
+
+		add_filter(
+			'inc2734_wp_view_controller_template_part_root_hierarchy',
+			function( $hierarchy ) {
+				$hierarchy[] = sys_get_temp_dir();
+				return $hierarchy;
+			}
+		);
+
+		add_filter(
+			'inc2734_wp_view_controller_config',
+			function( $config ) {
+				$config['layout'] = [ 'root-templates/wrapper' ];
+				return $config;
+			}
+		);
+
+		$wrapper_templates = Helper::get_wrapper_templates();
+		$this->assertSame(
+			[
+				'wrapper' => 'Custom Wrapper',
+			],
+			$wrapper_templates
+		);
+
+		file_exists( $file ) && unlink( $file );
+		is_dir( $wrapper ) && rmdir( $wrapper );
+		is_dir( $root ) && rmdir( $root );
+	}
 }
