@@ -6,7 +6,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 		new \Inc2734\WP_View_Controller\Bootstrap();
 
 		global $wp_rewrite;
-		parent::set_up();
+		create_initial_taxonomies();
 
 		$wp_rewrite->init();
 		$wp_rewrite->set_permalink_structure( '/%postname%/' );
@@ -39,14 +39,14 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 			]
 		);
 
-		$this->author_a_id = $this->factory->user->create( [ 'user_login' => 'User A' ] );
-		$this->author_b_id = $this->factory->user->create( [ 'user_login' => 'User B' ] );
+		$this->author_a_id = $this->factory->user->create( [ 'user_login' => 'user-a' ] );
+		$this->author_b_id = $this->factory->user->create( [ 'user_login' => 'user-b' ] );
 
 		$this->post_2000_01_01_id = $this->factory->post->create(
 			[
 				'post_title'  => 'Post A',
 				'post_name'   => 'post-a',
-				'post_date'   => '2000/01/01 00:00:00',
+				'post_date'   => '2000-01-01 00:00:00',
 				'post_author' => $this->author_a_id,
 			]
 		);
@@ -55,7 +55,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 			[
 				'post_title'  => 'Post B',
 				'post_name'   => 'post-b',
-				'post_date'   => '2000/01/02 00:00:00',
+				'post_date'   => '2000-01-02 00:00:00',
 				'post_author' => $this->author_b_id,
 			]
 		);
@@ -64,7 +64,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 			[
 				'post_title'  => 'Post C',
 				'post_name'   => 'post-c',
-				'post_date'   => '2000/02/01 00:00:00',
+				'post_date'   => '2000-02-01 00:00:00',
 				'post_author' => $this->author_a_id,
 			]
 		);
@@ -73,7 +73,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 			[
 				'post_title'  => 'Post D',
 				'post_name'   => 'post-d',
-				'post_date'   => '2001/01/01 00:00:00',
+				'post_date'   => '2001-01-01 00:00:00',
 				'post_author' => $this->author_a_id,
 			]
 		);
@@ -132,7 +132,6 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 			wp_set_object_terms( $post_id, get_term( $this->tag_b_id, 'post_tag' )->slug, 'post_tag' );
 		}
 
-		create_initial_taxonomies();
 		$wp_rewrite->flush_rules();
 
 		$this->static_view_directory = get_template_directory() . '/templates/static';
@@ -150,8 +149,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__category() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$category = get_term( $this->category_a_id, 'category' );
-		$this->go_to( get_term_link( $category ) );
+		$this->go_to( '/category/category-a/' );
 
 		$this->assertEquals(
 			'templates/static/category/category-a',
@@ -164,8 +162,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__category__index() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$category = get_term( $this->category_b_id, 'category' );
-		$this->go_to( get_term_link( $category ) );
+		$this->go_to( '/category/category-b/' );
 
 		$this->assertEquals(
 			'templates/static/category/category-b/index',
@@ -178,8 +175,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__post_tag() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$post_tag = get_term( $this->tag_a_id, 'post_tag' );
-		$this->go_to( get_term_link( $post_tag ) );
+		$this->go_to( '/tag/tag-a/' );
 
 		$this->assertEquals(
 			'templates/static/tag/tag-a',
@@ -192,8 +188,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__post_tag__index() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$post_tag = get_term( $this->tag_b_id, 'post_tag' );
-		$this->go_to( get_term_link( $post_tag ) );
+		$this->go_to( '/tag/tag-b/' );
 
 		$this->assertEquals(
 			'templates/static/tag/tag-b/index',
@@ -206,9 +201,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__year() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$post = get_post( $this->post_2001_01_01_id );
-		$year = date( 'Y', strtotime( $post->post_date ) );
-		$this->go_to( get_year_link( $year ) );
+		$this->go_to( '/2001/' );
 
 		$this->assertEquals(
 			'templates/static/2001',
@@ -221,9 +214,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__year__index() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$post = get_post( $this->post_2000_01_01_id );
-		$year = date( 'Y', strtotime( $post->post_date ) );
-		$this->go_to( get_year_link( $year ) );
+		$this->go_to( '/2000/' );
 
 		$this->assertEquals(
 			'templates/static/2000/index',
@@ -236,10 +227,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__month() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$post = get_post( $this->post_2000_02_01_id );
-		$year  = date( 'Y', strtotime( $post->post_date ) );
-		$month = date( 'm', strtotime( $post->post_date ) );
-		$this->go_to( get_month_link( $year, $month ) );
+		$this->go_to( '/2000/02/' );
 
 		$this->assertEquals(
 			'templates/static/2000/02',
@@ -252,10 +240,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__month__index() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$post = get_post( $this->post_2000_01_01_id );
-		$year  = date( 'Y', strtotime( $post->post_date ) );
-		$month = date( 'm', strtotime( $post->post_date ) );
-		$this->go_to( get_month_link( $year, $month ) );
+		$this->go_to( '/2000/01/' );
 
 		$this->assertEquals(
 			'templates/static/2000/01/index',
@@ -268,11 +253,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__day() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$post = get_post( $this->post_2000_01_01_id );
-		$year  = date( 'Y', strtotime( $post->post_date ) );
-		$month = date( 'm', strtotime( $post->post_date ) );
-		$day   = date( 'd', strtotime( $post->post_date ) );
-		$this->go_to( get_day_link( $year, $month, $day ) );
+		$this->go_to( '/2000/01/01/' );
 
 		$this->assertEquals(
 			'templates/static/2000/01/01',
@@ -285,11 +266,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__day__index() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$post = get_post( $this->post_2000_01_02_id );
-		$year  = date( 'Y', strtotime( $post->post_date ) );
-		$month = date( 'm', strtotime( $post->post_date ) );
-		$day   = date( 'd', strtotime( $post->post_date ) );
-		$this->go_to( get_day_link( $year, $month, $day ) );
+		$this->go_to( '/2000/01/02/' );
 
 		$this->assertEquals(
 			'templates/static/2000/01/02/index',
@@ -302,8 +279,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__author() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$post = get_post( $this->post_2000_01_02_id );
-		$this->go_to( get_author_posts_url( $post->post_author ) );
+		$this->go_to( '/author/user-b/' );
 
 		$this->assertEquals(
 			'templates/static/author/user-b',
@@ -316,8 +292,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__author__index() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$post = get_post( $this->post_2000_01_01_id );
-		$this->go_to( get_author_posts_url( $post->post_author ) );
+		$this->go_to( '/author/user-a/' );
 
 		$this->assertEquals(
 			'templates/static/author/user-a/index',
@@ -330,8 +305,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__single_post() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$post = get_post( $this->post_2000_01_01_id );
-		$this->go_to( get_permalink( $post ) );
+		$this->go_to( '/post-a/' );
 
 		$this->assertEquals(
 			'templates/static/post-a',
@@ -344,8 +318,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__single_post__index() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$post = get_post( $this->post_2000_01_02_id );
-		$this->go_to( get_permalink( $post ) );
+		$this->go_to( '/post-b/' );
 
 		$this->assertEquals(
 			'templates/static/post-b/index',
@@ -358,13 +331,13 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__single_custom_post() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$custom_post_type_id = $this->factory->post->create(
+		$this->factory->post->create(
 			[
 				'post_type'  => $this->post_type,
 				'post_title' => 'News A'
 			]
 		);
-		$this->go_to( get_permalink( $custom_post_type_id ) );
+		$this->go_to( '/news/news-a/' );
 
 		$this->assertEquals(
 			'templates/static/news/news-a',
@@ -377,13 +350,13 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__single_custom_post__index() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$custom_post_type_id = $this->factory->post->create(
+		$this->factory->post->create(
 			[
 				'post_type'  => $this->post_type,
 				'post_title' => 'News B'
 			]
 		);
-		$this->go_to( get_permalink( $custom_post_type_id ) );
+		$this->go_to( '/news/news-b/' );
 
 		$this->assertEquals(
 			'templates/static/news/news-b/index',
@@ -396,7 +369,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__post_type_archive_no_post() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$this->go_to( get_post_type_archive_link( $this->post_type_no ) );
+		$this->go_to( '/no/' );
 		$this->assertFalse( get_post_type() );
 
 		$this->assertEquals(
@@ -410,7 +383,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	 */
 	public function get_static_view_template_name__post_type_archive_no_post__index() {
 		$View = new Inc2734\WP_View_Controller\App\View();
-		$this->go_to( get_post_type_archive_link( $this->post_type_no_index ) );
+		$this->go_to( '/no-index/' );
 		$this->assertFalse( get_post_type() );
 
 		$this->assertEquals(
@@ -425,7 +398,7 @@ class Inc2734_WP_View_Controller_View_Test extends WP_UnitTestCase {
 	public function get_static_view_template_name__post_type_archive_have_posts() {
 		$View = new Inc2734\WP_View_Controller\App\View();
 		$this->factory->post->create( [ 'post_type' => $this->post_type ] );
-		$this->go_to( get_post_type_archive_link( $this->post_type ) );
+		$this->go_to( '/news/' );
 		$this->assertNotFalse( get_post_type() );
 
 		$this->assertEquals(

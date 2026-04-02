@@ -119,7 +119,7 @@ class Inc2734_WP_View_Controller_Template_Part_Test extends WP_UnitTestCase {
 	 * @runInSeparateProcess
 	 * @preserveGlobalState disabled
 	 */
-	public function name() {
+	public function template_name() {
 		add_filter(
 			'inc2734_wp_view_controller_get_template_part_args',
 			function( $args ) {
